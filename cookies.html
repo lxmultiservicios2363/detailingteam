@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración de Cookies - Detailing Team</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .legal-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .legal-content h3 {
+            color: var(--primary-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .legal-content p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        .legal-content ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .cookie-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 1px solid #eaeef2;
+            border-radius: 8px;
+        }
+        .cookie-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .cookie-option label {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .cookie-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1>Detailing Team</h1>
+            <p class="slogan">Configuración de Cookies</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="legal-content">
+                <h2>Política de Cookies</h2>
+                <p>Última actualización: 6 de marzo de 2025</p>
+                <p>En Detailing Team utilizamos cookies y tecnologías similares para mejorar tu experiencia en nuestro sitio web, personalizar el contenido, analizar nuestro tráfico y mostrar publicidad relevante. Esta página te permite configurar tus preferencias de cookies.</p>
+
+                <h3>¿Qué son las cookies?</h3>
+                <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Se utilizan ampliamente para hacer que los sitios web funcionen correctamente, así como para proporcionar información a los propietarios del sitio.</p>
+
+                <h3>Tipos de cookies que utilizamos</h3>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="necessary" checked disabled>
+                    <div>
+                        <label for="necessary">Cookies necesarias (siempre activas)</label>
+                        <p>Estas cookies son esenciales para el funcionamiento básico del sitio web, como la navegación entre páginas y el acceso a áreas seguras. No pueden desactivarse.</p>
+                    </div>
+                </div>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="analytics">
+                    <div>
+                        <label for="analytics">Cookies de análisis</label>
+                        <p>Nos ayudan a entender cómo interactúan los visitantes con el sitio web, recopilando información de forma anónima. Esto nos permite mejorar la funcionalidad y la experiencia del usuario.</p>
+                    </div>
+                </div>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="marketing">
+                    <div>
+                        <label for="marketing">Cookies de marketing</label>
+                        <p>Se utilizan para rastrear a los visitantes en los sitios web y mostrar anuncios relevantes y atractivos para el usuario individual.</p>
+                    </div>
+                </div>
+
+                <h3>Cookies específicas que usamos</h3>
+                <ul>
+                    <li><strong>localStorage (datos locales):</strong> Almacenamos temporalmente en tu navegador la información de registro y reservas para ofrecerte una experiencia personalizada. Estos datos no se comparten con terceros.</li>
+                    <li><strong>Preferencias de idioma y tema:</strong> Guardamos tu elección de idioma (español/inglés) y tema (claro/oscuro/sistema) para que no tengas que volver a seleccionarlos en cada visita.</li>
+                    <li><strong>Google Maps (futuro):</strong> Cuando implementemos el mapa interactivo, se cargarán cookies de Google para mostrar la ubicación correctamente.</li>
+                </ul>
+
+                <h3>Cómo controlar las cookies</h3>
+                <p>Puedes aceptar o rechazar las cookies no esenciales mediante los botones a continuación. También puedes configurar tu navegador para bloquear o eliminar cookies. Sin embargo, si desactivas algunas cookies, es posible que ciertas partes del sitio no funcionen correctamente.</p>
+
+                <div class="cookie-buttons">
+                    <button type="button" class="btn" onclick="aceptarTodas()">Aceptar todas</button>
+                    <button type="button" class="btn btn-gold" onclick="rechazarTodas()">Rechazar todas</button>
+                    <button type="button" class="btn" onclick="guardarPreferencias()">Guardar preferencias</button>
+                </div>
+
+                <h3>Más información</h3>
+                <p>Para cualquier pregunta sobre nuestras políticas de cookies, contáctanos en: <strong>contactdetailingteam@gmail.com</strong> o llámanos al <strong>+1 (713) 928-0466</strong>.</p>
+
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a la página principal</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>© 2024 Detailing Team. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function aceptarTodas() {
+            document.getElementById('analytics').checked = true;
+            document.getElementById('marketing').checked = true;
+            guardarPreferencias();
+        }
+
+        function rechazarTodas() {
+            document.getElementById('analytics').checked = false;
+            document.getElementById('marketing').checked = false;
+            guardarPreferencias();
+        }
+
+        function guardarPreferencias() {
+            const preferencias = {
+                necesarias: true,
+                analiticas: document.getElementById('analytics').checked,
+                marketing: document.getElementById('marketing').checked,
+                fecha: new Date().toISOString()
+            };
+            localStorage.setItem('cookiePreferences', JSON.stringify(preferencias));
+            const lang = navigator.language || 'es';
+            alert(lang.startsWith('es') ? 'Preferencias de cookies guardadas correctamente.' : 'Cookie preferences saved successfully.');
+        }
+
+        window.onload = function() {
+            const guardadas = localStorage.getItem('cookiePreferences');
+            if (guardadas) {
+                try {
+                    const pref = JSON.parse(guardadas);
+                    document.getElementById('analytics').checked = pref.analiticas;
+                    document.getElementById('marketing').checked = pref.marketing;
+                } catch(e) {}
+            }
+        };
+    </script>
+</body>
+</html>

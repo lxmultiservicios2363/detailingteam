@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailing Team TX - Excellence in Shine</title>
+    <!-- Font Awesome para iconos modernos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Fuentes modernas: Montserrat + Open Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Nuestro archivo de estilos -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER CON IDIOMA Y TEMA -->
+    <header>
+        <div class="container header-content">
+            <div class="header-controls">
+                <div class="theme-selector">
+                    <button type="button" class="theme-btn" id="themeLight" onclick="cambiarTema('light')" title="Modo claro">🌞</button>
+                    <button type="button" class="theme-btn" id="themeDark" onclick="cambiarTema('dark')" title="Modo oscuro">🌙</button>
+                    <button type="button" class="theme-btn" id="themeSystem" onclick="cambiarTema('system')" title="Seguir sistema">💻</button>
+                </div>
+                <div class="language-selector">
+                    <button type="button" class="lang-btn" id="btnEnglish" onclick="cambiarIdioma('en')">
+                        <span>🇺🇸</span> English
+                    </button>
+                    <button type="button" class="lang-btn" id="btnSpanish" onclick="cambiarIdioma('es')">
+                        <span>🇲🇽</span> Español
+                    </button>
+                </div>
+            </div>
+            <h1 id="header-title">Detailing Team</h1>
+            <p class="slogan" id="header-slogan">Excellence in Shine - Automotive Protection</p>
+            <p class="owner-info" id="header-owner">Propietario: Israel Ramirez Abreu</p>
+            <div class="contact-info-header">
+                <span id="header-phone"><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</span>
+                <span id="header-email"><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN -->
+    <nav>
+        <div class="container">
+            <div class="nav-menu">
+                <a href="#servicios" id="nav-services"><i class="fas fa-car"></i> Servicios</a>
+                <a href="#catalogo" id="nav-catalog"><i class="fas fa-oil-can"></i> Catálogo</a>
+                <a href="#registro" id="nav-register"><i class="fas fa-user-plus"></i> Registro</a>
+                <a href="#reservas" id="nav-bookings"><i class="fas fa-calendar-alt"></i> Reservas</a>
+                <a href="#contacto" id="nav-contact"><i class="fas fa-map-marker-alt"></i> Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- SECCIÓN SERVICIOS -->
+        <section id="servicios">
+            <div class="container">
+                <h2 id="services-title">Servicios Profesionales</h2>
+                <p class="section-description" id="services-description">Precios competitivos en Houston, TX</p>
+
+                <!-- Horario de atención -->
+                <div class="schedule-box">
+                    <h4 id="schedule-title"><i class="far fa-clock"></i> Horario de atención</h4>
+                    <p id="schedule-text"><strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM</p>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service1-name">Lavado Exterior</div>
+                            <p id="service1-desc">Lavado de carrocería, llantas y cristales</p>
+                            <div class="service-price">$25 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service1-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service2-name">Lavado Completo</div>
+                            <p id="service2-desc">Interior + Exterior + Aspirado profundo</p>
+                            <div class="service-price">$45 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service2-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service3-name">Limpieza de Motor</div>
+                            <p id="service3-desc">Desengrasado y protección de componentes</p>
+                            <div class="service-price">$60 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service3-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service4-name">Pulido y Encerado</div>
+                            <p id="service4-desc">Pulido de pintura y cera de alta duración</p>
+                            <div class="service-price">$120 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service4-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service5-name">Protección Cerámica</div>
+                            <p id="service5-desc">Capa cerámica profesional (6 meses)</p>
+                            <div class="service-price">$350 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service5-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-content">
+                            <div class="service-name" id="service6-name">Paquete Premium</div>
+                            <p id="service6-desc">Lavado completo + Pulido + Cerámica</p>
+                            <div class="service-price">$480 <small>+tax</small></div>
+                            <a href="#reservas" class="btn" id="service6-btn"><i class="fas fa-calendar-check"></i> Reservar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CATÁLOGO DE PRODUCTOS -->
+        <section id="catalogo">
+            <div class="container">
+                <h2 id="products-title">Catálogo de Productos</h2>
+                <p class="section-description" id="products-description">Aceites, refrigerantes y más para tu vehículo</p>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="card-content">
+                            <div class="product-name" id="product1-name">Aceite 5W-30</div>
+                            <p id="product1-desc">Galón (3.78L) - Mobil 1</p>
+                            <div class="product-price">$28</div>
+                            <button type="button" class="btn btn-gold" id="product1-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="card-content">
+                            <div class="product-name" id="product2-name">Refrigerante</div>
+                            <p id="product2-desc">Concentrado 50/50 - Galón</p>
+                            <div class="product-price">$18</div>
+                            <button type="button" class="btn btn-gold" id="product2-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="card-content">
+                            <div class="product-name" id="product3-name">Líquido Frenos DOT 4</div>
+                            <p id="product3-desc">12 oz - Prestone</p>
+                            <div class="product-price">$9</div>
+                            <button type="button" class="btn btn-gold" id="product3-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="card-content">
+                            <div class="product-name" id="product4-name">Limpiaparabrisas</div>
+                            <p id="product4-desc">Galón - Ready to use</p>
+                            <div class="product-price">$5</div>
+                            <button type="button" class="btn btn-gold" id="product4-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN REGISTRO DE USUARIOS -->
+        <section id="registro">
+            <div class="container">
+                <h2 id="register-title">Registro de Clientes</h2>
+                <p class="section-description" id="register-description">Guarda los datos de tu vehículo para un servicio más rápido</p>
+                <div class="form-container">
+                    <form id="registerForm" onsubmit="guardarRegistro(event)">
+                        <div class="form-group">
+                            <label for="nombre" id="register-name-label">Nombre y Apellidos *</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" id="register-email-label">Email *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono" id="register-phone-label">Teléfono *</label>
+                            <input type="tel" id="telefono" name="telefono" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo" id="register-car-label">Marca y Modelo *</label>
+                            <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Ej: Honda Civic" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="anio" id="register-year-label">Año</label>
+                            <input type="number" id="anio" name="anio" class="form-control" placeholder="2020">
+                        </div>
+                        <div class="form-group">
+                            <label for="placa" id="register-plate-label">Placa (opcional)</label>
+                            <input type="text" id="placa" name="placa" class="form-control" placeholder="ABC-1234">
+                        </div>
+                        <button type="submit" class="btn btn-block" id="register-btn"><i class="fas fa-save"></i> Registrarme</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN RESERVAS ONLINE -->
+        <section id="reservas">
+            <div class="container">
+                <h2 id="booking-title">Reserva tu Turno</h2>
+                <p class="section-description" id="booking-description">Elige servicio, fecha y hora</p>
+
+                <!-- Mostrar cupo disponible -->
+                <div id="availabilityMessage" class="availability-message"></div>
+
+                <div class="form-container">
+                    <form id="bookingForm" onsubmit="return procesarReserva(event)">
+                        <div class="form-group">
+                            <label for="servicio" id="booking-service-label">Servicio *</label>
+                            <select id="servicio" name="servicio" class="form-control" required>
+                                <option value="" id="booking-select-option">Selecciona un servicio</option>
+                                <option value="Lavado Exterior">Lavado Exterior - $25</option>
+                                <option value="Lavado Completo">Lavado Completo - $45</option>
+                                <option value="Limpieza de Motor">Limpieza de Motor - $60</option>
+                                <option value="Pulido y Encerado">Pulido y Encerado - $120</option>
+                                <option value="Protección Cerámica">Protección Cerámica - $350</option>
+                                <option value="Paquete Premium">Paquete Premium - $480</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha" id="booking-date-label">Fecha *</label>
+                            <input type="date" id="fecha" name="fecha" class="form-control" required onchange="actualizarDisponibilidad()">
+                        </div>
+                        <div class="form-group">
+                            <label for="hora" id="booking-time-label">Hora *</label>
+                            <input type="time" id="hora" name="hora" class="form-control" required min="07:00" max="17:30" step="1800">
+                            <small id="time-help">Horario: 7:00 AM - 5:30 PM</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="notas" id="booking-notes-label">Notas adicionales</label>
+                            <textarea id="notas" name="notas" class="form-control" rows="3" placeholder="Alguna indicación especial..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-block" id="booking-btn"><i class="fas fa-calendar-check"></i> Solicitar Turno</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTACTO Y UBICACIÓN -->
+        <section id="contacto">
+            <div class="container">
+                <h2 id="contact-title">Visítanos o Contáctanos</h2>
+                <div class="contact-info-box">
+                    <p class="contact-address" id="contact-address"><i class="fas fa-map-pin"></i> 13330 West Road, Houston, TX 77041</p>
+                    <p id="contact-phone-email"><i class="fas fa-phone-alt"></i> +1 (713) 928-0466 | <i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</p>
+                </div>
+
+                <div class="social-section">
+                    <h3 class="social-title" id="social-title">Síguenos en redes</h3>
+                    <div class="social-links">
+                        <a href="https://wa.me/17139280466" class="social-link whatsapp" target="_blank" rel="noopener" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="sr-only">WhatsApp</span>
+                        </a>
+                        <a href="#" class="social-link facebook" target="_blank" rel="noopener" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span class="sr-only">Facebook</span>
+                        </a>
+                        <a href="#" class="social-link instagram" target="_blank" rel="noopener" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span class="sr-only">Instagram</span>
+                        </a>
+                        <a href="https://maps.google.com/?q=13330+West+Road+Houston+TX+77041" class="social-link map" target="_blank" rel="noopener" title="Ubicación">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span class="sr-only">Ubicación en Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Métodos de pago -->
+                <div class="payment-methods">
+                    <h3 class="social-title" id="payment-title">Métodos de pago aceptados</h3>
+                    <div class="payment-icons">
+                        <div class="payment-icon"><i class="fab fa-paypal"></i><span>PayPal</span></div>
+                        <div class="payment-icon"><i class="fab fa-apple-pay"></i><span>Apple Pay</span></div>
+                        <div class="payment-icon"><i class="fab fa-google-pay"></i><span>Google Pay</span></div>
+                        <div class="payment-icon"><i class="fas fa-university"></i><span>Venmo</span></div>
+                        <div class="payment-icon"><i class="fas fa-money-bill-wave"></i><span>Cash App</span></div>
+                        <div class="payment-icon"><i class="fas fa-university"></i><span>Zelle</span></div>
+                    </div>
+                </div>
+
+                <!-- Mapa placeholder -->
+                <div class="map-placeholder">
+                    <p id="map-text"><i class="fas fa-map"></i> Mapa de Houston, TX (próximamente)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER CON POLÍTICAS -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 id="footer-about-title">Detailing Team</h4>
+                    <p id="footer-about-text">Excelencia en brillo y protección automotriz en Houston, Texas.</p>
+                    <p id="footer-about-country"><i class="fas fa-flag-usa"></i> Servicio profesional y garantizado.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 id="footer-quick-title">Enlaces rápidos</h4>
+                    <p><a href="#servicios" id="footer-quick-services"><i class="fas fa-car"></i> Servicios</a></p>
+                    <p><a href="#catalogo" id="footer-quick-products"><i class="fas fa-oil-can"></i> Productos</a></p>
+                    <p><a href="#registro" id="footer-quick-register"><i class="fas fa-user-plus"></i> Registro</a></p>
+                    <p><a href="#reservas" id="footer-quick-bookings"><i class="fas fa-calendar-alt"></i> Reservas</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4 id="footer-legal-title">Legal</h4>
+                    <p><a href="privacy.html" id="footer-legal-privacy"><i class="fas fa-shield-alt"></i> Políticas de Privacidad</a></p>
+                    <p><a href="terms.html" id="footer-legal-terms"><i class="fas fa-file-contract"></i> Términos de Servicio</a></p>
+                    <p><a href="cookies.html" id="footer-legal-cookies"><i class="fas fa-cookie-bite"></i> Configuración de Cookies</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4 id="footer-domain-title">Próximo dominio</h4>
+                    <p id="footer-domain"><i class="fas fa-globe"></i> www.detailingteamtx.com</p>
+                    <p id="footer-secure"><i class="fas fa-lock"></i> Seguro con HTTPS</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p id="copyright-text">© 2024 Detailing Team. Todos los derechos reservados.</p>
+                <p id="copyright-security"><i class="fas fa-check-circle"></i> Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Nuestro archivo de JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
