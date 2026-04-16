@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Detailing Team</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Tipografías -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Estilos compartidos -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ============================================= */
+        /* ESTILOS ESPECÍFICOS DEL PANEL DE ADMINISTRACIÓN */
+        /* ============================================= */
+        .admin-login {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .admin-login h2 {
+            margin-bottom: 2rem;
+            color: var(--primary-blue);
+        }
+        .admin-login input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .admin-login button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .admin-login button:hover {
+            background: var(--secondary-blue);
+        }
+        .error-message {
+            color: var(--error-red);
+            margin-top: 1rem;
+            display: none;
+        }
+        .info-text {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        .admin-panel {
+            display: none;
+        }
+        .admin-header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        .admin-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: white;
+        }
+        .admin-header button {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e1e5e9;
+            padding-bottom: 1rem;
+        }
+        .tab {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .data-table {
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table tr:hover {
+            background: rgba(0,0,0,0.02);
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge.sedan {
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+        .badge.suv {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dark-gray);
+        }
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+        @media (max-width: 768px) {
+            .data-table {
+                overflow-x: auto;
+            }
+            .data-table table {
+                min-width: 600px;
+            }
+            .admin-header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================= -->
+    <!-- PANTALLA DE LOGIN DEL ADMINISTRADOR          -->
+    <!-- ============================================= -->
+    <div class="admin-login" id="loginScreen">
+        <h2 id="admin-login-title"><i class="fas fa-lock"></i> Acceso Administrativo</h2>
+        <input type="password" id="adminPassword" placeholder="Contraseña" autocomplete="current-password">
+        <button type="button" id="admin-login-btn" onclick="verificarLogin()">Entrar</button>
+        <div class="error-message" id="loginError">Contraseña incorrecta</div>
+        <div class="info-text" id="admin-login-info">
+            <i class="fas fa-info-circle"></i> Contraseña por defecto: <strong>admin123</strong>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- PANEL DE ADMINISTRACIÓN                       -->
+    <!-- ============================================= -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <div class="container">
+                <h1 id="admin-panel-title"><i class="fas fa-crown"></i> Panel de Administración - Detailing Team</h1>
+                <button type="button" id="admin-logout-btn" onclick="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Estadísticas -->
+            <div class="admin-stats" id="statsContainer"></div>
+
+            <!-- Pestañas -->
+            <div class="tabs">
+                <button type="button" class="tab active" onclick="cambiarTab('clientes')" id="tabClientes">📋 Clientes</button>
+                <button type="button" class="tab" onclick="cambiarTab('reservas')" id="tabReservas">📅 Reservas</button>
+            </div>
+
+            <!-- Contenido: Clientes -->
+            <div class="tab-content active" id="tabClientesContent">
+                <div class="data-table" id="clientesTable"></div>
+            </div>
+
+            <!-- Contenido: Reservas -->
+            <div class="tab-content" id="tabReservasContent">
+                <div class="data-table" id="reservasTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // SISTEMA DE IDIOMAS PARA ADMIN.HTML
+        // =============================================
+        // Este sistema permite cambiar el idioma del panel de administración
+        // entre español e inglés, leyendo la preferencia guardada en localStorage
+        // por la página principal (index.html).
+        // =============================================
+
+        // =============================================
+        // TEXTOS EN INGLÉS PARA EL PANEL DE ADMINISTRACIÓN
+        // =============================================
+        const textosAdminEn = {
+            // Login
+            'admin-login-title': 'Administrative Access',
+            'admin-login-btn': 'Login',
+            'admin-login-info': 'Default password: <strong>admin123</strong>',
+            'admin-logout-btn': 'Logout',
+            'admin-panel-title': 'Administration Panel - Detailing Team',
+            // Pestañas
+            'tabClientes': '📋 Clients',
+            'tabReservas': '📅 Bookings',
+            // Estadísticas
+            'stat-total-clients': 'Total Clients',
+            'stat-total-bookings': 'Total Bookings',
+            'stat-sedan': 'Sedan',
+            'stat-suv': 'SUV',
+            // Tabla clientes
+            'th-name': 'Name',
+            'th-email': 'Email',
+            'th-phone': 'Phone',
+            'th-vehicle': 'Vehicle',
+            'th-year': 'Year',
+            'th-plate': 'License Plate',
+            'th-registration-date': 'Registration Date',
+            // Tabla reservas
+            'th-service': 'Service',
+            'th-type': 'Type',
+            'th-date': 'Date',
+            'th-time': 'Time',
+            'th-price': 'Price',
+            'th-notes': 'Notes',
+            'th-client-email': 'Client Email',
+            'th-request-date': 'Request Date',
+            // Estados vacíos
+            'empty-clients-title': 'No registered clients',
+            'empty-clients-text': 'Clients will appear here when they register on the website.',
+            'empty-bookings-title': 'No bookings',
+            'empty-bookings-text': 'Bookings will appear here when clients make a reservation.',
+            // Tipo de vehículo
+            'vehicle-sedan': 'Sedan',
+            'vehicle-suv': 'SUV/Truck'
+        };
+
+        // =============================================
+        // TEXTOS EN ESPAÑOL PARA EL PANEL DE ADMINISTRACIÓN
+        // =============================================
+        const textosAdminEs = {
+            // Login
+            'admin-login-title': 'Acceso Administrativo',
+            'admin-login-btn': 'Entrar',
+            'admin-login-info': 'Contraseña por defecto: <strong>admin123</strong>',
+            'admin-logout-btn': 'Cerrar Sesión',
+            'admin-panel-title': 'Panel de Administración - Detailing Team',
+            // Pestañas
+            'tabClientes': '📋 Clientes',
+            'tabReservas': '📅 Reservas',
+            // Estadísticas
+            'stat-total-clients': 'Total Clientes',
+            'stat-total-bookings': 'Total Reservas',
+            'stat-sedan': 'Sedán',
+            'stat-suv': 'SUV',
+            // Tabla clientes
+            'th-name': 'Nombre',
+            'th-email': 'Email',
+            'th-phone': 'Teléfono',
+            'th-vehicle': 'Vehículo',
+            'th-year': 'Año',
+            'th-plate': 'Placa',
+            'th-registration-date': 'Fecha Registro',
+            // Tabla reservas
+            'th-service': 'Servicio',
+            'th-type': 'Tipo',
+            'th-date': 'Fecha',
+            'th-time': 'Hora',
+            'th-price': 'Precio',
+            'th-notes': 'Notas',
+            'th-client-email': 'Cliente Email',
+            'th-request-date': 'Solicitud',
+            // Estados vacíos
+            'empty-clients-title': 'No hay clientes registrados',
+            'empty-clients-text': 'Los clientes aparecerán aquí cuando se registren en la página.',
+            'empty-bookings-title': 'No hay reservas',
+            'empty-bookings-text': 'Las reservas aparecerán aquí cuando los clientes reserven.',
+            // Tipo de vehículo
+            'vehicle-sedan': 'Sedán',
+            'vehicle-suv': 'SUV/Truck'
+        };
+
+        // =============================================
+        // FUNCIÓN: actualizarIdiomaAdmin
+        // =============================================
+        // Actualiza todos los textos del panel de administración
+        // según el idioma seleccionado (lee de localStorage)
+        // =============================================
+        function actualizarIdiomaAdmin() {
+            const idioma = localStorage.getItem('idioma') || 'es';
+            const textos = idioma === 'en' ? textosAdminEn : textosAdminEs;
+            
+            // Actualizar textos del login
+            const loginTitle = document.getElementById('admin-login-title');
+            const loginBtn = document.getElementById('admin-login-btn');
+            const loginInfo = document.getElementById('admin-login-info');
+            const logoutBtn = document.getElementById('admin-logout-btn');
+            const panelTitle = document.getElementById('admin-panel-title');
+            
+            if (loginTitle) loginTitle.innerHTML = `<i class="fas fa-lock"></i> ${textos['admin-login-title']}`;
+            if (loginBtn) loginBtn.innerText = textos['admin-login-btn'];
+            if (loginInfo) loginInfo.innerHTML = `<i class="fas fa-info-circle"></i> ${textos['admin-login-info']}`;
+            if (logoutBtn) logoutBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${textos['admin-logout-btn']}`;
+            if (panelTitle) panelTitle.innerHTML = `<i class="fas fa-crown"></i> ${textos['admin-panel-title']}`;
+            
+            // Actualizar pestañas
+            const tabClientes = document.getElementById('tabClientes');
+            const tabReservas = document.getElementById('tabReservas');
+            if (tabClientes) tabClientes.innerHTML = textos['tabClientes'];
+            if (tabReservas) tabReservas.innerHTML = textos['tabReservas'];
+            
+            // Guardar textos en variable global para usar en las tablas
+            window.textosAdmin = textos;
+            
+            // Recargar datos para actualizar tablas
+            cargarDatos();
+        }
+
+        // =============================================
+        // FUNCIÓN: verificarLogin
+        // =============================================
+        // Verifica la contraseña ingresada y muestra el panel
+        // =============================================
+        function verificarLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                cargarDatos();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // =============================================
+        // FUNCIÓN: cerrarSesion
+        // =============================================
+        // Cierra la sesión y vuelve a la pantalla de login
+        // =============================================
+        function cerrarSesion() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        // =============================================
+        // FUNCIÓN: cargarDatos
+        // =============================================
+        // Carga los datos de clientes y reservas desde localStorage
+        // y actualiza las tablas y estadísticas
+        // =============================================
+        function cargarDatos() {
+            // Obtener datos de localStorage
+            const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+            const textos = window.textosAdmin || textosAdminEs;
+
+            // Actualizar estadísticas
+            const statsContainer = document.getElementById('statsContainer');
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <h3><i class="fas fa-users"></i> ${textos['stat-total-clients']}</h3>
+                    <div class="number">${clientes.length}</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-calendar-check"></i> ${textos['stat-total-bookings']}</h3>
+                    <div class="number">${reservas.length}</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-car"></i> ${textos['stat-sedan']}</h3>
+                    <div class="number">${reservas.filter(r => r.tipoVehiculo === 'sedan').length}</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-truck"></i> ${textos['stat-suv']}</h3>
+                    <div class="number">${reservas.filter(r => r.tipoVehiculo === 'suv').length}</div>
+                </div>
+            `;
+
+            // Tabla de clientes
+            const clientesTable = document.getElementById('clientesTable');
+            if (clientes.length === 0) {
+                clientesTable.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <h3>${textos['empty-clients-title']}</h3>
+                        <p>${textos['empty-clients-text']}</p>
+                    </div>
+                `;
+            } else {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>${textos['th-name']}</th>
+                                <th>${textos['th-email']}</th>
+                                <th>${textos['th-phone']}</th>
+                                <th>${textos['th-vehicle']}</th>
+                                <th>${textos['th-year']}</th>
+                                <th>${textos['th-plate']}</th>
+                                <th>${textos['th-registration-date']}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                clientes.forEach(c => {
+                    html += `
+                        <tr>
+                            <td>${c.nombre || ''}</td>
+                            <td>${c.email || ''}</td>
+                            <td>${c.telefono || ''}</td>
+                            <td>${c.modelo || ''}</td>
+                            <td>${c.anio || ''}</td>
+                            <td>${c.placa || '-'}</td>
+                            <td>${c.fecha || ''}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table>`;
+                clientesTable.innerHTML = html;
+            }
+
+            // Tabla de reservas
+            const reservasTable = document.getElementById('reservasTable');
+            if (reservas.length === 0) {
+                reservasTable.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>${textos['empty-bookings-title']}</h3>
+                        <p>${textos['empty-bookings-text']}</p>
+                    </div>
+                `;
+            } else {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>${textos['th-service']}</th>
+                                <th>${textos['th-type']}</th>
+                                <th>${textos['th-date']}</th>
+                                <th>${textos['th-time']}</th>
+                                <th>${textos['th-price']}</th>
+                                <th>${textos['th-notes']}</th>
+                                <th>${textos['th-client-email']}</th>
+                                <th>${textos['th-request-date']}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                reservas.forEach(r => {
+                    const badgeClass = r.tipoVehiculo === 'suv' ? 'badge suv' : 'badge sedan';
+                    const badgeText = r.tipoVehiculo === 'suv' ? textos['vehicle-suv'] : textos['vehicle-sedan'];
+                    html += `
+                        <tr>
+                            <td>${r.servicio || ''}</td>
+                            <td><span class="${badgeClass}">${badgeText}</span></td>
+                            <td>${r.fecha || ''}</td>
+                            <td>${r.hora || ''}</td>
+                            <td><strong>$${r.precio || ''}</strong></td>
+                            <td>${r.notas || '-'}</td>
+                            <td>${r.clienteEmail || '-'}</td>
+                            <td>${r.fechaSolicitud || ''}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table>`;
+                reservasTable.innerHTML = html;
+            }
+        }
+
+        // =============================================
+        // FUNCIÓN: cambiarTab
+        // =============================================
+        // Cambia entre la pestaña de clientes y reservas
+        // =============================================
+        function cambiarTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'clientes') {
+                document.getElementById('tabClientes').classList.add('active');
+                document.getElementById('tabClientesContent').classList.add('active');
+            } else {
+                document.getElementById('tabReservas').classList.add('active');
+                document.getElementById('tabReservasContent').classList.add('active');
+            }
+        }
+
+        // =============================================
+        // CONTRASEÑA DEL ADMINISTRADOR
+        // =============================================
+        const ADMIN_PASSWORD = "admin123";
+
+        // =============================================
+        // INICIALIZACIÓN - SE EJECUTA AL CARGAR LA PÁGINA
+        // =============================================
+        window.onload = function() {
+            // Aplicar idioma guardado
+            actualizarIdiomaAdmin();
+            
+            // Escuchar cambios en localStorage (cuando se cambia el idioma desde index.html)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'idioma') {
+                    actualizarIdiomaAdmin();
+                }
+            });
+            
+            // Mostrar pantalla de login
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Términos de Servicio - Detailing Team</title>
+    <title id="page-title">Términos de Servicio - Detailing Team</title>
+    <!-- ============================================= -->
+    <!-- FAVICON -->
+    <!-- ============================================= -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <!-- ============================================= -->
+    <!-- FONT AWESOME -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- TIPOGRAFÍAS (coherentes con el sitio) -->
+    <!-- ============================================= -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- ESTILOS COMPARTIDOS -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="styles.css">
+    <!-- ============================================= -->
+    <!-- ESTILOS ESPECÍFICOS PARA PÁGINAS LEGALES -->
+    <!-- ============================================= -->
     <style>
         .legal-content {
             max-width: 800px;
@@ -16,18 +33,30 @@
             border-radius: 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
+        .legal-content h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
         .legal-content h3 {
             color: var(--primary-blue);
             margin-top: 2rem;
             margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
         .legal-content p {
             margin-bottom: 1rem;
             line-height: 1.8;
+            color: var(--text-primary);
         }
         .legal-content ul {
             margin-left: 2rem;
             margin-bottom: 1rem;
+        }
+        .legal-content li {
+            margin-bottom: 0.5rem;
+        }
+        .legal-content strong {
+            color: var(--primary-blue);
         }
         .back-link {
             display: inline-block;
@@ -35,64 +64,284 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
+            transition: color 0.3s;
         }
         .back-link:hover {
+            color: var(--accent-gold);
             text-decoration: underline;
+        }
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+        .update-date {
+            color: var(--dark-gray);
+            font-style: italic;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eaeef2;
+        }
+        body.dark-mode .legal-content {
+            background: var(--card-bg);
+        }
+        body.dark-mode .legal-content h2,
+        body.dark-mode .legal-content h3,
+        body.dark-mode .legal-content strong {
+            color: var(--accent-gold);
+        }
+        body.dark-mode .update-date {
+            color: #aaa;
+            border-bottom-color: #444;
+        }
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            .legal-content h2 {
+                font-size: 1.8rem;
+            }
+            .legal-content h3 {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ============================================= -->
+    <!-- HEADER CON TÍTULOS TRADUCIBLES                -->
+    <!-- ============================================= -->
     <header>
         <div class="container header-content">
-            <h1>Detailing Team</h1>
-            <p class="slogan">Términos de Servicio</p>
+            <h1 id="header-title">Detailing Team</h1>
+            <p class="slogan" id="header-slogan">Términos de Servicio</p>
         </div>
     </header>
-
+    <!-- ============================================= -->
+    <!-- MAIN - CONTENIDO PRINCIPAL                    -->
+    <!-- ============================================= -->
     <main>
         <div class="container">
             <div class="legal-content">
-                <h2>Términos de Servicio</h2>
-                <p>Última actualización: 6 de marzo de 2025</p>
+                <!-- ========================================= -->
+                <!-- TÍTULO PRINCIPAL TRADUCIBLE               -->
+                <!-- ========================================= -->
+                <h2 id="terms-main-title">📋 Términos de Servicio</h2>
+                <p class="update-date" id="terms-update-date"><i class="far fa-calendar-alt"></i> Última actualización: 17 de marzo de 2026</p>
 
-                <h3>1. Aceptación de los términos</h3>
-                <p>Al acceder y utilizar el sitio web de Detailing Team (www.detailingteamtx.com), usted acepta cumplir con estos términos de servicio. Si no está de acuerdo con alguna parte, no debe utilizar nuestro sitio.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 1 - Aceptación de los términos    -->
+                <!-- ========================================= -->
+                <h3 id="terms-section1-title">1. Aceptación de los términos</h3>
+                <p id="terms-section1-text">Al acceder y utilizar el sitio web de <strong>Detailing Team</strong> (www.detailingteamtx.com), usted acepta cumplir con estos términos de servicio. Si no está de acuerdo con alguna parte, no debe utilizar nuestro sitio.</p>
 
-                <h3>2. Servicios ofrecidos</h3>
-                <p>Detailing Team ofrece servicios de lavado y protección automotriz en Houston, Texas. Las reservas realizadas a través de nuestro sitio están sujetas a disponibilidad y confirmación por nuestra parte. Nos reservamos el derecho de rechazar cualquier servicio por razones operativas.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 2 - Servicios ofrecidos           -->
+                <!-- ========================================= -->
+                <h3 id="terms-section2-title">2. Servicios ofrecidos</h3>
+                <p id="terms-section2-text"><strong>Detailing Team</strong> ofrece servicios de lavado y protección automotriz en Houston, Texas. Las reservas realizadas a través de nuestro sitio están sujetas a disponibilidad y confirmación por nuestra parte. Nos reservamos el derecho de rechazar cualquier servicio por razones operativas.</p>
 
-                <h3>3. Precios y pagos</h3>
-                <p>Los precios mostrados en el sitio están en dólares estadounidenses e incluyen los impuestos aplicables, a menos que se indique "+tax". Aceptamos los métodos de pago indicados en la sección de contacto. El pago se realiza en el momento del servicio, excepto cuando se indique lo contrario.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 3 - Precios y pagos               -->
+                <!-- ========================================= -->
+                <h3 id="terms-section3-title">3. Precios y pagos</h3>
+                <p id="terms-section3-text">Los precios mostrados en el sitio están en dólares estadounidenses e incluyen los impuestos aplicables, a menos que se indique "+tax". Aceptamos los métodos de pago indicados en la sección de contacto. El pago se realiza en el momento del servicio, excepto cuando se indique lo contrario.</p>
 
-                <h3>4. Cancelaciones y cambios</h3>
-                <p>Puede cancelar o modificar su reserva con al menos 2 horas de anticipación comunicándose al +1 (713) 928-0466 o respondiendo el mensaje de confirmación de WhatsApp. Las cancelaciones con menos de 2 horas de anticipación pueden estar sujetas a un cargo del 50% del servicio.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 4 - Cancelaciones y cambios       -->
+                <!-- ========================================= -->
+                <h3 id="terms-section4-title">4. Cancelaciones y cambios</h3>
+                <p id="terms-section4-text">Puede cancelar o modificar su reserva con al menos 2 horas de anticipación comunicándose al <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong> o respondiendo el mensaje de confirmación de WhatsApp. Las cancelaciones con menos de 2 horas de anticipación pueden estar sujetas a un cargo del 50% del servicio.</p>
 
-                <h3>5. Responsabilidad del cliente</h3>
-                <p>Usted es responsable de proporcionar información precisa al registrarse y al hacer una reserva. Detailing Team no se hace responsable por daños a vehículos debido a información incorrecta proporcionada por el cliente o por causas de fuerza mayor.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 5 - Responsabilidad del cliente   -->
+                <!-- ========================================= -->
+                <h3 id="terms-section5-title">5. Responsabilidad del cliente</h3>
+                <p id="terms-section5-text">Usted es responsable de proporcionar información precisa al registrarse y al hacer una reserva. <strong>Detailing Team</strong> no se hace responsable por daños a vehículos debido a información incorrecta proporcionada por el cliente o por causas de fuerza mayor.</p>
 
-                <h3>6. Propiedad intelectual</h3>
-                <p>Todo el contenido del sitio web, incluyendo logotipos, textos, imágenes y código, es propiedad de Detailing Team y está protegido por leyes de derechos de autor. No está permitido su uso sin autorización previa.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 6 - Propiedad intelectual        -->
+                <!-- ========================================= -->
+                <h3 id="terms-section6-title">6. Propiedad intelectual</h3>
+                <p id="terms-section6-text">Todo el contenido del sitio web, incluyendo logotipos, textos, imágenes y código, es propiedad de <strong>Detailing Team</strong> y está protegido por leyes de derechos de autor. No está permitido su uso sin autorización previa.</p>
 
-                <h3>7. Limitación de responsabilidad</h3>
-                <p>En ningún caso Detailing Team será responsable por daños indirectos, incidentales o consecuentes derivados del uso o la imposibilidad de uso de nuestros servicios.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 7 - Limitación de responsabilidad -->
+                <!-- ========================================= -->
+                <h3 id="terms-section7-title">7. Limitación de responsabilidad</h3>
+                <p id="terms-section7-text">En ningún caso <strong>Detailing Team</strong> será responsable por daños indirectos, incidentales o consecuentes derivados del uso o la imposibilidad de uso de nuestros servicios.</p>
 
-                <h3>8. Ley aplicable</h3>
-                <p>Estos términos se rigen por las leyes del estado de Texas, Estados Unidos. Cualquier disputa será resuelta en los tribunales de Houston, Texas.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 8 - Ley aplicable                 -->
+                <!-- ========================================= -->
+                <h3 id="terms-section8-title">8. Ley aplicable</h3>
+                <p id="terms-section8-text">Estos términos se rigen por las leyes del estado de Texas, Estados Unidos. Cualquier disputa será resuelta en los tribunales de Houston, Texas.</p>
 
-                <h3>9. Contacto</h3>
-                <p>Para preguntas sobre estos términos, contáctenos en: <strong>contactdetailingteam@gmail.com</strong> o llámenos al <strong>+1 (713) 928-0466</strong>.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 9 - Contacto                      -->
+                <!-- ========================================= -->
+                <h3 id="terms-section9-title">9. Contacto</h3>
+                <p id="terms-section9-text">Para preguntas sobre estos términos, contáctenos en:</p>
+                <p id="terms-contact-info">
+                    <i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br>
+                    <i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br>
+                    <i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041
+                </p>
 
-                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a la página principal</a>
+                <!-- ========================================= -->
+                <!-- ENLACE DE REGRESO                          -->
+                <!-- ========================================= -->
+                <a href="index.html" class="back-link" id="terms-back-link">
+                    <i class="fas fa-arrow-left"></i> Volver a la página principal
+                </a>
             </div>
         </div>
     </main>
-
+    <!-- ============================================= -->
+    <!-- FOOTER CON IDs PARA TRADUCCIÓN                -->
+    <!-- ============================================= -->
     <footer>
         <div class="container">
             <div class="copyright">
-                <p>© 2024 Detailing Team. Todos los derechos reservados.</p>
+                <p id="footer-copyright">© 2024-2026 Detailing Team. Todos los derechos reservados.</p>
+                <p>
+                    <a href="privacy.html" id="footer-link-privacy">Políticas de Privacidad</a> |
+                    <a href="cookies.html" id="footer-link-cookies">Configuración de Cookies</a> |
+                    <a href="index.html" id="footer-link-home">Inicio</a>
+                </p>
             </div>
         </div>
     </footer>
+
+    <!-- ============================================= -->
+    <!-- SCRIPT PARA TRADUCCIÓN DE TÉRMINOS            -->
+    <!-- ============================================= -->
+    <script>
+        // =============================================
+        // SISTEMA DE IDIOMAS PARA TERMS.HTML
+        // =============================================
+        // Este sistema permite cambiar el idioma de la página de términos de servicio
+        // entre español e inglés, leyendo la preferencia guardada en localStorage
+        // por la página principal (index.html).
+        // =============================================
+
+        // =============================================
+        // TEXTOS EN INGLÉS PARA TERMS.HTML
+        // =============================================
+        const textosTermsEn = {
+            'page-title': 'Terms of Service - Detailing Team',
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Terms of Service',
+            'terms-main-title': '📋 Terms of Service',
+            'terms-update-date': 'Last updated: March 17, 2026',
+            'terms-section1-title': '1. Acceptance of Terms',
+            'terms-section1-text': 'By accessing and using the <strong>Detailing Team</strong> website (www.detailingteamtx.com), you agree to comply with these terms of service. If you do not agree with any part, you should not use our site.',
+            'terms-section2-title': '2. Services Offered',
+            'terms-section2-text': '<strong>Detailing Team</strong> offers car washing and protection services in Houston, Texas. Reservations made through our site are subject to availability and confirmation by us. We reserve the right to refuse any service for operational reasons.',
+            'terms-section3-title': '3. Prices and Payments',
+            'terms-section3-text': 'Prices shown on the site are in US dollars and include applicable taxes, unless indicated "+tax". We accept the payment methods indicated in the contact section. Payment is made at the time of service, unless otherwise indicated.',
+            'terms-section4-title': '4. Cancellations and Changes',
+            'terms-section4-text': 'You can cancel or modify your reservation at least 2 hours in advance by calling <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong> or responding to the WhatsApp confirmation message. Cancellations with less than 2 hours notice may be subject to a 50% service charge.',
+            'terms-section5-title': '5. Customer Responsibility',
+            'terms-section5-text': 'You are responsible for providing accurate information when registering and making a reservation. <strong>Detailing Team</strong> is not responsible for damage to vehicles due to incorrect information provided by the customer or due to force majeure.',
+            'terms-section6-title': '6. Intellectual Property',
+            'terms-section6-text': 'All website content, including logos, texts, images and code, is owned by <strong>Detailing Team</strong> and is protected by copyright laws. Its use without prior authorization is not permitted.',
+            'terms-section7-title': '7. Limitation of Liability',
+            'terms-section7-text': 'In no event shall <strong>Detailing Team</strong> be liable for indirect, incidental or consequential damages arising from the use or inability to use our services.',
+            'terms-section8-title': '8. Applicable Law',
+            'terms-section8-text': 'These terms are governed by the laws of the State of Texas, United States. Any dispute shall be resolved in the courts of Houston, Texas.',
+            'terms-section9-title': '9. Contact',
+            'terms-section9-text': 'For questions about these terms, contact us at:',
+            'terms-contact-info': '<i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br><i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br><i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041',
+            'terms-back-link': 'Back to home page',
+            'footer-copyright': '© 2024-2026 Detailing Team. All rights reserved.',
+            'footer-link-privacy': 'Privacy Policy',
+            'footer-link-cookies': 'Cookie Settings',
+            'footer-link-home': 'Home'
+        };
+
+        // =============================================
+        // TEXTOS EN ESPAÑOL PARA TERMS.HTML
+        // =============================================
+        const textosTermsEs = {
+            'page-title': 'Términos de Servicio - Detailing Team',
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Términos de Servicio',
+            'terms-main-title': '📋 Términos de Servicio',
+            'terms-update-date': 'Última actualización: 17 de marzo de 2026',
+            'terms-section1-title': '1. Aceptación de los términos',
+            'terms-section1-text': 'Al acceder y utilizar el sitio web de <strong>Detailing Team</strong> (www.detailingteamtx.com), usted acepta cumplir con estos términos de servicio. Si no está de acuerdo con alguna parte, no debe utilizar nuestro sitio.',
+            'terms-section2-title': '2. Servicios ofrecidos',
+            'terms-section2-text': '<strong>Detailing Team</strong> ofrece servicios de lavado y protección automotriz en Houston, Texas. Las reservas realizadas a través de nuestro sitio están sujetas a disponibilidad y confirmación por nuestra parte. Nos reservamos el derecho de rechazar cualquier servicio por razones operativas.',
+            'terms-section3-title': '3. Precios y pagos',
+            'terms-section3-text': 'Los precios mostrados en el sitio están en dólares estadounidenses e incluyen los impuestos aplicables, a menos que se indique "+tax". Aceptamos los métodos de pago indicados en la sección de contacto. El pago se realiza en el momento del servicio, excepto cuando se indique lo contrario.',
+            'terms-section4-title': '4. Cancelaciones y cambios',
+            'terms-section4-text': 'Puede cancelar o modificar su reserva con al menos 2 horas de anticipación comunicándose al <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong> o respondiendo el mensaje de confirmación de WhatsApp. Las cancelaciones con menos de 2 horas de anticipación pueden estar sujetas a un cargo del 50% del servicio.',
+            'terms-section5-title': '5. Responsabilidad del cliente',
+            'terms-section5-text': 'Usted es responsable de proporcionar información precisa al registrarse y al hacer una reserva. <strong>Detailing Team</strong> no se hace responsable por daños a vehículos debido a información incorrecta proporcionada por el cliente o por causas de fuerza mayor.',
+            'terms-section6-title': '6. Propiedad intelectual',
+            'terms-section6-text': 'Todo el contenido del sitio web, incluyendo logotipos, textos, imágenes y código, es propiedad de <strong>Detailing Team</strong> y está protegido por leyes de derechos de autor. No está permitido su uso sin autorización previa.',
+            'terms-section7-title': '7. Limitación de responsabilidad',
+            'terms-section7-text': 'En ningún caso <strong>Detailing Team</strong> será responsable por daños indirectos, incidentales o consecuentes derivados del uso o la imposibilidad de uso de nuestros servicios.',
+            'terms-section8-title': '8. Ley aplicable',
+            'terms-section8-text': 'Estos términos se rigen por las leyes del estado de Texas, Estados Unidos. Cualquier disputa será resuelta en los tribunales de Houston, Texas.',
+            'terms-section9-title': '9. Contacto',
+            'terms-section9-text': 'Para preguntas sobre estos términos, contáctenos en:',
+            'terms-contact-info': '<i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br><i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br><i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041',
+            'terms-back-link': 'Volver a la página principal',
+            'footer-copyright': '© 2024-2026 Detailing Team. Todos los derechos reservados.',
+            'footer-link-privacy': 'Políticas de Privacidad',
+            'footer-link-cookies': 'Configuración de Cookies',
+            'footer-link-home': 'Inicio'
+        };
+
+        // =============================================
+        // FUNCIÓN: actualizarIdiomaTerms
+        // =============================================
+        // Actualiza todos los textos de la página de términos de servicio
+        // según el idioma seleccionado (lee de localStorage)
+        // =============================================
+        function actualizarIdiomaTerms() {
+            const idioma = localStorage.getItem('idioma') || 'es';
+            const textos = idioma === 'en' ? textosTermsEn : textosTermsEs;
+
+            // Recorrer todos los IDs y actualizar el contenido
+            for (let id in textos) {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    // Si el texto contiene HTML (como contact-info), usar innerHTML
+                    if (id.includes('contact-info') || id.includes('text')) {
+                        elemento.innerHTML = textos[id];
+                    } else {
+                        // Para títulos, usar innerText
+                        elemento.innerText = textos[id];
+                    }
+                }
+            }
+
+            // Actualizar también los elementos que no tienen ID fijo
+            const headerTitle = document.querySelector('header h1');
+            const headerSlogan = document.querySelector('header .slogan');
+            if (headerTitle) headerTitle.innerText = textos['header-title'];
+            if (headerSlogan) headerSlogan.innerText = textos['header-slogan'];
+
+            // Actualizar el título de la pestaña del navegador
+            document.title = textos['page-title'];
+        }
+
+        // =============================================
+        // INICIALIZACIÓN - SE EJECUTA AL CARGAR LA PÁGINA
+        // =============================================
+        window.onload = function() {
+            // Aplicar idioma guardado
+            actualizarIdiomaTerms();
+
+            // Escuchar cambios en localStorage (cuando se cambia el idioma desde index.html)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'idioma') {
+                    actualizarIdiomaTerms();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

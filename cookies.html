@@ -3,11 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuración de Cookies - Detailing Team</title>
+    <title id="page-title">Configuración de Cookies - Detailing Team</title>
+    <!-- ============================================= -->
+    <!-- FAVICON - Icono de la página en la pestaña   -->
+    <!-- ============================================= -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <!-- ============================================= -->
+    <!-- FONT AWESOME - Iconos profesionales           -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- TIPOGRAFÍAS - Usando las mismas del sitio     -->
+    <!-- ============================================= -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- ESTILOS COMPARTIDOS - El mismo CSS del sitio  -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="styles.css">
+    <!-- ============================================= -->
+    <!-- ESTILOS ESPECÍFICOS PARA PÁGINAS LEGALES      -->
+    <!-- ============================================= -->
     <style>
+        /* ========================================= */
+        /* Estilos para el contenido legal           */
+        /* ========================================= */
         .legal-content {
             max-width: 800px;
             margin: 2rem auto;
@@ -15,6 +35,10 @@
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .legal-content h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
         }
         .legal-content h3 {
             color: var(--primary-blue);
@@ -29,152 +53,422 @@
             margin-left: 2rem;
             margin-bottom: 1rem;
         }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 600;
+        .legal-content li {
+            margin-bottom: 0.5rem;
         }
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        /* ========================================= */
+        /* Estilos para las opciones de cookies      */
+        /* ========================================= */
         .cookie-option {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             margin: 1rem 0;
-            padding: 1rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
             border: 1px solid #eaeef2;
-            border-radius: 8px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .cookie-option:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         .cookie-option input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
+            margin-top: 3px;
             cursor: pointer;
+            accent-color: var(--primary-blue);
         }
         .cookie-option label {
             font-weight: 600;
             color: var(--primary-blue);
+            margin-bottom: 0.3rem;
+            display: block;
         }
+        .cookie-option p {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        /* ========================================= */
+        /* Botones de cookies                        */
+        /* ========================================= */
         .cookie-buttons {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
             flex-wrap: wrap;
         }
+        /* ========================================= */
+        /* Enlace de regreso                         */
+        /* ========================================= */
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+        /* ========================================= */
+        /* Ajustes para modo oscuro                  */
+        /* ========================================= */
+        body.dark-mode .cookie-option {
+            background: var(--card-bg);
+            border-color: #444;
+        }
+        body.dark-mode .cookie-option label {
+            color: var(--accent-gold);
+        }
+        /* ========================================= */
+        /* Responsive                                */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            .cookie-option {
+                padding: 1rem;
+            }
+            .cookie-buttons {
+                flex-direction: column;
+            }
+            .cookie-buttons button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- ============================================= -->
+    <!-- HEADER - Cabecera con título                  -->
+    <!-- ============================================= -->
     <header>
         <div class="container header-content">
-            <h1>Detailing Team</h1>
-            <p class="slogan">Configuración de Cookies</p>
+            <h1 id="header-title">Detailing Team</h1>
+            <p class="slogan" id="header-slogan">Configuración de Cookies</p>
         </div>
     </header>
-
+    <!-- ============================================= -->
+    <!-- MAIN - Contenido principal                    -->
+    <!-- ============================================= -->
     <main>
         <div class="container">
             <div class="legal-content">
-                <h2>Política de Cookies</h2>
-                <p>Última actualización: 6 de marzo de 2025</p>
-                <p>En Detailing Team utilizamos cookies y tecnologías similares para mejorar tu experiencia en nuestro sitio web, personalizar el contenido, analizar nuestro tráfico y mostrar publicidad relevante. Esta página te permite configurar tus preferencias de cookies.</p>
+                <!-- Título principal con ID para traducción -->
+                <h2 id="cookies-main-title">🍪 Política de Cookies</h2>
+                <!-- Fecha de actualización con ID para traducción -->
+                <p id="cookies-update-date"><em>Última actualización: 17 de marzo de 2026</em></p>
+                <!-- Párrafo introductorio con ID para traducción -->
+                <p id="cookies-intro-text">En <strong>Detailing Team</strong> utilizamos cookies y tecnologías similares para mejorar tu experiencia en nuestro sitio web, personalizar el contenido, analizar nuestro tráfico y mostrar publicidad relevante. Esta página te permite configurar tus preferencias de cookies.</p>
 
-                <h3>¿Qué son las cookies?</h3>
-                <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Se utilizan ampliamente para hacer que los sitios web funcionen correctamente, así como para proporcionar información a los propietarios del sitio.</p>
+                <!-- Sección: ¿Qué son las cookies? -->
+                <h3 id="cookies-what-title">¿Qué son las cookies?</h3>
+                <p id="cookies-what-text">Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Se utilizan ampliamente para hacer que los sitios web funcionen correctamente, así como para proporcionar información a los propietarios del sitio sobre cómo los visitantes interactúan con él.</p>
 
-                <h3>Tipos de cookies que utilizamos</h3>
+                <!-- Sección: Tipos de cookies -->
+                <h3 id="cookies-types-title">Tipos de cookies que utilizamos</h3>
 
+                <!-- Opción 1: Cookies necesarias (siempre activas) -->
                 <div class="cookie-option">
                     <input type="checkbox" id="necessary" checked disabled>
                     <div>
-                        <label for="necessary">Cookies necesarias (siempre activas)</label>
-                        <p>Estas cookies son esenciales para el funcionamiento básico del sitio web, como la navegación entre páginas y el acceso a áreas seguras. No pueden desactivarse.</p>
+                        <label for="necessary" id="cookies-necessary-label">📌 Cookies necesarias (siempre activas)</label>
+                        <p id="cookies-necessary-text">Estas cookies son esenciales para el funcionamiento básico del sitio web, como la navegación entre páginas y el acceso a áreas seguras. No pueden desactivarse.</p>
                     </div>
                 </div>
 
+                <!-- Opción 2: Cookies de análisis -->
                 <div class="cookie-option">
                     <input type="checkbox" id="analytics">
                     <div>
-                        <label for="analytics">Cookies de análisis</label>
-                        <p>Nos ayudan a entender cómo interactúan los visitantes con el sitio web, recopilando información de forma anónima. Esto nos permite mejorar la funcionalidad y la experiencia del usuario.</p>
+                        <label for="analytics" id="cookies-analytics-label">📊 Cookies de análisis</label>
+                        <p id="cookies-analytics-text">Nos ayudan a entender cómo interactúan los visitantes con el sitio web, recopilando información de forma anónima. Esto nos permite mejorar la funcionalidad y la experiencia del usuario.</p>
                     </div>
                 </div>
 
+                <!-- Opción 3: Cookies de marketing -->
                 <div class="cookie-option">
                     <input type="checkbox" id="marketing">
                     <div>
-                        <label for="marketing">Cookies de marketing</label>
-                        <p>Se utilizan para rastrear a los visitantes en los sitios web y mostrar anuncios relevantes y atractivos para el usuario individual.</p>
+                        <label for="marketing" id="cookies-marketing-label">🎯 Cookies de marketing</label>
+                        <p id="cookies-marketing-text">Se utilizan para rastrear a los visitantes en los sitios web y mostrar anuncios relevantes y atractivos para el usuario individual.</p>
                     </div>
                 </div>
 
-                <h3>Cookies específicas que usamos</h3>
-                <ul>
-                    <li><strong>localStorage (datos locales):</strong> Almacenamos temporalmente en tu navegador la información de registro y reservas para ofrecerte una experiencia personalizada. Estos datos no se comparten con terceros.</li>
-                    <li><strong>Preferencias de idioma y tema:</strong> Guardamos tu elección de idioma (español/inglés) y tema (claro/oscuro/sistema) para que no tengas que volver a seleccionarlos en cada visita.</li>
-                    <li><strong>Google Maps (futuro):</strong> Cuando implementemos el mapa interactivo, se cargarán cookies de Google para mostrar la ubicación correctamente.</li>
+                <!-- Sección: Cookies específicas -->
+                <h3 id="cookies-specific-title">Cookies específicas que usamos</h3>
+                <ul id="cookies-specific-list">
+                    <li><strong>📦 localStorage (datos locales):</strong> Almacenamos temporalmente en tu navegador la información de registro y reservas para ofrecerte una experiencia personalizada. Estos datos no se comparten con terceros y solo se usan para mejorar tu experiencia.</li>
+                    <li><strong>🌓 Preferencias de idioma y tema:</strong> Guardamos tu elección de idioma (español/inglés) y tema (claro/oscuro/sistema) para que no tengas que volver a seleccionarlos en cada visita.</li>
+                    <li><strong>🗺️ Google Maps:</strong> Cuando utilizas el mapa interactivo, se cargan cookies de Google para mostrar la ubicación correctamente y recordar tus preferencias de visualización.</li>
                 </ul>
 
-                <h3>Cómo controlar las cookies</h3>
-                <p>Puedes aceptar o rechazar las cookies no esenciales mediante los botones a continuación. También puedes configurar tu navegador para bloquear o eliminar cookies. Sin embargo, si desactivas algunas cookies, es posible que ciertas partes del sitio no funcionen correctamente.</p>
+                <!-- Sección: Cómo controlar cookies -->
+                <h3 id="cookies-control-title">Cómo controlar las cookies</h3>
+                <p id="cookies-control-text">Puedes aceptar o rechazar las cookies no esenciales mediante los botones a continuación. También puedes configurar tu navegador para bloquear o eliminar cookies. Sin embargo, si desactivas algunas cookies, es posible que ciertas partes del sitio no funcionen correctamente.</p>
 
+                <!-- Botones de acción con IDs para traducción -->
                 <div class="cookie-buttons">
-                    <button type="button" class="btn" onclick="aceptarTodas()">Aceptar todas</button>
-                    <button type="button" class="btn btn-gold" onclick="rechazarTodas()">Rechazar todas</button>
-                    <button type="button" class="btn" onclick="guardarPreferencias()">Guardar preferencias</button>
+                    <button type="button" class="btn" id="btn-accept-all" onclick="aceptarTodas()">
+                        <i class="fas fa-check-circle"></i> Aceptar todas
+                    </button>
+                    <button type="button" class="btn btn-gold" id="btn-reject-all" onclick="rechazarTodas()">
+                        <i class="fas fa-times-circle"></i> Rechazar todas
+                    </button>
+                    <button type="button" class="btn" id="btn-save-preferences" onclick="guardarPreferencias()">
+                        <i class="fas fa-save"></i> Guardar preferencias
+                    </button>
                 </div>
 
-                <h3>Más información</h3>
-                <p>Para cualquier pregunta sobre nuestras políticas de cookies, contáctanos en: <strong>contactdetailingteam@gmail.com</strong> o llámanos al <strong>+1 (713) 928-0466</strong>.</p>
+                <!-- Sección: Más información -->
+                <h3 id="cookies-more-info-title">Más información</h3>
+                <p id="cookies-more-info-text">Para cualquier pregunta sobre nuestras políticas de cookies, contáctanos en: <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong> o llámanos al <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong>.</p>
 
-                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a la página principal</a>
+                <!-- Enlace para volver a la página principal con ID para traducción -->
+                <a href="index.html" class="back-link" id="cookies-back-link">
+                    <i class="fas fa-arrow-left"></i> Volver a la página principal
+                </a>
             </div>
         </div>
     </main>
-
+    <!-- ============================================= -->
+    <!-- FOOTER - Pie de página con IDs para traducción -->
+    <!-- ============================================= -->
     <footer>
         <div class="container">
             <div class="copyright">
-                <p>© 2024 Detailing Team. Todos los derechos reservados.</p>
+                <p id="footer-copyright">© 2024-2026 Detailing Team. Todos los derechos reservados.</p>
+                <p>
+                    <a href="privacy.html" id="footer-link-privacy">Políticas de Privacidad</a> |
+                    <a href="terms.html" id="footer-link-terms">Términos de Servicio</a> |
+                    <a href="index.html" id="footer-link-home">Inicio</a>
+                </p>
             </div>
         </div>
     </footer>
-
+    <!-- ============================================= -->
+    <!-- SCRIPT PARA GESTIÓN DE COOKIES Y TRADUCCIÓN   -->
+    <!-- ============================================= -->
     <script>
+        // =============================================
+        // SISTEMA DE IDIOMAS PARA COOKIES.HTML
+        // =============================================
+        // Este sistema permite cambiar el idioma de la página de cookies
+        // entre español e inglés, leyendo la preferencia guardada en localStorage
+        // por la página principal (index.html).
+        // =============================================
+
+        // =============================================
+        // TEXTOS EN INGLÉS PARA COOKIES.HTML
+        // =============================================
+        const textosCookiesEn = {
+            'page-title': 'Cookie Settings - Detailing Team',
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Cookie Settings',
+            'cookies-main-title': '🍪 Cookie Policy',
+            'cookies-update-date': 'Last updated: March 17, 2026',
+            'cookies-intro-text': 'At <strong>Detailing Team</strong> we use cookies and similar technologies to improve your experience on our website, personalize content, analyze our traffic, and show relevant advertising. This page allows you to configure your cookie preferences.',
+            'cookies-what-title': 'What are cookies?',
+            'cookies-what-text': 'Cookies are small text files that are stored on your device when you visit a website. They are widely used to make websites work properly, as well as to provide information to site owners about how visitors interact with the site.',
+            'cookies-types-title': 'Types of cookies we use',
+            'cookies-necessary-label': '📌 Necessary cookies (always active)',
+            'cookies-necessary-text': 'These cookies are essential for the basic functioning of the website, such as navigation between pages and access to secure areas. They cannot be disabled.',
+            'cookies-analytics-label': '📊 Analytics cookies',
+            'cookies-analytics-text': 'They help us understand how visitors interact with the website, collecting information anonymously. This allows us to improve functionality and user experience.',
+            'cookies-marketing-label': '🎯 Marketing cookies',
+            'cookies-marketing-text': 'They are used to track visitors across websites and show relevant and attractive ads to the individual user.',
+            'cookies-specific-title': 'Specific cookies we use',
+            'cookies-specific-list': '<li><strong>📦 localStorage (local data):</strong> We temporarily store registration and reservation information in your browser to offer you a personalized experience. This data is not shared with third parties and is only used to improve your experience.</li><li><strong>🌓 Language and theme preferences:</strong> We save your language choice (Spanish/English) and theme (light/dark/system) so you don\'t have to select them again on each visit.</li><li><strong>🗺️ Google Maps:</strong> When you use the interactive map, Google cookies are loaded to display the location correctly and remember your viewing preferences.</li>',
+            'cookies-control-title': 'How to control cookies',
+            'cookies-control-text': 'You can accept or reject non-essential cookies using the buttons below. You can also configure your browser to block or delete cookies. However, if you disable some cookies, certain parts of the site may not function correctly.',
+            'btn-accept-all': 'Accept all',
+            'btn-reject-all': 'Reject all',
+            'btn-save-preferences': 'Save preferences',
+            'cookies-more-info-title': 'More information',
+            'cookies-more-info-text': 'For any questions about our cookie policies, contact us at: <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong> or call us at <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong>.',
+            'cookies-back-link': 'Back to home page',
+            'footer-copyright': '© 2024-2026 Detailing Team. All rights reserved.',
+            'footer-link-privacy': 'Privacy Policy',
+            'footer-link-terms': 'Terms of Service',
+            'footer-link-home': 'Home'
+        };
+
+        // =============================================
+        // TEXTOS EN ESPAÑOL PARA COOKIES.HTML
+        // =============================================
+        const textosCookiesEs = {
+            'page-title': 'Configuración de Cookies - Detailing Team',
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Configuración de Cookies',
+            'cookies-main-title': '🍪 Política de Cookies',
+            'cookies-update-date': 'Última actualización: 17 de marzo de 2026',
+            'cookies-intro-text': 'En <strong>Detailing Team</strong> utilizamos cookies y tecnologías similares para mejorar tu experiencia en nuestro sitio web, personalizar el contenido, analizar nuestro tráfico y mostrar publicidad relevante. Esta página te permite configurar tus preferencias de cookies.',
+            'cookies-what-title': '¿Qué son las cookies?',
+            'cookies-what-text': 'Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Se utilizan ampliamente para hacer que los sitios web funcionen correctamente, así como para proporcionar información a los propietarios del sitio sobre cómo los visitantes interactúan con él.',
+            'cookies-types-title': 'Tipos de cookies que utilizamos',
+            'cookies-necessary-label': '📌 Cookies necesarias (siempre activas)',
+            'cookies-necessary-text': 'Estas cookies son esenciales para el funcionamiento básico del sitio web, como la navegación entre páginas y el acceso a áreas seguras. No pueden desactivarse.',
+            'cookies-analytics-label': '📊 Cookies de análisis',
+            'cookies-analytics-text': 'Nos ayudan a entender cómo interactúan los visitantes con el sitio web, recopilando información de forma anónima. Esto nos permite mejorar la funcionalidad y la experiencia del usuario.',
+            'cookies-marketing-label': '🎯 Cookies de marketing',
+            'cookies-marketing-text': 'Se utilizan para rastrear a los visitantes en los sitios web y mostrar anuncios relevantes y atractivos para el usuario individual.',
+            'cookies-specific-title': 'Cookies específicas que usamos',
+            'cookies-specific-list': '<li><strong>📦 localStorage (datos locales):</strong> Almacenamos temporalmente en tu navegador la información de registro y reservas para ofrecerte una experiencia personalizada. Estos datos no se comparten con terceros y solo se usan para mejorar tu experiencia.</li><li><strong>🌓 Preferencias de idioma y tema:</strong> Guardamos tu elección de idioma (español/inglés) y tema (claro/oscuro/sistema) para que no tengas que volver a seleccionarlos en cada visita.</li><li><strong>🗺️ Google Maps:</strong> Cuando utilizas el mapa interactivo, se cargan cookies de Google para mostrar la ubicación correctamente y recordar tus preferencias de visualización.</li>',
+            'cookies-control-title': 'Cómo controlar las cookies',
+            'cookies-control-text': 'Puedes aceptar o rechazar las cookies no esenciales mediante los botones a continuación. También puedes configurar tu navegador para bloquear o eliminar cookies. Sin embargo, si desactivas algunas cookies, es posible que ciertas partes del sitio no funcionen correctamente.',
+            'btn-accept-all': 'Aceptar todas',
+            'btn-reject-all': 'Rechazar todas',
+            'btn-save-preferences': 'Guardar preferencias',
+            'cookies-more-info-title': 'Más información',
+            'cookies-more-info-text': 'Para cualquier pregunta sobre nuestras políticas de cookies, contáctanos en: <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong> o llámanos al <strong><i class="fas fa-phone-alt"></i> +1 (713) 928-0466</strong>.',
+            'cookies-back-link': 'Volver a la página principal',
+            'footer-copyright': '© 2024-2026 Detailing Team. Todos los derechos reservados.',
+            'footer-link-privacy': 'Políticas de Privacidad',
+            'footer-link-terms': 'Términos de Servicio',
+            'footer-link-home': 'Inicio'
+        };
+
+        // =============================================
+        // FUNCIÓN: actualizarIdiomaCookies
+        // =============================================
+        // Actualiza todos los textos de la página de cookies
+        // según el idioma seleccionado (lee de localStorage)
+        // También actualiza los textos de los botones y el título de la página
+        // =============================================
+        function actualizarIdiomaCookies() {
+            const idioma = localStorage.getItem('idioma') || 'es';
+            const textos = idioma === 'en' ? textosCookiesEn : textosCookiesEs;
+
+            // Recorrer todos los IDs y actualizar el contenido
+            for (let id in textos) {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    // Si el texto contiene HTML (como listas), usar innerHTML
+                    if (id.includes('list') || id.includes('text')) {
+                        elemento.innerHTML = textos[id];
+                    } else {
+                        // Para títulos, botones y labels usar innerText
+                        elemento.innerText = textos[id];
+                    }
+                }
+            }
+
+            // Actualizar también los elementos que no tienen ID fijo
+            const headerTitle = document.querySelector('header h1');
+            const headerSlogan = document.querySelector('header .slogan');
+            if (headerTitle) headerTitle.innerText = textos['header-title'];
+            if (headerSlogan) headerSlogan.innerText = textos['header-slogan'];
+
+            // Actualizar el título de la pestaña del navegador
+            document.title = textos['page-title'];
+
+            // Actualizar los textos de los botones que tienen iconos (innerHTML)
+            const btnAcceptAll = document.getElementById('btn-accept-all');
+            const btnRejectAll = document.getElementById('btn-reject-all');
+            const btnSavePrefs = document.getElementById('btn-save-preferences');
+
+            if (btnAcceptAll) {
+                btnAcceptAll.innerHTML = `<i class="fas fa-check-circle"></i> ${textos['btn-accept-all']}`;
+            }
+            if (btnRejectAll) {
+                btnRejectAll.innerHTML = `<i class="fas fa-times-circle"></i> ${textos['btn-reject-all']}`;
+            }
+            if (btnSavePrefs) {
+                btnSavePrefs.innerHTML = `<i class="fas fa-save"></i> ${textos['btn-save-preferences']}`;
+            }
+        }
+
+        // =============================================
+        // FUNCIÓN: aceptarTodas
+        // =============================================
+        // Activa todas las cookies (análisis y marketing) y guarda las preferencias
+        // Muestra un mensaje de confirmación en el idioma actual
+        // =============================================
         function aceptarTodas() {
             document.getElementById('analytics').checked = true;
             document.getElementById('marketing').checked = true;
             guardarPreferencias();
         }
 
+        // =============================================
+        // FUNCIÓN: rechazarTodas
+        // =============================================
+        // Desactiva todas las cookies no esenciales (análisis y marketing) y guarda las preferencias
+        // Muestra un mensaje de confirmación en el idioma actual
+        // =============================================
         function rechazarTodas() {
             document.getElementById('analytics').checked = false;
             document.getElementById('marketing').checked = false;
             guardarPreferencias();
         }
 
+        // =============================================
+        // FUNCIÓN: guardarPreferencias
+        // =============================================
+        // Guarda las preferencias de cookies en localStorage
+        // Muestra un mensaje de confirmación en el idioma actual
+        // =============================================
         function guardarPreferencias() {
             const preferencias = {
                 necesarias: true,
                 analiticas: document.getElementById('analytics').checked,
                 marketing: document.getElementById('marketing').checked,
-                fecha: new Date().toISOString()
+                fecha: new Date().toLocaleString(),
+                timestamp: Date.now()
             };
             localStorage.setItem('cookiePreferences', JSON.stringify(preferencias));
-            const lang = navigator.language || 'es';
-            alert(lang.startsWith('es') ? 'Preferencias de cookies guardadas correctamente.' : 'Cookie preferences saved successfully.');
+
+            // Mostrar alerta en el idioma actual
+            const idioma = localStorage.getItem('idioma') || 'es';
+            if (idioma === 'es') {
+                alert('✅ Preferencias de cookies guardadas correctamente.');
+            } else {
+                alert('✅ Cookie preferences saved successfully.');
+            }
+            console.log('📦 Preferencias guardadas:', preferencias);
         }
 
+        // =============================================
+        // INICIALIZACIÓN - SE EJECUTA AL CARGAR LA PÁGINA
+        // =============================================
         window.onload = function() {
+            // Aplicar idioma guardado
+            actualizarIdiomaCookies();
+
+            // Cargar preferencias de cookies guardadas
             const guardadas = localStorage.getItem('cookiePreferences');
             if (guardadas) {
                 try {
                     const pref = JSON.parse(guardadas);
-                    document.getElementById('analytics').checked = pref.analiticas;
-                    document.getElementById('marketing').checked = pref.marketing;
-                } catch(e) {}
+                    document.getElementById('analytics').checked = pref.analiticas || false;
+                    document.getElementById('marketing').checked = pref.marketing || false;
+                    console.log('📦 Preferencias cargadas:', pref);
+                } catch(e) {
+                    console.log('⚠️ Error cargando preferencias:', e);
+                }
+            } else {
+                console.log('📦 No hay preferencias guardadas. Usando valores por defecto.');
+                document.getElementById('analytics').checked = false;
+                document.getElementById('marketing').checked = false;
             }
+
+            // Escuchar cambios en localStorage (cuando se cambia el idioma desde index.html)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'idioma') {
+                    actualizarIdiomaCookies();
+                }
+            });
         };
     </script>
 </body>

@@ -1,52 +1,90 @@
-/* ===== ESTILOS PROFESIONALES PARA DETAILING TEAM ===== */
+/* =============================================
+   ESTILOS PROFESIONALES PARA DETAILING TEAM
+   =============================================
+   Versión: 2.0 (Corregida)
+   Fecha: 17/03/2026
+   Compatibilidad: Chrome, Firefox, Safari, Edge
+   ============================================= */
+
+/* ============================================= */
+/* VARIABLES GLOBALES (Modo claro por defecto)   */
+/* ============================================= */
 :root {
-    /* Modo claro (por defecto) */
+    /* Colores principales */
     --primary-blue: #0a2b5c;
     --secondary-blue: #1e4a7a;
     --accent-gold: #c9a959;
+    
+    /* Colores neutros */
     --light-gray: #f4f7fb;
     --dark-gray: #333333;
     --white: #ffffff;
+    
+    /* Estados y feedback */
     --success-green: #2e7d32;
     --error-red: #c62828;
     --error-bg: #ffebee;
     --success-bg: #e8f5e9;
+    
+    /* Redes sociales */
     --whatsapp-green: #25D366;
     --facebook-blue: #1877F2;
     --instagram-pink: #E4405F;
     --instagram-purple: #833AB4;
     --instagram-orange: #FCAF45;
     --map-red: #EA4335;
+    
+    /* Métodos de pago */
     --paypal-blue: #003087;
     --venmo-blue: #0085CA;
     --cashapp-green: #00D632;
     --applepay-black: #000000;
     --googlepay-blue: #4285F4;
     --zelle-purple: #6A1B9A;
+    --sms-blue: #34b7f1;
+    
+    /* Variables dinámicas (cambian con el tema) */
     --bg-primary: var(--light-gray);
     --text-primary: var(--dark-gray);
     --card-bg: var(--white);
     --footer-text: rgba(255,255,255,0.8);
 }
 
-/* Modo oscuro */
+/* ============================================= */
+/* MODO OSCURO - SOBREESCRIBE VARIABLES         */
+/* ============================================= */
 body.dark-mode {
+    /* Colores principales más suaves para modo oscuro */
     --primary-blue: #1e3a5f;
     --secondary-blue: #2b4c7c;
     --accent-gold: #d4af37;
+    
+    /* Colores neutros oscuros */
     --light-gray: #1a1a1a;
     --dark-gray: #e0e0e0;
     --white: #2d2d2d;
+    
+    /* Estados en modo oscuro */
     --success-green: #4caf50;
     --error-red: #f44336;
     --error-bg: #4a2c2c;
     --success-bg: #1e3a2e;
+    
+    /* Variables dinámicas modo oscuro */
     --bg-primary: #121212;
-    --text-primary: #e0e0e0;
-    --card-bg: #2d2d2d;
-    --footer-text: #cccccc;
+    --text-primary: #f0f0f0;
+    --card-bg: #2a2a2a;
+    --footer-text: #dddddd;
 }
 
+/* Fondo general con degradado en modo oscuro */
+body.dark-mode {
+    background: linear-gradient(180deg, #121212 0%, #1a1a2e 100%);
+}
+
+/* ============================================= */
+/* RESET Y ESTILOS BASE                          */
+/* ============================================= */
 * {
     margin: 0;
     padding: 0;
@@ -54,31 +92,40 @@ body.dark-mode {
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
     background-color: var(--bg-primary);
     transition: background-color 0.3s, color 0.3s;
 }
 
+/* Tipografía para títulos */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 700;
 }
 
+/* Contenedor principal - centra el contenido */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* ===== HEADER ===== */
+/* ============================================= */
+/* HEADER - CABECERA CON DEGRADADO PROFESIONAL   */
+/* ============================================= */
 header {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    background: linear-gradient(135deg, #0a2b5c 0%, #0a0f1f 70%, #000000 100%);
     color: var(--white);
     padding: 1.5rem 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     position: relative;
+}
+
+/* Degradado más elegante en modo oscuro */
+body.dark-mode header {
+    background: linear-gradient(135deg, #0a1a3a 0%, #0d1117 50%, #000000 100%);
 }
 
 .header-content {
@@ -88,80 +135,66 @@ header {
     text-align: center;
 }
 
-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
-}
-
-header .slogan {
-    font-size: 1.2rem;
-    font-weight: 300;
-    margin-bottom: 1rem;
-    color: var(--accent-gold);
-}
-
-.owner-info {
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-}
-
-.contact-info-header {
+/* ============================================= */
+/* HEADER TOP - LOGO CENTRADO                    */
+/* ============================================= */
+.header-top {
     display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 0.5rem;
-}
-
-.contact-info-header span {
-    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
 }
 
+/* Contenedor del logo centrado */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Enlace del logo - sin efectos no deseados */
+.logo-link {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 0;
+}
+
+.logo-link:hover {
+    opacity: 1;
+    transform: none;
+}
+
+/* Logo más grande y centrado */
+.logo {
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    opacity: 0.95;
+    transform: scale(1.02);
+}
+
+/* Controles absolutos (tema e idioma) en la esquina superior derecha */
 .header-controls {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 0;
+    right: 0;
     display: flex;
     gap: 0.5rem;
     align-items: center;
 }
 
-.theme-selector {
-    display: flex;
-    gap: 0.3rem;
-    background: rgba(255,255,255,0.1);
-    padding: 0.2rem;
-    border-radius: 25px;
-}
-
-.theme-btn {
-    background: transparent;
-    border: 1px solid var(--white);
-    color: var(--white);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-    font-size: 0.9rem;
-}
-
-.theme-btn:hover {
-    background: var(--white);
-    color: var(--primary-blue);
-}
-
-.theme-btn.active {
-    background: var(--accent-gold);
-    border-color: var(--accent-gold);
-    color: var(--primary-blue);
-}
-
+/* ============================================= */
+/* SELECTOR DE IDIOMA                           */
+/* ============================================= */
 .language-selector {
     display: flex;
     gap: 0.3rem;
@@ -193,47 +226,169 @@ header .slogan {
     color: var(--primary-blue);
 }
 
-/* ===== NAVEGACIÓN ===== */
+/* ============================================= */
+/* SWITCH DE TEMA (CLARO/OSCURO)                */
+/* ============================================= */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+}
+
+.slider i {
+    font-size: 16px;
+    color: #fff;
+    z-index: 1;
+}
+
+.slider .fa-sun {
+    margin-left: 2px;
+}
+
+.slider .fa-moon {
+    margin-right: 2px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-blue);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+/* ============================================= */
+/* ===== NAVEGACIÓN - MENÚ CON BOTONES ========= */
+/* ============================================= */
+/* Barra de navegación sticky (se queda fija al hacer scroll) */
 nav {
-    background-color: var(--card-bg);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     position: sticky;
     top: 0;
     z-index: 100;
     transition: background-color 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Contenedor del menú - flexbox centrado */
 .nav-menu {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 2rem;
-    padding: 1rem 0;
+    gap: 0.3rem;
+    padding: 0.8rem 1.5rem;
+    margin: 0 auto;
 }
 
+/* Estilos de los botones del menú */
 .nav-menu a {
-    color: var(--primary-blue);
+    color: var(--white);
     text-decoration: none;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 40px;              /* Bordes redondeados tipo píldora */
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: 0.3px;
+    /* Compatibilidad con Safari - backdrop-filter con prefijo */
+    -webkit-backdrop-filter: blur(4px);  /* Safari 9+ */
+    backdrop-filter: blur(4px);          /* Chrome, Firefox, Edge */
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+/* Efecto hover de los botones - cambia a dorado */
 .nav-menu a:hover {
-    border-bottom-color: var(--accent-gold);
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+    transform: translateY(-2px);      /* Efecto de elevación */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-color: transparent;
 }
 
-/* ===== SECCIONES GENERALES ===== */
+/* Botón activo (para la sección actual del usuario) */
+.nav-menu a.active {
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-color: transparent;
+}
+
+/* Modo oscuro - navegación */
+body.dark-mode nav {
+    background: linear-gradient(135deg, #0a1a3a 0%, #0d1117 100%);
+}
+
+body.dark-mode .nav-menu a {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .nav-menu a:hover,
+body.dark-mode .nav-menu a.active {
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+}
+
+/* ============================================= */
+/* SECCIONES GENERALES                           */
+/* ============================================= */
 section {
     padding: 4rem 0;
 }
 
+/* Fondo alternado para secciones pares */
 section:nth-child(even) {
     background-color: var(--card-bg);
 }
 
+/* Títulos de sección con línea decorativa dorada */
 h2 {
     font-size: 2.2rem;
     color: var(--primary-blue);
@@ -242,6 +397,7 @@ h2 {
     position: relative;
 }
 
+/* Línea decorativa debajo del título */
 h2:after {
     content: '';
     display: block;
@@ -251,16 +407,25 @@ h2:after {
     margin: 1rem auto 0;
 }
 
+/* Iconos dentro de títulos */
+h2 i, h3 i, h4 i {
+    margin-right: 0.5rem;
+    color: var(--accent-gold);
+}
+
+/* Descripción de sección */
 .section-description {
     text-align: center;
     margin-bottom: 2rem;
     color: var(--text-primary);
 }
 
-/* ===== TARJETAS ===== */
+/* ============================================= */
+/* TARJETAS DE SERVICIOS Y PRODUCTOS            */
+/* ============================================= */
 .services-grid, .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
@@ -272,13 +437,30 @@ h2:after {
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     transition: transform 0.3s, box-shadow 0.3s;
     border: 1px solid #eaeef2;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Efecto hover en tarjetas */
 .service-card:hover, .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 }
 
+/* Imagen del servicio */
+.service-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--accent-gold);
+    transition: transform 0.5s ease;
+}
+
+.service-card:hover .service-image {
+    transform: scale(1.05);
+}
+
+/* Contenido de la tarjeta */
 .card-content {
     padding: 1.8rem;
 }
@@ -290,6 +472,7 @@ h2:after {
     margin-bottom: 0.8rem;
 }
 
+/* Precio destacado */
 .service-price, .product-price {
     font-size: 2rem;
     font-weight: 700;
@@ -303,6 +486,14 @@ h2:after {
     color: var(--text-primary);
 }
 
+.service-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* ============================================= */
+/* BOTONES GENERALES                             */
+/* ============================================= */
 .btn {
     display: inline-block;
     background: var(--primary-blue);
@@ -310,17 +501,23 @@ h2:after {
     padding: 0.8rem 1.8rem;
     border-radius: 30px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     border: none;
     cursor: pointer;
-    transition: background 0.3s;
-    font-size: 1rem;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .btn:hover {
     background: var(--secondary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
+/* Botón dorado (acento) */
 .btn-gold {
     background: var(--accent-gold);
     color: var(--primary-blue);
@@ -330,11 +527,14 @@ h2:after {
     background: #b8943f;
 }
 
+/* Botón de ancho completo */
 .btn-block {
     width: 100%;
 }
 
-/* ===== FORMULARIOS ===== */
+/* ============================================= */
+/* FORMULARIOS                                   */
+/* ============================================= */
 .form-container {
     max-width: 600px;
     margin: 0 auto;
@@ -363,7 +563,7 @@ h2:after {
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--card-bg);
     color: var(--text-primary);
 }
@@ -373,6 +573,7 @@ h2:after {
     border-color: var(--accent-gold);
 }
 
+/* Select personalizado con flecha */
 select.form-control {
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -381,7 +582,9 @@ select.form-control {
     background-size: 1em;
 }
 
-/* ===== MENSAJE DE DISPONIBILIDAD ===== */
+/* ============================================= */
+/* MENSAJE DE DISPONIBILIDAD                     */
+/* ============================================= */
 .availability-message {
     text-align: center;
     margin-bottom: 1rem;
@@ -399,7 +602,9 @@ select.form-control {
     color: var(--error-red);
 }
 
-/* ===== CONTACTO Y UBICACIÓN ===== */
+/* ============================================= */
+/* CONTACTO Y REDES SOCIALES                     */
+/* ============================================= */
 .contact-info-box {
     text-align: center;
     margin-bottom: 2rem;
@@ -426,6 +631,7 @@ select.form-control {
     margin: 2rem 0;
 }
 
+/* Iconos de redes sociales */
 .social-link {
     display: flex;
     align-items: center;
@@ -451,12 +657,30 @@ select.form-control {
 .social-link.map {
     background: var(--map-red);
 }
+.social-link.sms {
+    background: var(--sms-blue);
+}
 .social-link:hover {
     transform: scale(1.1);
     filter: brightness(1.1);
 }
 
-/* ===== MÉTODOS DE PAGO ===== */
+.sms-link {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.3s;
+}
+
+.sms-link:hover {
+    color: var(--accent-gold);
+}
+
+/* ============================================= */
+/* MÉTODOS DE PAGO                              */
+/* ============================================= */
 .payment-methods {
     margin-top: 3rem;
     text-align: center;
@@ -483,14 +707,21 @@ select.form-control {
     color: var(--text-primary);
 }
 
+/* Colores específicos para cada método de pago */
+.payment-icon .fa-cc-visa { color: #1A1F71; }
+.payment-icon .fa-cc-mastercard { color: #EB001B; }
+.payment-icon .fa-cc-amex { color: #2E77BB; }
+.payment-icon .fa-cc-discover { color: #FF6000; }
 .payment-icon .fa-paypal { color: var(--paypal-blue); }
 .payment-icon .fa-apple-pay { color: var(--applepay-black); }
 .payment-icon .fa-google-pay { color: var(--googlepay-blue); }
 .payment-icon .fa-university { color: var(--venmo-blue); }
 .payment-icon .fa-money-bill-wave { color: var(--cashapp-green); }
-.payment-icon .fa-university { color: var(--zelle-purple); }
+.payment-icon .fa-money-bill-alt { color: #2E7D32; }
 
-/* Clase para texto accesible */
+/* ============================================= */
+/* CLASE PARA TEXTO ACCESIBLE (screen readers)   */
+/* ============================================= */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -503,30 +734,30 @@ select.form-control {
     border: 0;
 }
 
-/* Mapa placeholder */
-.map-placeholder {
-    background-color: #e9ecef;
-    height: 300px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--dark-gray);
-    font-weight: 600;
+/* ============================================= */
+/* MAPA INTERACTIVO                              */
+/* ============================================= */
+.map-container {
     margin-top: 2rem;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>');
-    background-repeat: no-repeat;
-    background-position: center 40%;
-    background-size: 60px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.map-placeholder p {
-    background: rgba(255,255,255,0.8);
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
+.map-iframe {
+    display: block;
+    width: 100%;
+    height: 350px;
+    border: none;
 }
 
-/* ===== FOOTER ===== */
+/* ============================================= */
+/* FOOTER - PIE DE PÁGINA                        */
+/* ============================================= */
 footer {
     background: var(--primary-blue);
     color: var(--white);
@@ -570,7 +801,9 @@ footer {
     margin-top: 0.5rem;
 }
 
-/* ===== HORARIO ===== */
+/* ============================================= */
+/* HORARIO DE ATENCIÓN                           */
+/* ============================================= */
 .schedule-box {
     background: var(--card-bg);
     border-radius: 12px;
@@ -585,23 +818,333 @@ footer {
     margin-bottom: 0.5rem;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ============================================= */
+/* GALERÍA DE FOTOS                              */
+/* ============================================= */
+#galeria {
+    background-color: var(--card-bg);
+    transition: background-color 0.3s;
+}
+
+/* Filtros de la galería */
+.gallery-filter {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+
+/* Contenedor del slider */
+.slider-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0 40px;
+}
+
+.gallery-grid {
+    display: flex;
+    transition: transform 0.5s ease;
+    gap: 1rem;
+}
+
+/* Elemento individual de la galería */
+.gallery-item {
+    flex: 0 0 calc(33.333% - 0.67rem);
+    min-width: 280px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border: 1px solid #eaeef2;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-item .service-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.gallery-item .before-after {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.gallery-item .before-after span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.gallery-item .image-container {
+    position: relative;
+}
+
+/* Botones del slider */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    z-index: 10;
+    transition: background 0.3s;
+}
+
+.slider-btn:hover {
+    background: var(--accent-gold);
+}
+
+.slider-btn.prev {
+    left: 0;
+}
+
+.slider-btn.next {
+    right: 0;
+}
+
+/* Puntos/dots del slider */
+.gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.gallery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dark-gray);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gallery-dot.active {
+    opacity: 1;
+    background: var(--accent-gold);
+    transform: scale(1.2);
+}
+
+/* ============================================= */
+/* SECCIÓN DESARROLLADOR (QR CODE)              */
+/* ============================================= */
+.developer-section {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+}
+
+.developer-section h4 {
+    color: var(--accent-gold);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.qr-message {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.qr-container {
+    display: inline-block;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin: 1rem 0;
+}
+
+.qr-container img {
+    display: block;
+    width: 180px;
+    height: 180px;
+}
+
+.cta-message {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--accent-gold);
+    margin-top: 1rem;
+    background: rgba(0,0,0,0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+/* ============================================= */
+/* AJUSTES ESPECÍFICOS MODO OSCURO              */
+/* ============================================= */
+body.dark-mode .service-card,
+body.dark-mode .product-card,
+body.dark-mode .form-container,
+body.dark-mode .schedule-box {
+    background-color: var(--card-bg);
+    border-color: #444;
+}
+
+body.dark-mode .service-name,
+body.dark-mode .product-name,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode .social-title {
+    color: var(--accent-gold);
+}
+
+body.dark-mode .btn {
+    background-color: var(--accent-gold);
+    color: var(--primary-blue);
+}
+
+body.dark-mode .btn:hover {
+    background-color: #b8943f;
+}
+
+body.dark-mode .filter-btn {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+body.dark-mode .filter-btn:hover,
+body.dark-mode .filter-btn.active {
+    background-color: var(--accent-gold);
+    color: var(--primary-blue);
+}
+
+body.dark-mode .sms-link,
+body.dark-mode a {
+    color: var(--accent-gold);
+}
+
+body.dark-mode .sms-link:hover,
+body.dark-mode a:hover {
+    color: #d4af37;
+    text-decoration: underline;
+}
+
+body.dark-mode .payment-icon span {
+    color: #dddddd;
+}
+
+body.dark-mode .payment-icon .fa-apple-pay {
+    color: #FFFFFF;
+}
+
+body.dark-mode .payment-icon .fa-cc-visa,
+body.dark-mode .payment-icon .fa-cc-mastercard,
+body.dark-mode .payment-icon .fa-cc-amex,
+body.dark-mode .payment-icon .fa-cc-discover,
+body.dark-mode .payment-icon .fa-paypal,
+body.dark-mode .payment-icon .fa-google-pay,
+body.dark-mode .payment-icon .fa-university,
+body.dark-mode .payment-icon .fa-money-bill-wave,
+body.dark-mode .payment-icon .fa-money-bill-alt {
+    filter: brightness(1.2);
+}
+
+body.dark-mode .cta-message {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ============================================= */
+/* CLASES UTILITARIAS                            */
+/* ============================================= */
+.hidden {
+    display: none !important;
+}
+
+/* ============================================= */
+/* RESPONSIVE - AJUSTES PARA MÓVIL Y TABLET      */
+/* ============================================= */
+
+/* Tablets y dispositivos medianos */
 @media (max-width: 768px) {
     header h1 {
         font-size: 2rem;
     }
 
+    /* Controles se mueven debajo del logo en móvil */
     .header-controls {
         position: static;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 1rem;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 1rem;
+        margin-bottom: 0;
     }
 
-    .nav-menu {
-        gap: 1rem;
+    .header-top {
         flex-direction: column;
-        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo {
+        max-height: 90px;
+    }
+
+    /* Menú responsive - se apila verticalmente en móvil */
+    .nav-menu {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .nav-menu a {
+        justify-content: center;
+        padding: 0.6rem 1rem;
     }
 
     h2 {
@@ -611,8 +1154,40 @@ footer {
     .form-container {
         padding: 1.5rem;
     }
+
+    .gallery-item {
+        flex: 0 0 calc(50% - 0.5rem);
+    }
+
+    .developer-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .developer-details {
+        text-align: center;
+    }
+
+    .developer-details p {
+        justify-content: center;
+    }
+
+    .map-iframe {
+        height: 250px;
+    }
+
+    /* Botones de contacto en columna en móvil */
+    .contact-buttons-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .contact-btn {
+        justify-content: center;
+    }
 }
 
+/* Teléfonos pequeños */
 @media (max-width: 480px) {
     .contact-info-header {
         flex-direction: column;
@@ -622,4 +1197,186 @@ footer {
     .service-price, .product-price {
         font-size: 1.5rem;
     }
+
+    .gallery-item {
+        flex: 0 0 100%;
+    }
+
+    .slider-container {
+        padding: 0 30px;
+    }
+
+    .logo {
+        max-height: 80px;
+    }
+
+    .header-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* ============================================= */
+/* PASARELA DE PAGOS - ESTILOS                   */
+/* ============================================= */
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.payment-option-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.payment-option-card:hover {
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.payment-option-icon {
+    font-size: 3rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.payment-option-icon .fa-paypal {
+    color: #003087;
+}
+
+.payment-option-icon .fa-money-bill-wave {
+    color: var(--success-green);
+}
+
+.payment-option-info h4 {
+    color: var(--primary-blue);
+    margin-bottom: 0.3rem;
+}
+
+.payment-option-info p {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.payment-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-blue);
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Responsive para pasarela de pagos */
+@media (max-width: 480px) {
+    .payment-option-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .payment-option-icon {
+        font-size: 2.5rem;
+        min-width: auto;
+    }
+}
+
+/* ============================================= */
+/* BOTONES DE CONTACTO - SECCIÓN CONTACTO       */
+/* ============================================= */
+.contact-buttons-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 220px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contact-btn i {
+    font-size: 2rem;
+}
+
+.contact-btn .btn-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-btn .btn-title {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.contact-btn .btn-detail {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* Colores específicos para cada botón de contacto */
+.contact-btn.phone-btn {
+    background: linear-gradient(135deg, #0a2b5c, #1e4a7a);
+    color: white;
+}
+.contact-btn.sms-btn {
+    background: linear-gradient(135deg, #34b7f1, #1e8fc9);
+    color: white;
+}
+.contact-btn.email-btn {
+    background: linear-gradient(135deg, #ea4335, #c5221f);
+    color: white;
+}
+.contact-btn.whatsapp-btn {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+}
+
+/* Efecto hover en botones de contacto */
+.contact-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Modo oscuro - botones de contacto */
+body.dark-mode .contact-btn {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .contact-btn.phone-btn {
+    background: linear-gradient(135deg, #0a1a3a, #0d1117);
+}
+body.dark-mode .contact-btn.sms-btn {
+    background: linear-gradient(135deg, #1a5c7a, #0d3b4f);
+}
+body.dark-mode .contact-btn.email-btn {
+    background: linear-gradient(135deg, #8b2c26, #5c1a16);
+}
+body.dark-mode .contact-btn.whatsapp-btn {
+    background: linear-gradient(135deg, #1a6e4a, #0d4a33);
 }

@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Políticas de Privacidad - Detailing Team</title>
+    <!-- ============================================= -->
+    <!-- FAVICON -->
+    <!-- ============================================= -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <!-- ============================================= -->
+    <!-- FONT AWESOME -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- TIPOGRAFÍAS -->
+    <!-- ============================================= -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ============================================= -->
+    <!-- ESTILOS COMPARTIDOS -->
+    <!-- ============================================= -->
     <link rel="stylesheet" href="styles.css">
+    <!-- ============================================= -->
+    <!-- ESTILOS ESPECÍFICOS -->
+    <!-- ============================================= -->
     <style>
         .legal-content {
             max-width: 800px;
@@ -16,18 +33,30 @@
             border-radius: 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
+        .legal-content h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
         .legal-content h3 {
             color: var(--primary-blue);
             margin-top: 2rem;
             margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
         .legal-content p {
             margin-bottom: 1rem;
             line-height: 1.8;
+            color: var(--text-primary);
         }
         .legal-content ul {
             margin-left: 2rem;
             margin-bottom: 1rem;
+        }
+        .legal-content li {
+            margin-bottom: 0.5rem;
+        }
+        .legal-content strong {
+            color: var(--primary-blue);
         }
         .back-link {
             display: inline-block;
@@ -35,61 +64,304 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
+            transition: color 0.3s;
         }
         .back-link:hover {
+            color: var(--accent-gold);
             text-decoration: underline;
+        }
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+        .update-date {
+            color: var(--dark-gray);
+            font-style: italic;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eaeef2;
+        }
+        body.dark-mode .legal-content {
+            background: var(--card-bg);
+        }
+        body.dark-mode .legal-content h2,
+        body.dark-mode .legal-content h3,
+        body.dark-mode .legal-content strong {
+            color: var(--accent-gold);
+        }
+        body.dark-mode .update-date {
+            color: #aaa;
+            border-bottom-color: #444;
+        }
+        @media (max-width: 768px) {
+            .legal-content {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+            .legal-content h2 {
+                font-size: 1.8rem;
+            }
+            .legal-content h3 {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ============================================= -->
+    <!-- HEADER CON TÍTULOS TRADUCIDOS                -->
+    <!-- ============================================= -->
     <header>
         <div class="container header-content">
-            <h1>Detailing Team</h1>
-            <p class="slogan">Políticas de Privacidad</p>
+            <h1 id="header-title">Detailing Team</h1>
+            <p class="slogan" id="header-slogan">Políticas de Privacidad</p>
         </div>
     </header>
-
+    <!-- ============================================= -->
+    <!-- MAIN - CONTENIDO PRINCIPAL                    -->
+    <!-- ============================================= -->
     <main>
         <div class="container">
             <div class="legal-content">
-                <h2>Políticas de Privacidad</h2>
-                <p>Última actualización: 6 de marzo de 2025</p>
+                <!-- ========================================= -->
+                <!-- TÍTULO PRINCIPAL TRADUCIBLE               -->
+                <!-- ========================================= -->
+                <h2 id="privacy-title">🔒 Políticas de Privacidad</h2>
+                <p class="update-date" id="privacy-update-date"><i class="far fa-calendar-alt"></i> Última actualización: 17 de marzo de 2026</p>
 
-                <h3>1. Información que recopilamos</h3>
-                <p>En Detailing Team, recopilamos información personal que usted nos proporciona directamente, como nombre, correo electrónico, número de teléfono, y datos de su vehículo (marca, modelo, año, placa) cuando se registra en nuestro sitio o realiza una reserva.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 1 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section1-title">1. Información que recopilamos</h3>
+                <p id="privacy-section1-text">En <strong>Detailing Team</strong>, recopilamos información personal que usted nos proporciona directamente, como nombre, correo electrónico, número de teléfono, y datos de su vehículo (marca, modelo, año, placa) cuando se registra en nuestro sitio o realiza una reserva.</p>
 
-                <h3>2. Uso de la información</h3>
-                <p>Utilizamos su información para: procesar sus reservas, personalizar su experiencia, comunicarnos con usted sobre su servicio, mejorar nuestro sitio web y cumplir con requisitos legales.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 2 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section2-title">2. Uso de la información</h3>
+                <p id="privacy-section2-text">Utilizamos su información para:</p>
+                <ul id="privacy-section2-list">
+                    <li>✅ Procesar sus reservas y confirmar turnos</li>
+                    <li>✅ Personalizar su experiencia en nuestro sitio</li>
+                    <li>✅ Comunicarnos con usted sobre su servicio</li>
+                    <li>✅ Mejorar nuestro sitio web y servicios</li>
+                    <li>✅ Cumplir con requisitos legales aplicables</li>
+                </ul>
 
-                <h3>3. Almacenamiento de datos</h3>
-                <p>Sus datos se almacenan de forma segura en el navegador (localStorage) mientras no tengamos un servidor backend. Una vez que implementemos un sistema de base de datos, migraremos la información con los más altos estándares de seguridad.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 3 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section3-title">3. Almacenamiento de datos</h3>
+                <p id="privacy-section3-text">Sus datos se almacenan de forma segura en:</p>
+                <ul id="privacy-section3-list">
+                    <li><strong>📦 LocalStorage del navegador:</strong> Como respaldo temporal mientras se procesa su información.</li>
+                    <li><strong>🗄️ Base de datos en la nube (MongoDB Atlas):</strong> Para persistencia a largo plazo, con los más altos estándares de seguridad y cifrado.</li>
+                </ul>
 
-                <h3>4. Compartir información</h3>
-                <p>No vendemos ni compartimos su información personal con terceros, excepto cuando sea necesario para procesar pagos (a través de pasarelas como PayPal, Venmo, etc.) o por requerimiento legal.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 4 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section4-title">4. Compartir información</h3>
+                <p id="privacy-section4-text">No vendemos ni compartimos su información personal con terceros, excepto cuando sea necesario para:</p>
+                <ul id="privacy-section4-list">
+                    <li>💳 Procesar pagos (a través de pasarelas como PayPal, Stripe, etc.)</li>
+                    <li>⚖️ Cumplir con requerimientos legales o autoridades competentes</li>
+                </ul>
 
-                <h3>5. Seguridad</h3>
-                <p>Implementamos medidas de seguridad técnicas y organizativas para proteger su información contra acceso no autorizado, pérdida o alteración. Nuestro sitio utiliza HTTPS para cifrar la comunicación.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 5 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section5-title">5. Seguridad</h3>
+                <p id="privacy-section5-text">Implementamos medidas de seguridad técnicas y organizativas para proteger su información contra acceso no autorizado, pérdida o alteración:</p>
+                <ul id="privacy-section5-list">
+                    <li>🔐 Cifrado SSL/HTTPS en toda la comunicación</li>
+                    <li>🛡️ Autenticación segura en la base de datos</li>
+                    <li>📋 Acceso restringido a información personal</li>
+                </ul>
 
-                <h3>6. Sus derechos</h3>
-                <p>Usted puede solicitar acceso, corrección o eliminación de sus datos personales contactándonos a contactdetailingteam@gmail.com.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 6 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section6-title">6. Sus derechos</h3>
+                <p id="privacy-section6-text">Usted tiene derecho a:</p>
+                <ul id="privacy-section6-list">
+                    <li>📖 Acceder a sus datos personales</li>
+                    <li>✏️ Solicitar corrección de información incorrecta</li>
+                    <li>🗑️ Solicitar la eliminación de sus datos</li>
+                    <li>🚫 Oponerse al procesamiento de sus datos</li>
+                </ul>
+                <p id="privacy-section6-contact">Para ejercer estos derechos, contáctenos en <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong>.</p>
 
-                <h3>7. Cambios a esta política</h3>
-                <p>Podemos actualizar esta política ocasionalmente. Le notificaremos cualquier cambio publicando la nueva versión en esta página.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 7 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section7-title">7. Cambios a esta política</h3>
+                <p id="privacy-section7-text">Podemos actualizar esta política ocasionalmente para reflejar cambios en nuestras prácticas o por razones legales. Le notificaremos cualquier cambio publicando la nueva versión en esta página con la fecha de actualización correspondiente.</p>
 
-                <h3>8. Contacto</h3>
-                <p>Si tiene preguntas sobre esta política, contáctenos en: <strong>contactdetailingteam@gmail.com</strong> o llámenos al <strong>+1 (713) 928-0466</strong>.</p>
+                <!-- ========================================= -->
+                <!-- SECCIÓN 8 - TRADUCIBLE                     -->
+                <!-- ========================================= -->
+                <h3 id="privacy-section8-title">8. Contacto</h3>
+                <p id="privacy-section8-text">Si tiene preguntas sobre esta política o sobre cómo manejamos sus datos, contáctenos en:</p>
+                <p id="privacy-section8-contact">
+                    <i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br>
+                    <i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br>
+                    <i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041
+                </p>
 
-                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a la página principal</a>
+                <!-- ========================================= -->
+                <!-- ENLACE DE REGRESO                          -->
+                <!-- ========================================= -->
+                <a href="index.html" class="back-link" id="privacy-back-link">
+                    <i class="fas fa-arrow-left"></i> Volver a la página principal
+                </a>
             </div>
         </div>
     </main>
-
+    <!-- ============================================= -->
+    <!-- FOOTER                                        -->
+    <!-- ============================================= -->
     <footer>
         <div class="container">
             <div class="copyright">
-                <p>© 2024 Detailing Team. Todos los derechos reservados.</p>
+                <p id="footer-copyright">© 2024-2026 Detailing Team. Todos los derechos reservados.</p>
+                <p>
+                    <a href="terms.html" id="footer-link-terms">Términos de Servicio</a> |
+                    <a href="cookies.html" id="footer-link-cookies">Configuración de Cookies</a> |
+                    <a href="index.html" id="footer-link-home">Inicio</a>
+                </p>
             </div>
         </div>
     </footer>
+
+    <script>
+        // =============================================
+        // SISTEMA DE IDIOMAS PARA PRIVACY.HTML
+        // =============================================
+        // Este sistema permite cambiar el idioma de la página de políticas de privacidad
+        // entre español e inglés, leyendo la preferencia guardada en localStorage
+        // por la página principal (index.html).
+        // =============================================
+
+        // =============================================
+        // TEXTOS EN INGLÉS PARA PRIVACY.HTML
+        // =============================================
+        const textosPrivacyEn = {
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Privacy Policy',
+            'privacy-title': '🔒 Privacy Policy',
+            'privacy-update-date': 'Last updated: March 17, 2026',
+            'privacy-section1-title': '1. Information We Collect',
+            'privacy-section1-text': 'At <strong>Detailing Team</strong>, we collect personal information that you provide directly to us, such as name, email address, phone number, and your vehicle data (make, model, year, license plate) when you register on our site or make a reservation.',
+            'privacy-section2-title': '2. Use of Information',
+            'privacy-section2-text': 'We use your information to:',
+            'privacy-section2-list': '<li>✅ Process your reservations and confirm appointments</li><li>✅ Personalize your experience on our site</li><li>✅ Communicate with you about your service</li><li>✅ Improve our website and services</li><li>✅ Comply with applicable legal requirements</li>',
+            'privacy-section3-title': '3. Data Storage',
+            'privacy-section3-text': 'Your data is securely stored in:',
+            'privacy-section3-list': '<li><strong>📦 Browser LocalStorage:</strong> As a temporary backup while your information is processed.</li><li><strong>🗄️ Cloud Database (MongoDB Atlas):</strong> For long-term persistence, with the highest security and encryption standards.</li>',
+            'privacy-section4-title': '4. Information Sharing',
+            'privacy-section4-text': 'We do not sell or share your personal information with third parties, except when necessary to:',
+            'privacy-section4-list': '<li>💳 Process payments (through gateways such as PayPal, Stripe, etc.)</li><li>⚖️ Comply with legal requirements or competent authorities</li>',
+            'privacy-section5-title': '5. Security',
+            'privacy-section5-text': 'We implement technical and organizational security measures to protect your information against unauthorized access, loss, or alteration:',
+            'privacy-section5-list': '<li>🔐 SSL/HTTPS encryption for all communications</li><li>🛡️ Secure authentication in the database</li><li>📋 Restricted access to personal information</li>',
+            'privacy-section6-title': '6. Your Rights',
+            'privacy-section6-text': 'You have the right to:',
+            'privacy-section6-list': '<li>📖 Access your personal data</li><li>✏️ Request correction of incorrect information</li><li>🗑️ Request deletion of your data</li><li>🚫 Object to the processing of your data</li>',
+            'privacy-section6-contact': 'To exercise these rights, contact us at <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong>.',
+            'privacy-section7-title': '7. Changes to This Policy',
+            'privacy-section7-text': 'We may update this policy occasionally to reflect changes in our practices or for legal reasons. We will notify you of any changes by posting the new version on this page with the corresponding update date.',
+            'privacy-section8-title': '8. Contact',
+            'privacy-section8-text': 'If you have questions about this policy or how we handle your data, contact us at:',
+            'privacy-section8-contact': '<i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br><i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br><i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041',
+            'privacy-back-link': 'Back to home page',
+            'footer-copyright': '© 2024-2026 Detailing Team. All rights reserved.',
+            'footer-link-terms': 'Terms of Service',
+            'footer-link-cookies': 'Cookie Settings',
+            'footer-link-home': 'Home'
+        };
+
+        // =============================================
+        // TEXTOS EN ESPAÑOL PARA PRIVACY.HTML
+        // =============================================
+        const textosPrivacyEs = {
+            'header-title': 'Detailing Team',
+            'header-slogan': 'Políticas de Privacidad',
+            'privacy-title': '🔒 Políticas de Privacidad',
+            'privacy-update-date': 'Última actualización: 17 de marzo de 2026',
+            'privacy-section1-title': '1. Información que recopilamos',
+            'privacy-section1-text': 'En <strong>Detailing Team</strong>, recopilamos información personal que usted nos proporciona directamente, como nombre, correo electrónico, número de teléfono, y datos de su vehículo (marca, modelo, año, placa) cuando se registra en nuestro sitio o realiza una reserva.',
+            'privacy-section2-title': '2. Uso de la información',
+            'privacy-section2-text': 'Utilizamos su información para:',
+            'privacy-section2-list': '<li>✅ Procesar sus reservas y confirmar turnos</li><li>✅ Personalizar su experiencia en nuestro sitio</li><li>✅ Comunicarnos con usted sobre su servicio</li><li>✅ Mejorar nuestro sitio web y servicios</li><li>✅ Cumplir con requisitos legales aplicables</li>',
+            'privacy-section3-title': '3. Almacenamiento de datos',
+            'privacy-section3-text': 'Sus datos se almacenan de forma segura en:',
+            'privacy-section3-list': '<li><strong>📦 LocalStorage del navegador:</strong> Como respaldo temporal mientras se procesa su información.</li><li><strong>🗄️ Base de datos en la nube (MongoDB Atlas):</strong> Para persistencia a largo plazo, con los más altos estándares de seguridad y cifrado.</li>',
+            'privacy-section4-title': '4. Compartir información',
+            'privacy-section4-text': 'No vendemos ni compartimos su información personal con terceros, excepto cuando sea necesario para:',
+            'privacy-section4-list': '<li>💳 Procesar pagos (a través de pasarelas como PayPal, Stripe, etc.)</li><li>⚖️ Cumplir con requerimientos legales o autoridades competentes</li>',
+            'privacy-section5-title': '5. Seguridad',
+            'privacy-section5-text': 'Implementamos medidas de seguridad técnicas y organizativas para proteger su información contra acceso no autorizado, pérdida o alteración:',
+            'privacy-section5-list': '<li>🔐 Cifrado SSL/HTTPS en toda la comunicación</li><li>🛡️ Autenticación segura en la base de datos</li><li>📋 Acceso restringido a información personal</li>',
+            'privacy-section6-title': '6. Sus derechos',
+            'privacy-section6-text': 'Usted tiene derecho a:',
+            'privacy-section6-list': '<li>📖 Acceder a sus datos personales</li><li>✏️ Solicitar corrección de información incorrecta</li><li>🗑️ Solicitar la eliminación de sus datos</li><li>🚫 Oponerse al procesamiento de sus datos</li>',
+            'privacy-section6-contact': 'Para ejercer estos derechos, contáctenos en <strong><i class="fas fa-envelope"></i> contactdetailingteam@gmail.com</strong>.',
+            'privacy-section7-title': '7. Cambios a esta política',
+            'privacy-section7-text': 'Podemos actualizar esta política ocasionalmente para reflejar cambios en nuestras prácticas o por razones legales. Le notificaremos cualquier cambio publicando la nueva versión en esta página con la fecha de actualización correspondiente.',
+            'privacy-section8-title': '8. Contacto',
+            'privacy-section8-text': 'Si tiene preguntas sobre esta política o sobre cómo manejamos sus datos, contáctenos en:',
+            'privacy-section8-contact': '<i class="fas fa-envelope"></i> <strong>contactdetailingteam@gmail.com</strong><br><i class="fas fa-phone-alt"></i> <strong>+1 (713) 928-0466</strong><br><i class="fas fa-map-marker-alt"></i> 13330 West Road, Houston, TX 77041',
+            'privacy-back-link': 'Volver a la página principal',
+            'footer-copyright': '© 2024-2026 Detailing Team. Todos los derechos reservados.',
+            'footer-link-terms': 'Términos de Servicio',
+            'footer-link-cookies': 'Configuración de Cookies',
+            'footer-link-home': 'Inicio'
+        };
+
+        // =============================================
+        // FUNCIÓN: actualizarIdiomaPrivacy
+        // =============================================
+        // Actualiza todos los textos de la página de privacidad
+        // según el idioma seleccionado (lee de localStorage)
+        // =============================================
+        function actualizarIdiomaPrivacy() {
+            const idioma = localStorage.getItem('idioma') || 'es';
+            const textos = idioma === 'en' ? textosPrivacyEn : textosPrivacyEs;
+
+            // Recorrer todos los IDs y actualizar el contenido
+            for (let id in textos) {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    // Si el texto contiene HTML (como listas), usar innerHTML
+                    if (id.includes('list') || id.includes('contact')) {
+                        elemento.innerHTML = textos[id];
+                    } else {
+                        elemento.innerText = textos[id];
+                    }
+                }
+            }
+
+            // Actualizar también los elementos que no tienen ID fijo
+            const headerTitle = document.querySelector('header h1');
+            const headerSlogan = document.querySelector('header .slogan');
+            if (headerTitle) headerTitle.innerText = textos['header-title'];
+            if (headerSlogan) headerSlogan.innerText = textos['header-slogan'];
+        }
+
+        // =============================================
+        // INICIALIZACIÓN - SE EJECUTA AL CARGAR LA PÁGINA
+        // =============================================
+        window.onload = function() {
+            // Aplicar idioma guardado
+            actualizarIdiomaPrivacy();
+
+            // Escuchar cambios en localStorage (cuando se cambia el idioma desde index.html)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'idioma') {
+                    actualizarIdiomaPrivacy();
+                }
+            });
+        }
+    </script>
 </body>
 </html>

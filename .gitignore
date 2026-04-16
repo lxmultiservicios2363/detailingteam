@@ -1,0 +1,67 @@
+# =============================================
+# ARCHIVOS IGNORADOS POR GIT - DETAILING TEAM
+# =============================================
+# Este archivo le dice a Git qué archivos/carpetas
+# NO deben subirse al repositorio (por seguridad o tamaño).
+# =============================================
+
+# =============================================
+# ARCHIVOS DE ENTORNO (CONTRASEÑAS, CLAVES)
+# =============================================
+# Contienen información sensible como contraseñas y claves API.
+# NUNCA deben subirse a GitHub.
+.env
+*.env
+.env.local
+.env.production
+
+# =============================================
+# CARPETA DE DEPENDENCIAS (node_modules)
+# =============================================
+# Es enorme (cientos de MB) y se regenera con npm install.
+# No tiene sentido subirla.
+node_modules/
+backend/node_modules/
+
+# =============================================
+# ARCHIVOS DE REGISTRO (LOGS)
+# =============================================
+# Archivos que registran actividad del servidor.
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =============================================
+# CARPETAS DEL SISTEMA OPERATIVO
+# =============================================
+# Archivos temporales y de configuración del SO.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =============================================
+# CARPETA DE DISTRIBUCIÓN (si usamos build)
+# =============================================
+dist/
+build/
+
+# =============================================
+# ARCHIVOS DE EDITOR (VSCode)
+# =============================================
+# Configuraciones locales del editor.
+.vscode/
+*.code-workspace
+
+# =============================================
+# ARCHIVOS DE DEPURACIÓN
+# =============================================
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# =============================================
+# CARPETAS DE DEPENDENCIAS DE FRONTEND
+# =============================================
+# Si en el futuro usamos npm en el frontend
+frontend/node_modules/
