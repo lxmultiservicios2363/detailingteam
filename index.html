@@ -836,16 +836,24 @@
             }
         }
 
+        // =============================================
+        // FUNCIÓN: inicializarTema (CORREGIDA)
+        // =============================================
         function inicializarTema() {
             const temaGuardado = localStorage.getItem('tema');
             const checkbox = document.getElementById('themeToggle');
-            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (temaGuardado === 'dark' || (!temaGuardado && systemDark)) {
+            
+            if (temaGuardado === 'dark') {
                 document.body.classList.add('dark-mode');
                 if (checkbox) checkbox.checked = true;
-            } else {
+            } else if (temaGuardado === 'light') {
                 document.body.classList.remove('dark-mode');
                 if (checkbox) checkbox.checked = false;
+            } else {
+                // Si no hay tema guardado, usar modo claro por defecto
+                document.body.classList.remove('dark-mode');
+                if (checkbox) checkbox.checked = false;
+                localStorage.setItem('tema', 'light');
             }
         }
 
