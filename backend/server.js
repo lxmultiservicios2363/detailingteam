@@ -5,48 +5,44 @@
 // conecta a MongoDB Atlas y maneja las rutas API
 // para clientes, reservas y envío de emails.
 // 
-// 📌 Versión: 3.1 (CORREGIDA - CORS CON CREDENCIALES)
-// 📌 Fecha: 17/03/2026
+// 📌 Versión: 4.1 (CORREGIDA - SIN ERRORES)
+// 📌 Fecha: 16/04/2026
 // 📌 Autor: Luis Enrique Reina Mesa
 // =============================================
 
 // =============================================
 // 📦 IMPORTACIÓN DE DEPENDENCIAS
 // =============================================
-const express = require('express');          // Framework para crear el servidor web
-const nodemailer = require('nodemailer');    // Librería para enviar emails
-const mongoose = require('mongoose');         // ODM para conectar con MongoDB
-const dotenv = require('dotenv');             // Para leer variables de entorno del archivo .env
-const dns = require('dns');                   // Módulo DNS nativo de Node.js
-const cors = require('cors');                 // Para permitir conexiones desde el frontend
+const express = require('express');
+const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const dns = require('dns');
+const cors = require('cors');
+const path = require('path');
+
+// =============================================
+// 🔐 CARGAR VARIABLES DE ENTORNO (FORZADO)
+// =============================================
+// IMPORTANTE: Especificar la ruta exacta del archivo .env
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Debug: Verificar que las variables se cargaron
+console.log('📝 VERIFICANDO VARIABLES DE ENTORNO:');
+console.log('   MONGO_URI:', process.env.MONGO_URI ? '✅ CARGADA' : '❌ NO CARGADA');
+console.log('   EMAIL_USER:', process.env.EMAIL_USER ? '✅ CARGADO' : '❌ NO CARGADO');
+console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? '✅ CARGADA' : '❌ NO CARGADA');
+console.log('   PORT:', process.env.PORT || '3001 (default)');
 
 // =============================================
 // 🌐 CONFIGURACIÓN DNS PARA NODE.JS v22+
-// =============================================
-// 🔍 PROBLEMA: En Node.js v22+ en Windows, a veces falla la resolución
-//    de los registros DNS SRV que MongoDB Atlas necesita.
-//    Esto causa el error "querySrv ECONNREFUSED".
-//
-// ✅ SOLUCIÓN: Forzar el uso de Google DNS (8.8.8.8, 8.8.4.4)
-//    que sí soportan correctamente las consultas SRV.
-//
-// 📚 REFERENCIA: Esta solución está documentada en foros de MongoDB
-//    y Stack Overflow como solución definitiva.
 // =============================================
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 console.log('🌐 DNS configurado: 8.8.8.8, 8.8.4.4');
 
 // =============================================
-// 🔐 CARGAR VARIABLES DE ENTORNO
-// =============================================
-// Lee las variables del archivo .env (EMAIL_USER, EMAIL_PASSWORD, MONGODB_URI)
-dotenv.config();
-
-// =============================================
 // 📁 IMPORTAR MODELOS DE DATOS
 // =============================================
-// Estos archivos definen la estructura de los datos
-// que se guardarán en MongoDB
 const Cliente = require('./models/cliente');
 const Reserva = require('./models/reserva');
 
@@ -57,28 +53,19 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // =============================================
-// 🌐 CONFIGURACIÓN DE CORS (CORREGIDA)
+// 🌐 CONFIGURACIÓN DE CORS
 // =============================================
-// 🔍 PROBLEMA: El frontend envía credentials: 'include' pero origin: '*'
-//    no permite credenciales. Es incompatible.
-//
-// ✅ SOLUCIÓN: Especificar orígenes permitidos y permitir credenciales.
-// =============================================
-
-// Lista de orígenes permitidos (ajusta según necesites)
 const allowedOrigins = [
-    'http://localhost:3000',  // Puerto común de desarrollo
-    'http://localhost:5500',  // Puerto de Live Server
+    'http://localhost:3000',
+    'http://localhost:5500',
     'http://127.0.0.1:5500',
-    'http://localhost:3001',  // El mismo backend
-    'null',                   // Para archivos locales (file://)
-    'file://'                  // Para archivos locales
+    'http://localhost:3001',
+    'null',
+    'file://'
 ];
 
-// Configuración CORS con credenciales permitidas
 app.use(cors({
     origin: function(origin, callback) {
-        // Permitir solicitudes sin origen (como Postman o archivos locales)
         if (!origin || allowedOrigins.includes(origin) || origin.startsWith('file://')) {
             callback(null, true);
         } else {
@@ -86,53 +73,59 @@ app.use(cors({
             callback(new Error('No permitido por CORS'));
         }
     },
-    credentials: true,        // 👈 PERMITE ENVIAR COOKIES Y CREDENCIALES
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
-// Middleware para que el servidor entienda JSON (debe ir DESPUÉS de CORS)
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Para datos de formularios
+app.use(express.urlencoded({ extended: true }));
 
 // =============================================
-// 🗄️ CONEXIÓN A MONGODB ATLAS
+// 🗄️ CONEXIÓN A MONGODB ATLAS (CORREGIDO)
 // =============================================
-// 📌 MONGODB_URI: Viene del archivo .env
-//    Ejemplo: mongodb+srv://usuario:contraseña@cluster.mongodb.net/basedatos
-//
-// ⚙️ OPCIONES:
-//   - serverApi: Configura la versión estable de la API
-//   - family: 4  👈 Fuerza el uso de IPv4 (evita problemas con IPv6)
-// =============================================
-mongoose.connect(process.env.MONGODB_URI, {
+// Usa MONGO_URI (NO MONGODB_URI)
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+    console.error('❌ ERROR CRÍTICO: MONGO_URI no está definida en el archivo .env');
+    process.exit(1);
+}
+
+mongoose.connect(MONGO_URI, {
     serverApi: {
         version: '1',
         strict: true,
         deprecationErrors: true,
     },
-    family: 4 // 👈 Forzar IPv4 para evitar conflictos de red
+    family: 4
 })
 .then(() => console.log('✅ Conectado a MongoDB Atlas'))
 .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
 // =============================================
-// 📧 CONFIGURACIÓN DE EMAIL (NODEMAILER)
+// 📧 CONFIGURACIÓN DE EMAIL (CORREGIDO)
 // =============================================
-// Configura el transporte para enviar emails usando Gmail
-// Requiere una contraseña de aplicación (no la contraseña normal)
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
+
+if (!EMAIL_USER || !EMAIL_PASS) {
+    console.error('❌ ERROR CRÍTICO: EMAIL_USER o EMAIL_PASS no están definidas');
+} else {
+    console.log('📧 Email configurado para:', EMAIL_USER);
+}
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
     }
 });
 
-// Verificar que la configuración de email sea correcta
 transporter.verify((error, success) => {
     if (error) {
-        console.error('❌ Error en configuración de email:', error);
+        console.error('❌ Error en configuración de email:', error.message);
     } else {
         console.log('📧 Servidor de email listo');
     }
@@ -142,19 +135,11 @@ transporter.verify((error, success) => {
 // 🌐 RUTAS DE LA API
 // =============================================
 
-// ---------------------------------------------
-// 🏠 RUTA DE PRUEBA
-// ---------------------------------------------
-// Verifica que el servidor esté funcionando
 app.get('/', (req, res) => {
     res.send('✅ Servidor de Detailing Team con MongoDB funcionando');
 });
 
-// =============================================
 // 👥 RUTAS DE CLIENTES
-// =============================================
-
-// 📋 Obtener todos los clientes (ordenados del más reciente al más antiguo)
 app.get('/api/clientes', async (req, res) => {
     try {
         const clientes = await Cliente.find().sort({ fecha: -1 });
@@ -165,10 +150,8 @@ app.get('/api/clientes', async (req, res) => {
     }
 });
 
-// ➕ Registrar un nuevo cliente
 app.post('/api/clientes', async (req, res) => {
     try {
-        // Validar que los datos requeridos estén presentes
         const { nombre, email, telefono, modelo } = req.body;
         if (!nombre || !email || !telefono || !modelo) {
             return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -184,11 +167,7 @@ app.post('/api/clientes', async (req, res) => {
     }
 });
 
-// =============================================
 // 📅 RUTAS DE RESERVAS
-// =============================================
-
-// 📋 Obtener todas las reservas (ordenadas de la más reciente a la más antigua)
 app.get('/api/reservas', async (req, res) => {
     try {
         const reservas = await Reserva.find().sort({ fechaSolicitud: -1 });
@@ -199,10 +178,8 @@ app.get('/api/reservas', async (req, res) => {
     }
 });
 
-// ➕ Crear una nueva reserva
 app.post('/api/reservas', async (req, res) => {
     try {
-        // Validar que los datos requeridos estén presentes
         const { servicio, tipoVehiculo, fecha, hora, precio, clienteEmail } = req.body;
         if (!servicio || !tipoVehiculo || !fecha || !hora || !precio || !clienteEmail) {
             return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -218,15 +195,10 @@ app.post('/api/reservas', async (req, res) => {
     }
 });
 
-// =============================================
 // 📧 RUTAS DE EMAILS
-// =============================================
-
-// ✉️ Email de bienvenida al registrarse
 app.post('/api/enviar-bienvenida', async (req, res) => {
     const { nombre, email, idioma } = req.body;
 
-    // Validar datos requeridos
     if (!nombre || !email) {
         return res.status(400).json({ error: 'Faltan nombre o email' });
     }
@@ -250,8 +222,8 @@ app.post('/api/enviar-bienvenida', async (req, res) => {
            <p>📞 +1 (713) 928-0466</p>`;
 
     try {
-        const info = await transporter.sendMail({
-            from: `"Detailing Team" <${process.env.EMAIL_USER}>`,
+        await transporter.sendMail({
+            from: `"Detailing Team" <${EMAIL_USER}>`,
             to: email,
             subject: asunto,
             html: contenido
@@ -265,20 +237,15 @@ app.post('/api/enviar-bienvenida', async (req, res) => {
     }
 });
 
-// ✉️ Email de confirmación de reserva (para cliente y propietario)
 app.post('/api/enviar-reserva', async (req, res) => {
     const { cliente, reserva, tipo, idioma } = req.body;
 
-    // Validar datos requeridos
     if (!cliente || !reserva || !tipo) {
         return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
 
     let asunto, contenido, destinatario;
 
-    // ---------------------------------------------
-    // 📧 EMAIL PARA EL CLIENTE
-    // ---------------------------------------------
     if (tipo === 'cliente') {
         destinatario = cliente.email;
         asunto = idioma === 'es' 
@@ -315,11 +282,8 @@ app.post('/api/enviar-reserva', async (req, res) => {
                <p>📞 <strong>Phone:</strong> +1 (713) 928-0466</p>
                <p>We look forward to seeing you!</p>`;
 
-    // ---------------------------------------------
-    // 📧 EMAIL PARA EL PROPIETARIO
-    // ---------------------------------------------
     } else {
-        destinatario = process.env.EMAIL_USER;
+        destinatario = EMAIL_USER;
         asunto = '🔔 NUEVA RESERVA RECIBIDA - Detailing Team';
 
         contenido = `<h1>🔔 NUEVA RESERVA RECIBIDA</h1>
@@ -346,14 +310,14 @@ app.post('/api/enviar-reserva', async (req, res) => {
     }
 
     try {
-        const info = await transporter.sendMail({
-            from: `"Detailing Team" <${process.env.EMAIL_USER}>`,
+        await transporter.sendMail({
+            from: `"Detailing Team" <${EMAIL_USER}>`,
             to: destinatario,
             subject: asunto,
             html: contenido
         });
 
-        console.log(`✅ Email de ${tipo} enviado:`, info.messageId);
+        console.log(`✅ Email de ${tipo} enviado`);
         res.json({ success: true, message: 'Email enviado correctamente' });
     } catch (error) {
         console.error('❌ Error enviando email:', error);
@@ -366,12 +330,12 @@ app.post('/api/enviar-reserva', async (req, res) => {
 // =============================================
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`📧 Email configurado para: ${process.env.EMAIL_USER}`);
+    console.log(`📧 Email configurado para: ${EMAIL_USER}`);
     console.log(`🌐 CORS configurado con credenciales permitidas`);
 });
 
 // =============================================
-// 🔧 MANEJO DE ERRORES NO CAPTURADOS
+// 🔧 MANEJO DE ERRORES NO CAPTURADOS (CORREGIDO)
 // =============================================
 process.on('uncaughtException', (error) => {
     console.error('❌ Error no capturado:', error);
