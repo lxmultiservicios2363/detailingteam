@@ -5,8 +5,8 @@
 // conecta a MongoDB Atlas y maneja las rutas API
 // para clientes, reservas y envío de emails.
 // 
-// 📌 Versión: 4.1 (CORREGIDA - SIN ERRORES)
-// 📌 Fecha: 16/04/2026
+// 📌 Versión: 5.0 (CORREGIDA - SIRVE FRONTEND)
+// 📌 Fecha: 18/04/2026
 // 📌 Autor: Luis Enrique Reina Mesa
 // =============================================
 
@@ -24,7 +24,6 @@ const path = require('path');
 // =============================================
 // 🔐 CARGAR VARIABLES DE ENTORNO (FORZADO)
 // =============================================
-// IMPORTANTE: Especificar la ruta exacta del archivo .env
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Debug: Verificar que las variables se cargaron
@@ -53,13 +52,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // =============================================
-// 🌐 CONFIGURACIÓN DE CORS
+// 🌐 CONFIGURACIÓN DE CORS (ACTUALIZADA PARA RENDER)
 // =============================================
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
     'http://localhost:3001',
+    'https://detailingteam.onrender.com',
+    'https://detailingteam.vercel.app',
     'null',
     'file://'
 ];
@@ -82,9 +83,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =============================================
-// 🗄️ CONEXIÓN A MONGODB ATLAS (CORREGIDO)
+// 📁 SERVIR ARCHIVOS ESTÁTICOS (FRONTEND)
 // =============================================
-// Usa MONGO_URI (NO MONGODB_URI)
+// Esto permite que el backend entregue tu página web
+app.use(express.static(path.join(__dirname, '..')));
+
+// Ruta principal - sirve index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
+
+// =============================================
+// 🗄️ CONEXIÓN A MONGODB ATLAS
+// =============================================
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -104,7 +115,7 @@ mongoose.connect(MONGO_URI, {
 .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
 // =============================================
-// 📧 CONFIGURACIÓN DE EMAIL (CORREGIDO)
+// 📧 CONFIGURACIÓN DE EMAIL
 // =============================================
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
@@ -134,10 +145,6 @@ transporter.verify((error, success) => {
 // =============================================
 // 🌐 RUTAS DE LA API
 // =============================================
-
-app.get('/', (req, res) => {
-    res.send('✅ Servidor de Detailing Team con MongoDB funcionando');
-});
 
 // 👥 RUTAS DE CLIENTES
 app.get('/api/clientes', async (req, res) => {
@@ -335,7 +342,7 @@ app.listen(PORT, () => {
 });
 
 // =============================================
-// 🔧 MANEJO DE ERRORES NO CAPTURADOS (CORREGIDO)
+// 🔧 MANEJO DE ERRORES NO CAPTURADOS
 // =============================================
 process.on('uncaughtException', (error) => {
     console.error('❌ Error no capturado:', error);
