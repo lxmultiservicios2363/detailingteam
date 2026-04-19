@@ -3,14 +3,13 @@
 // =============================================
 // Este archivo contiene toda la lógica del frontend:
 // - Sistema de idiomas (español/inglés)
-// - Modo oscuro/claro
 // - Gestión de reservas (CON BACKEND MONGODB)
 // - Registro de clientes (CON BACKEND MONGODB)
 // - Envío de WhatsApp con ticket detallado
 // - Envío de emails al cliente y propietario
 // - Validaciones
 //
-// 📌 VERSIÓN: 8.1 (CORREGIDA - PRODUCCIÓN VERCELL)
+// 📌 VERSIÓN: 8.2 (CORREGIDA - TEMA SOLO EN INDEX.HTML)
 // 📌 FECHA: 18/04/2026
 // 📌 AUTOR: Luis Enrique Reina Mesa
 // =============================================
@@ -18,25 +17,19 @@
 // =============================================
 // CONSTANTES GLOBALES
 // =============================================
-const MAX_ORDENES_DIARIAS = 30;           // Límite de reservas por día
-const HORARIO_INICIO = "07:00";            // Hora de apertura
-const HORARIO_FIN = "17:30";               // Hora de cierre
-const TELEFONO_PROPIETARIO = "17139280466"; // WhatsApp del propietario (sin +)
+const MAX_ORDENES_DIARIAS = 30;
+const HORARIO_INICIO = "07:00";
+const HORARIO_FIN = "17:30";
+const TELEFONO_PROPIETARIO = "17139280466";
 
 // =============================================
-// 🔧 CONFIGURACIÓN DEL BACKEND (CORREGIDO PARA PRODUCCIÓN)
-// =============================================
-// Esta variable se ajusta automáticamente según el entorno:
-// - En desarrollo local: usa 'http://localhost:3001'
-// - En producción (Vercel): usa una cadena vacía para rutas relativas
-//   Las rutas relativas funcionan porque Vercel maneja /api/* internamente
+// CONFIGURACIÓN DEL BACKEND
 // =============================================
 const BACKEND_URL = 'https://detailingteam-backend.onrender.com';
 
 // =============================================
 // OBJETO PARA MAPEAR TIPOS DE VEHÍCULO A TEXTO
 // =============================================
-// Este objeto convierte el valor del select (ej: 'sedan') a texto legible
 const tipoVehiculoTexto = {
     'sedan': '🚗 Sedán (4 puertas, 5 asientos)',
     'hatchback': '🚗 Hatchback (5 puertas, 5 asientos)',
@@ -51,14 +44,10 @@ const tipoVehiculoTexto = {
 // =============================================
 // FUNCIÓN: guardarRegistro
 // =============================================
-// Guarda los datos del cliente en MongoDB y localStorage
-// También envía email de bienvenida al cliente
-// =============================================
 function guardarRegistro(event) {
     event.preventDefault();
     console.log('📝 Iniciando registro...');
     
-    // Obtener valores del formulario usando IDs del HTML
     const nombreInput = document.getElementById('register-input-name');
     const emailInput = document.getElementById('register-input-email');
     const telefonoInput = document.getElementById('register-input-phone');
@@ -67,13 +56,11 @@ function guardarRegistro(event) {
     const anioInput = document.getElementById('register-input-year');
     const placaInput = document.getElementById('register-input-plate');
     
-    // Validar que existan los campos del formulario
     if (!nombreInput || !emailInput || !telefonoInput || !direccionInput || !modeloInput) {
         alert('Error: No se encontró el formulario de registro. Por favor recarga la página.');
         return;
     }
     
-    // Crear objeto con los datos del cliente
     const registro = {
         nombre: nombreInput.value,
         email: emailInput.value,
@@ -86,10 +73,6 @@ function guardarRegistro(event) {
     
     console.log('📤 Enviando datos al backend:', registro);
     
-    // Enviar datos al backend (MongoDB)
-    // Usamos `${BACKEND_URL}/api/clientes` que se resuelve a:
-    // - Desarrollo: 'http://localhost:3001/api/clientes'
-    // - Producción: '/api/clientes' (ruta relativa a Vercel)
     fetch(`${BACKEND_URL}/api/clientes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -107,14 +90,12 @@ function guardarRegistro(event) {
     .then(data => {
         console.log('✅ Respuesta exitosa del servidor:', data);
         
-        // Guardar en localStorage como respaldo
         let registros = JSON.parse(localStorage.getItem('clientes')) || [];
         registros.push(registro);
         localStorage.setItem('clientes', JSON.stringify(registros));
         
         const idioma = localStorage.getItem('idioma') || 'es';
         
-        // Enviar email de bienvenida al cliente
         return fetch(`${BACKEND_URL}/api/enviar-bienvenida`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -141,7 +122,6 @@ function guardarRegistro(event) {
             : '✅ Registration saved, but there was an email problem. Error: ' + err.message);
     });
     
-    // Limpiar formulario
     const registerForm = document.getElementById('registerForm');
     if (registerForm) registerForm.reset();
 }
@@ -149,17 +129,11 @@ function guardarRegistro(event) {
 // =============================================
 // FUNCIÓN: procesarReserva
 // =============================================
-// Procesa la reserva, guarda en MongoDB y envía notificaciones
-// También envía WhatsApp con ticket y emails de confirmación
-// =============================================
 function procesarReserva(event) {
     event.preventDefault();
     
     const idioma = localStorage.getItem('idioma') || 'es';
     
-    // =============================================
-    // VALIDACIÓN DE HORA
-    // =============================================
     const horaInput = document.getElementById('booking-input-time');
     if (!horaInput) {
         alert('Error: Campo hora no encontrado');
@@ -174,9 +148,6 @@ function procesarReserva(event) {
         return false;
     }
     
-    // =============================================
-    // VALIDACIÓN DE FECHA Y DISPONIBILIDAD
-    // =============================================
     const fechaInput = document.getElementById('booking-input-date');
     if (!fechaInput) {
         alert('Error: Campo fecha no encontrado');
@@ -192,9 +163,6 @@ function procesarReserva(event) {
         return false;
     }
     
-    // =============================================
-    // OBTENER CLIENTE ACTUAL (el último registrado)
-    // =============================================
     let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
     if (clientes.length === 0) {
         alert(idioma === 'es' 
@@ -206,9 +174,6 @@ function procesarReserva(event) {
     
     const clienteActual = clientes[clientes.length - 1];
     
-    // =============================================
-    // OBTENER VALORES DEL FORMULARIO DE RESERVA
-    // =============================================
     const servicioSelect = document.getElementById('booking-select-service');
     const tipoVehiculoSelect = document.getElementById('booking-select-vehicle');
     const notasTextarea = document.getElementById('booking-textarea-notes');
@@ -222,7 +187,6 @@ function procesarReserva(event) {
     const tipoVehiculo = tipoVehiculoSelect.value;
     const precioFinal = calcularPrecioFinal(servicioOption, tipoVehiculo);
     
-    // Crear objeto con los datos de la reserva
     const reserva = {
         servicio: servicioOption.value,
         tipoVehiculo: tipoVehiculo,
@@ -236,9 +200,6 @@ function procesarReserva(event) {
     
     console.log('📤 Enviando reserva al backend:', reserva);
     
-    // =============================================
-    // GUARDAR RESERVA EN MONGODB
-    // =============================================
     fetch(`${BACKEND_URL}/api/reservas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -256,18 +217,13 @@ function procesarReserva(event) {
     .then(data => {
         console.log('✅ Reserva guardada en MongoDB:', data);
         
-        // Guardar en localStorage como respaldo
         let reservas = JSON.parse(localStorage.getItem('reservas')) || [];
         reservas.push(reserva);
         localStorage.setItem('reservas', JSON.stringify(reservas));
         
-        // Enviar WhatsApp con ticket al propietario
         const ticket = generarTicket(reserva, clienteActual);
         enviarWhatsApp(ticket);
         
-        // =============================================
-        // ENVIAR EMAIL AL CLIENTE (confirmación)
-        // =============================================
         return fetch(`${BACKEND_URL}/api/enviar-reserva`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -283,9 +239,6 @@ function procesarReserva(event) {
     .then(data => {
         console.log('✅ Email al cliente enviado:', data);
         
-        // =============================================
-        // ENVIAR EMAIL AL PROPIETARIO (notificación)
-        // =============================================
         return fetch(`${BACKEND_URL}/api/enviar-reserva`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -307,7 +260,6 @@ function procesarReserva(event) {
     .catch(err => {
         console.error('❌ Error en el proceso:', err);
         
-        // Guardar localmente como fallback (si el servidor no responde)
         let reservas = JSON.parse(localStorage.getItem('reservas')) || [];
         reservas.push(reserva);
         localStorage.setItem('reservas', JSON.stringify(reservas));
@@ -317,7 +269,6 @@ function procesarReserva(event) {
             : '⚠️ Booking saved locally, but there was a server problem. Error: ' + err.message);
     });
     
-    // Limpiar formulario y actualizar disponibilidad
     const bookingForm = document.getElementById('bookingForm');
     if (bookingForm) bookingForm.reset();
     actualizarDisponibilidad();
@@ -325,21 +276,11 @@ function procesarReserva(event) {
     return false;
 }
 
-// =============================================
-// FUNCIÓN: obtenerReservasPorFecha
-// =============================================
-// Obtiene las reservas guardadas localmente para una fecha específica
-// =============================================
 function obtenerReservasPorFecha(fecha) {
     let reservas = JSON.parse(localStorage.getItem('reservas')) || [];
     return reservas.filter(r => r.fecha === fecha);
 }
 
-// =============================================
-// FUNCIÓN: actualizarDisponibilidad
-// =============================================
-// Muestra el número de cupos disponibles para la fecha seleccionada
-// =============================================
 function actualizarDisponibilidad() {
     const fechaInput = document.getElementById('booking-input-date');
     if (!fechaInput || !fechaInput.value) return;
@@ -365,26 +306,14 @@ function actualizarDisponibilidad() {
     }
 }
 
-// =============================================
-// FUNCIÓN: validarHora
-// =============================================
-// Verifica que la hora seleccionada esté dentro del horario laboral
-// =============================================
 function validarHora(hora) {
     return hora >= HORARIO_INICIO && hora <= HORARIO_FIN;
 }
 
-// =============================================
-// FUNCIÓN: calcularPrecioFinal
-// =============================================
-// Calcula el precio final del servicio según el tipo de vehículo
-// =============================================
 function calcularPrecioFinal(servicioOption, tipoVehiculo) {
-    // Obtener precio base del atributo data-price-sedan
     const precioBase = servicioOption.getAttribute('data-price-sedan');
     let precioNumerico = parseInt(precioBase.split('-')[0]);
     
-    // Ajustes por tipo de vehículo (adicionales por tamaño)
     if (tipoVehiculo === 'suv' || tipoVehiculo === 'pickup') {
         precioNumerico += 40;
     } else if (tipoVehiculo === 'van') {
@@ -393,7 +322,6 @@ function calcularPrecioFinal(servicioOption, tipoVehiculo) {
         precioNumerico += 80;
     }
     
-    // Si el precio tiene rango (ej: 100-120), ajustar el máximo también
     if (precioBase.includes('-')) {
         const precioMaxOriginal = parseInt(precioBase.split('-')[1]);
         const precioMax = precioMaxOriginal + (precioNumerico - parseInt(precioBase.split('-')[0]));
@@ -402,23 +330,12 @@ function calcularPrecioFinal(servicioOption, tipoVehiculo) {
     return precioNumerico.toString();
 }
 
-// =============================================
-// FUNCIÓN: enviarWhatsApp
-// =============================================
-// Abre WhatsApp con el mensaje predefinido
-// =============================================
 function enviarWhatsApp(mensaje) {
     const mensajeCodificado = encodeURIComponent(mensaje);
     const url = `https://api.whatsapp.com/send?phone=${TELEFONO_PROPIETARIO}&text=${mensajeCodificado}`;
     window.open(url, '_blank');
 }
 
-// =============================================
-// FUNCIÓN: generarTicket
-// =============================================
-// Genera el ticket de reserva para enviar por WhatsApp
-// Contiene datos del cliente, vehículo, servicio, fecha, hora y total
-// =============================================
 function generarTicket(reserva, cliente) {
     const idioma = localStorage.getItem('idioma') || 'es';
     const salto = '\n';
@@ -492,13 +409,9 @@ function generarTicket(reserva, cliente) {
 // =============================================
 // FUNCIÓN: cambiarIdioma
 // =============================================
-// Cambia el idioma de toda la página (español/inglés)
-// Actualiza textos, placeholders y atributos alt
-// =============================================
 function cambiarIdioma(idioma) {
     const textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    // Actualizar elementos con ID
     for (let id in textos) {
         const elemento = document.getElementById(id);
         if (elemento) {
@@ -514,7 +427,6 @@ function cambiarIdioma(idioma) {
         }
     }
     
-    // Actualizar placeholders específicos de los inputs del registro
     const registerInputs = [
         'register-input-name', 'register-input-email', 'register-input-phone',
         'register-input-address', 'register-input-model', 'register-input-year', 'register-input-plate'
@@ -527,7 +439,6 @@ function cambiarIdioma(idioma) {
         }
     });
     
-    // Actualizar placeholders específicos del formulario de reservas
     const bookingInputs = ['booking-input-date', 'booking-input-time', 'booking-textarea-notes'];
     
     bookingInputs.forEach(inputId => {
@@ -539,46 +450,41 @@ function cambiarIdioma(idioma) {
         }
     });
     
-    // Actualizar el atributo alt del logo
     const logo = document.getElementById('header-logo');
     if (logo && textos['header-logo']) {
         logo.alt = textos['header-logo'];
     }
     
-    // Actualizar el título de la página
     document.title = textos['page-title'] || 'Detailing Team TX';
     
-    // Actualizar clases activas de los botones de idioma
     const btnEnglish = document.getElementById('btnEnglish');
     const btnSpanish = document.getElementById('btnSpanish');
     if (btnEnglish) btnEnglish.classList.toggle('active', idioma === 'en');
     if (btnSpanish) btnSpanish.classList.toggle('active', idioma === 'es');
     
-    // Actualizar el idioma del HTML
     document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
     
-    // Guardar preferencia en localStorage
     localStorage.setItem('idioma', idioma);
     
-    // Actualizar disponibilidad para que use el nuevo idioma
     actualizarDisponibilidad();
     
     console.log(`🌐 Idioma cambiado a: ${idioma === 'en' ? 'English' : 'Español'}`);
 }
 
-// =============================================
-// FUNCIÓN: detectarIdiomaNavegador
-// =============================================
-// Detecta el idioma del navegador del usuario
-// =============================================
 function detectarIdiomaNavegador() {
     const lang = navigator.language || navigator.userLanguage;
     return lang.startsWith('es') ? 'es' : (lang.startsWith('en') ? 'en' : 'es');
 }
 
 // =============================================
-// FUNCIONES DE TEMA (Modo oscuro/claro)
+// FUNCIONES DE TEMA (DESACTIVADAS - SE USA EL DE INDEX.HTML)
 // =============================================
+// Las funciones de tema se han comentado para evitar conflicto
+// con el sistema de tema que ya está en index.html.
+// El toggle de tema funciona correctamente desde index.html.
+// =============================================
+
+/*
 function cambiarTema(modo) {
     const body = document.body;
     body.classList.remove('dark-mode');
@@ -592,16 +498,16 @@ function aplicarTemaGuardado() {
     cambiarTema(temaGuardado || 'system');
 }
 
-// Escuchar cambios del sistema para el modo oscuro
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
     if (localStorage.getItem('tema') === 'system') {
         if (e.matches) document.body.classList.add('dark-mode');
         else document.body.classList.remove('dark-mode');
     }
 });
+*/
 
 // =============================================
-// FUNCIONES DE PAGO (Paso 2 del formulario)
+// FUNCIONES DE PAGO
 // =============================================
 function procesarPagoPayPal() {
     const idioma = localStorage.getItem('idioma') || 'es';
@@ -620,11 +526,6 @@ function volverAlFormulario() {
     if (step2) step2.classList.add('hidden');
 }
 
-// =============================================
-// FUNCIÓN: mostrarQRExterno
-// =============================================
-// Muestra el código QR del desarrollador (imagen física)
-// =============================================
 function mostrarQRExterno() {
     const qrContainer = document.getElementById('qrCode');
     if (!qrContainer) return;
@@ -654,7 +555,7 @@ function mostrarQRExterno() {
 }
 
 // =============================================
-// TEXTOS DE IDIOMAS (Español/Inglés)
+// TEXTOS DE IDIOMAS (COMPLETOS)
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
@@ -945,19 +846,17 @@ const textosIndexEs = {
 };
 
 // =============================================
-// INICIALIZACIÓN - SE EJECUTA AL CARGAR LA PÁGINA
+// INICIALIZACIÓN
 // =============================================
 window.onload = function() {
     console.log('🚀 Página cargada, iniciando configuración...');
     
-    // Cargar idioma guardado o detectar del navegador
     const idiomaGuardado = localStorage.getItem('idioma');
     cambiarIdioma(idiomaGuardado || detectarIdiomaNavegador());
     
-    // Cargar tema guardado
-    aplicarTemaGuardado();
+    // NOTA: El tema se inicializa desde index.html, no desde aquí
+    // aplicarTemaGuardado();  // COMENTADO - El tema lo maneja index.html
     
-    // Configurar input de hora con los límites
     const horaInput = document.getElementById('booking-input-time');
     if (horaInput) {
         horaInput.min = HORARIO_INICIO;
@@ -965,16 +864,13 @@ window.onload = function() {
         horaInput.step = "1800";
     }
     
-    // Configurar evento de cambio de fecha
     const fechaInput = document.getElementById('booking-input-date');
     if (fechaInput) {
         fechaInput.addEventListener('change', actualizarDisponibilidad);
     }
     
-    // Mostrar el código QR
     mostrarQRExterno();
     
-    // Escuchar cambios en localStorage (cuando se cambia el idioma desde otra página)
     window.addEventListener('storage', function(e) {
         if (e.key === 'idioma') {
             cambiarIdioma(e.newValue);
