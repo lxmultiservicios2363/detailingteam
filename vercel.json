@@ -1,20 +1,14 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/index.js"
     }
-  ],
-  "env": {
-    "MONGO_URI": "mongodb+srv://lxmultiservicios_db_user:fsxNO3Uu4zl2YhCq@detailingteamdb.fri9ll3.mongodb.net/detailing-team?retryWrites=true&w=majority&appName=DetailIngTeamDB",
-    "EMAIL_USER": "contactdetailingteam@gmail.com",
-    "EMAIL_PASS": "gwkz tkfy wynq pjjn"
-  }
+  ]
 }
