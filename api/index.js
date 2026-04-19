@@ -1,36 +1,35 @@
 // =============================================
 // API SERVERLESS - DETAILING TEAM (VERCEL)
 // =============================================
-// Este archivo reemplaza a server.js para funcionar
-// en el entorno serverless de Vercel.
-// =============================================
 
 const express = require('express');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-require('dotenv').config();
 
-// Importar modelos
+// =============================================
+// IMPORTAR MODELOS
+// =============================================
 const Cliente = require('../backend/models/cliente');
 const Reserva = require('../backend/models/reserva');
 
-// Crear app Express
+// =============================================
+// CREAR APP EXPRESS
+// =============================================
 const app = express();
 
-// Configurar CORS para producción
+// =============================================
+// CORS
+// =============================================
 app.use(cors({
-    origin: ['https://detailingteam.vercel.app', 'http://localhost:3000', 'http://localhost:5500'],
+    origin: '*',
     credentials: true
 }));
 
 app.use(express.json());
 
 // =============================================
-// CONEXIÓN A MONGODB (SINGLETON PARA SERVERLESS)
-// =============================================
-// En serverless, la conexión se reutiliza entre funciones
-// para no sobrecargar MongoDB Atlas.
+// CONEXIÓN A MONGODB (SINGLETON)
 // =============================================
 let cached = global.mongoose;
 
@@ -44,11 +43,10 @@ async function connectToDatabase() {
     }
 
     if (!cached.promise) {
-        const opts = {
+        cached.promise = mongoose.connect(process.env.MONGO_URI, {
             bufferCommands: false,
             serverApi: { version: '1', strict: true, deprecationErrors: true }
-        };
-        cached.promise = mongoose.connect(process.env.MONGO_URI, opts).then((mongoose) => {
+        }).then((mongoose) => {
             return mongoose;
         });
     }
@@ -57,7 +55,7 @@ async function connectToDatabase() {
 }
 
 // =============================================
-// CONFIGURACIÓN DE EMAIL
+// EMAIL
 // =============================================
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -68,15 +66,13 @@ const transporter = nodemailer.createTransport({
 });
 
 // =============================================
-// RUTAS DE LA API
+// RUTAS
 // =============================================
 
-// Ruta raíz
 app.get('/', (req, res) => {
-    res.json({ message: '✅ API de Detailing Team funcionando en Vercel' });
+    res.json({ message: '✅ API de Detailing Team funcionando' });
 });
 
-// GET /api/clientes
 app.get('/api/clientes', async (req, res) => {
     try {
         await connectToDatabase();
@@ -87,16 +83,9 @@ app.get('/api/clientes', async (req, res) => {
     }
 });
 
-// POST /api/clientes
 app.post('/api/clientes', async (req, res) => {
     try {
         await connectToDatabase();
-        const { nombre, email, telefono, direccion, modelo, anio, placa } = req.body;
-        
-        if (!nombre || !email || !telefono || !direccion || !modelo) {
-            return res.status(400).json({ error: 'Faltan campos requeridos' });
-        }
-        
         const cliente = new Cliente(req.body);
         await cliente.save();
         res.status(201).json(cliente);
@@ -105,7 +94,6 @@ app.post('/api/clientes', async (req, res) => {
     }
 });
 
-// GET /api/reservas
 app.get('/api/reservas', async (req, res) => {
     try {
         await connectToDatabase();
@@ -116,16 +104,9 @@ app.get('/api/reservas', async (req, res) => {
     }
 });
 
-// POST /api/reservas
 app.post('/api/reservas', async (req, res) => {
     try {
         await connectToDatabase();
-        const { servicio, tipoVehiculo, fecha, hora, precio, clienteEmail } = req.body;
-        
-        if (!servicio || !tipoVehiculo || !fecha || !hora || !precio || !clienteEmail) {
-            return res.status(400).json({ error: 'Faltan campos requeridos' });
-        }
-        
         const reserva = new Reserva(req.body);
         await reserva.save();
         res.status(201).json(reserva);
@@ -134,18 +115,13 @@ app.post('/api/reservas', async (req, res) => {
     }
 });
 
-// POST /api/enviar-bienvenida
 app.post('/api/enviar-bienvenida', async (req, res) => {
     const { nombre, email, idioma } = req.body;
     
-    if (!nombre || !email) {
-        return res.status(400).json({ error: 'Faltan nombre o email' });
-    }
-    
     const asunto = idioma === 'es' ? '¡Bienvenido a Detailing Team!' : 'Welcome to Detailing Team!';
     const contenido = idioma === 'es'
-        ? `<h1>¡Hola ${nombre}!</h1><p>Gracias por registrarte en Detailing Team.</p><p>¡Te esperamos!</p>`
-        : `<h1>Hello ${nombre}!</h1><p>Thank you for registering with Detailing Team.</p><p>We look forward to seeing you!</p>`;
+        ? `<h1>¡Hola ${nombre}!</h1><p>Gracias por registrarte.</p>`
+        : `<h1>Hello ${nombre}!</h1><p>Thank you for registering.</p>`;
     
     try {
         await transporter.sendMail({
@@ -160,13 +136,8 @@ app.post('/api/enviar-bienvenida', async (req, res) => {
     }
 });
 
-// POST /api/enviar-reserva
 app.post('/api/enviar-reserva', async (req, res) => {
     const { cliente, reserva, tipo, idioma } = req.body;
-    
-    if (!cliente || !reserva || !tipo) {
-        return res.status(400).json({ error: 'Faltan datos requeridos' });
-    }
     
     let asunto, contenido, destinatario;
     
@@ -174,24 +145,19 @@ app.post('/api/enviar-reserva', async (req, res) => {
         destinatario = cliente.email;
         asunto = idioma === 'es' ? '✅ Confirmación de tu reserva' : '✅ Booking Confirmation';
         contenido = `<h1>¡Hola ${cliente.nombre}!</h1><h2>Tu reserva ha sido confirmada</h2>
-                     <p><strong>📋 Servicio:</strong> ${reserva.servicio}</p>
-                     <p><strong>📅 Fecha:</strong> ${reserva.fecha}</p>
-                     <p><strong>⏰ Hora:</strong> ${reserva.hora}</p>
-                     <p><strong>💰 Total:</strong> $${reserva.precio}</p>
-                     <p>📍 13330 West Road, Houston, TX 77041</p>`;
+                     <p><strong>Servicio:</strong> ${reserva.servicio}</p>
+                     <p><strong>Fecha:</strong> ${reserva.fecha}</p>
+                     <p><strong>Hora:</strong> ${reserva.hora}</p>
+                     <p><strong>Total:</strong> $${reserva.precio}</p>`;
     } else {
         destinatario = process.env.EMAIL_USER;
         asunto = '🔔 NUEVA RESERVA RECIBIDA';
-        contenido = `<h1>🔔 NUEVA RESERVA RECIBIDA</h1>
-                     <h2>Datos del Cliente:</h2>
-                     <p><strong>👤 Nombre:</strong> ${cliente.nombre}</p>
-                     <p><strong>📧 Email:</strong> ${cliente.email}</p>
-                     <p><strong>📞 Teléfono:</strong> ${cliente.telefono}</p>
-                     <h2>Detalle de la Reserva:</h2>
-                     <p><strong>📋 Servicio:</strong> ${reserva.servicio}</p>
-                     <p><strong>📅 Fecha:</strong> ${reserva.fecha}</p>
-                     <p><strong>⏰ Hora:</strong> ${reserva.hora}</p>
-                     <p><strong>💰 Total:</strong> $${reserva.precio}</p>`;
+        contenido = `<h1>🔔 NUEVA RESERVA</h1>
+                     <h2>Cliente: ${cliente.nombre}</h2>
+                     <p><strong>Servicio:</strong> ${reserva.servicio}</p>
+                     <p><strong>Fecha:</strong> ${reserva.fecha}</p>
+                     <p><strong>Hora:</strong> ${reserva.hora}</p>
+                     <p><strong>Total:</strong> $${reserva.precio}</p>`;
     }
     
     try {
@@ -207,5 +173,7 @@ app.post('/api/enviar-reserva', async (req, res) => {
     }
 });
 
-// Exportar para Vercel
+// =============================================
+// EXPORTAR PARA VERCEL
+// =============================================
 module.exports = app;
