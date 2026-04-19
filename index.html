@@ -32,7 +32,7 @@
                 <div class="header-controls">
                     <div class="theme-switch-wrapper">
                         <label class="theme-switch" for="themeToggle">
-                            <input type="checkbox" id="themeToggle" onchange="toggleTema()">
+                            <input type="checkbox" id="themeToggle">
                             <span class="slider round">
                                 <i class="fas fa-sun"></i>
                                 <i class="fas fa-moon"></i>
@@ -825,6 +825,9 @@
             actualizarIdiomaIndex();
         }
 
+        // =============================================
+        // FUNCIONES DE TEMA (AHORA SÍ FUNCIONAN)
+        // =============================================
         function toggleTema() {
             const checkbox = document.getElementById('themeToggle');
             if (checkbox.checked) {
@@ -836,9 +839,6 @@
             }
         }
 
-        // =============================================
-        // FUNCIÓN: inicializarTema (CORREGIDA)
-        // =============================================
         function inicializarTema() {
             const temaGuardado = localStorage.getItem('tema');
             const checkbox = document.getElementById('themeToggle');
@@ -846,14 +846,10 @@
             if (temaGuardado === 'dark') {
                 document.body.classList.add('dark-mode');
                 if (checkbox) checkbox.checked = true;
-            } else if (temaGuardado === 'light') {
-                document.body.classList.remove('dark-mode');
-                if (checkbox) checkbox.checked = false;
             } else {
-                // Si no hay tema guardado, usar modo claro por defecto
                 document.body.classList.remove('dark-mode');
                 if (checkbox) checkbox.checked = false;
-                localStorage.setItem('tema', 'light');
+                if (!temaGuardado) localStorage.setItem('tema', 'light');
             }
         }
 
@@ -886,9 +882,6 @@
             console.log('Disponibilidad actualizada');
         }
 
-        // =============================================
-        // MOSTRAR QR EXTERNO (imagen física)
-        // =============================================
         function mostrarQRExterno() {
             const qrContainer = document.getElementById('qrCode');
             if (!qrContainer) return;
@@ -924,6 +917,18 @@
             inicializarTema();
             actualizarIdiomaIndex();
             mostrarQRExterno();
+
+            const horaInput = document.getElementById('booking-input-time');
+            if (horaInput) {
+                horaInput.min = "07:00";
+                horaInput.max = "17:30";
+                horaInput.step = "1800";
+            }
+            
+            const fechaInput = document.getElementById('booking-input-date');
+            if (fechaInput) {
+                fechaInput.addEventListener('change', actualizarDisponibilidad);
+            }
 
             window.addEventListener('storage', function(e) {
                 if (e.key === 'idioma') actualizarIdiomaIndex();
