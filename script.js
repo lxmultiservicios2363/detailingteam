@@ -31,7 +31,7 @@ const TELEFONO_PROPIETARIO = "17139280466"; // WhatsApp del propietario (sin +)
 // - En producción (Vercel): usa una cadena vacía para rutas relativas
 //   Las rutas relativas funcionan porque Vercel maneja /api/* internamente
 // =============================================
-const BACKEND_URL = ''; // ← ÚNICA LÍNEA CAMBIADA (antes era 'http://localhost:3001')
+const BACKEND_URL = 'https://detailingteam-backend.onrender.com';
 
 // =============================================
 // OBJETO PARA MAPEAR TIPOS DE VEHÍCULO A TEXTO
