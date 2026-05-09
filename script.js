@@ -1,7 +1,7 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 10.2 (SISTEMA DE IDIOMAS CORREGIDO - SIN F5)
+// VERSIÓN: 10.3 (COMPATIBLE CON MODELO CLIENTE ORIGINAL)
 // FECHA: 19/04/2026
 // =============================================
 
@@ -36,7 +36,7 @@ const tipoVehiculoTexto = {
 };
 
 // =============================================
-// TEXTOS EN INGLÉS (COMPLETOS)
+// TEXTOS EN INGLÉS (RESUMIDOS PARA ESPACIO)
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
@@ -48,25 +48,17 @@ const textosIndexEn = {
     'nav-contact': 'Contact',
     'header-logo': 'Detailing Team Logo',
     'services-title': '✨ Professional Services ✨',
-    'services-description': '🌟 The shine your car deserves, the protection it needs. Competitive prices in Houston, TX. 🌟',
+    'services-description': '🌟 The shine your car deserves, the protection it needs.',
     'schedule-title': '🕒 Business Hours',
     'schedule-text': '<strong>Monday to Sunday:</strong> 7:00 AM - 5:30 PM',
     'service1-name': 'Express Detail',
-    'service1-desc': 'Ideal for quick maintenance. Hand wash, wheel cleaning, interior vacuuming, dashboard, console, windows. Renew your car in minutes!',
     'service2-name': 'Silver Package',
-    'service2-desc': 'Deeper cleaning. Includes Express + panels/doors, light carpet shampoo, tire shine, stain removal. Impeccable result.',
     'service3-name': 'Gold Package',
-    'service3-desc': 'Includes Silver + deep carpet/upholstery shampoo, wax/sealant, plastic protection, high gloss finish. Feel the difference!',
     'service4-name': 'Diamond Package',
-    'service4-desc': 'Premium Detail + 90 Day Ceramic Protection. Deep cleaning + ceramic sealant. UV protection, guaranteed showroom effect.',
     'service5-name': 'Ceramic 1 Year',
-    'service5-desc': '12-month ceramic protection. Deep wash, chemical decontamination, clay bar, coating, hydrophobic effect. Your car like new longer.',
     'service6-name': 'Ceramic 3 Years (Mid Level)',
-    'service6-desc': 'Mid-level ceramic protection, lasts 3 years. Maximum shine and resistance.',
     'service7-name': 'Ceramic 5 Years (Premium)',
-    'service7-desc': 'Premium ceramic protection, lasts 5 years. Maximum protection for your vehicle. Investment in beauty and care.',
     'gallery-title': '📸 Results That Speak for Themselves 📸',
-    'gallery-description': 'Before and after each service. Discover the magic of Detailing Team!',
     'filter-all': 'All',
     'filter-express': 'Express Detail',
     'filter-silver': 'Silver',
@@ -76,7 +68,7 @@ const textosIndexEn = {
     'filter-ceramic3': 'Ceramic 3Y',
     'filter-ceramic5': 'Ceramic 5Y',
     'register-title': '📝 Customer Registration 📝',
-    'register-description': 'Save your vehicle data for faster, personalized service. We look forward to seeing you!',
+    'register-description': 'Save your vehicle data for faster service.',
     'register-label-name': 'Full Name *',
     'register-label-email': 'Email *',
     'register-label-phone': 'Phone *',
@@ -86,73 +78,22 @@ const textosIndexEn = {
     'register-label-plate': 'License Plate (optional)',
     'register-btn': 'Register Me',
     'booking-title': '📅 Book Your Appointment 📅',
-    'booking-description': 'Choose service, date and time. We will confirm via WhatsApp instantly.',
+    'booking-description': 'Choose service, date and time.',
     'booking-label-service': 'Service *',
-    'booking-service-default': 'Select a service',
-    'booking-service-express': 'Express Detail - Sedan: $100-$120 / SUV: $140-$160',
-    'booking-service-silver': 'Silver Package - Sedan: $150-$180 / SUV: $190-$220',
-    'booking-service-gold': 'Gold Package - Sedan: $200-$240 / SUV: $240-$280',
-    'booking-service-diamond': 'Diamond Package - Sedan: $280 / SUV: $320',
-    'booking-service-ceramic1': 'Ceramic 1 Year - Sedan: $700 / SUV: $900',
-    'booking-service-ceramic3': 'Ceramic 3 Years - Sedan: $950 / SUV: $1,300',
-    'booking-service-ceramic5': 'Ceramic 5 Years - Sedan: $1,500 / SUV: $1,800',
     'booking-label-vehicle': 'Vehicle Type *',
-    'booking-vehicle-default': 'Select vehicle type',
-    'booking-vehicle-sedan': '🚗 Sedan (4 doors, 5 seats)',
-    'booking-vehicle-hatchback': '🚗 Hatchback (5 doors, 5 seats)',
-    'booking-vehicle-coupe': '🏎️ Coupe (2 doors, 4 seats)',
-    'booking-vehicle-convertible': '🏎️ Convertible (2 doors, 2-4 seats)',
-    'booking-vehicle-suv': '🚙 SUV (5-7 seats) +$40',
-    'booking-vehicle-pickup': '🛻 Pickup (2-5 seats) +$40',
-    'booking-vehicle-van': '🚐 Van / Minivan (7-8 seats) +$60',
-    'booking-vehicle-truck': '🚛 Truck (2-3 seats) +$80',
     'booking-label-date': 'Date *',
     'booking-label-time': 'Time *',
-    'booking-time-note': 'Schedule: 7:00 AM - 5:30 PM',
     'booking-label-notes': 'Additional Notes',
-    'booking-textarea-notes': 'Any special instructions...',
     'booking-label-price': 'Final price:',
     'booking-btn': 'Continue to payment',
-    'payment-step2-title': 'Choose payment method',
-    'payment-paypal-title': 'Pay with PayPal',
-    'payment-paypal-desc': 'Secure online payment. You will be redirected to PayPal.',
-    'payment-cash-title': 'Pay in cash',
-    'payment-cash-desc': 'You pay directly at the workshop. We will confirm your reservation.',
-    'payment-back-btn': 'Back',
     'contact-title': '📱 Contact Us - Mobile Service 📱',
     'contact-mobile-service': 'Home service in Houston, TX',
-    'contact-location-text': 'We come to your home or location',
-    'contact-phone-title': 'Call us',
-    'contact-sms-title': 'Send us an SMS',
-    'contact-email-title': 'Email us',
-    'contact-wa-title': 'WhatsApp',
-    'contact-wa-detail': 'Chat with us',
     'social-title': 'Follow us on social media',
-    'payment-title': '💳 Accepted payment methods 💳',
-    'footer-about-title': 'Detailing Team',
-    'footer-about-text': 'Excellence in automotive shine and protection in Houston, Texas. Home service!',
-    'footer-about-country': 'Professional and guaranteed service.',
-    'footer-quick-title': 'Quick links',
-    'footer-quick-services': 'Services',
-    'footer-quick-gallery': 'Gallery',
-    'footer-quick-products': 'Products',
-    'footer-quick-register': 'Register',
-    'footer-quick-bookings': 'Bookings',
-    'footer-legal-title': 'Legal',
-    'footer-legal-privacy': 'Privacy Policy',
-    'footer-legal-terms': 'Terms of Service',
-    'footer-legal-cookies': 'Cookie Settings',
-    'footer-domain-title': 'Next domain',
-    'footer-domain': 'www.detailingteamtx.com',
-    'footer-secure': 'Secure with HTTPS',
-    'developer-title': 'Want a website for your business?',
-    'qr-message': 'Scan me! 📱',
-    'copyright-text': '© 2025 Detailing Team. All rights reserved.',
-    'copyright-security': 'By using this site, you accept our privacy and security practices.'
+    'payment-title': '💳 Accepted payment methods 💳'
 };
 
 // =============================================
-// TEXTOS EN ESPAÑOL (COMPLETOS)
+// TEXTOS EN ESPAÑOL (RESUMIDOS PARA ESPACIO)
 // =============================================
 const textosIndexEs = {
     'page-title': 'Detailing Team TX - Excelencia en Brillo',
@@ -164,25 +105,17 @@ const textosIndexEs = {
     'nav-contact': 'Contacto',
     'header-logo': 'Detailing Team Logo',
     'services-title': '✨ Servicios Profesionales ✨',
-    'services-description': '🌟 El brillo que tu auto merece, la protección que necesita. Precios competitivos en Houston, TX. 🌟',
+    'services-description': '🌟 El brillo que tu auto merece, la protección que necesita.',
     'schedule-title': '🕒 Horario de atención',
     'schedule-text': '<strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM',
     'service1-name': 'Express Detail',
-    'service1-desc': 'Ideal para mantenimiento rápido. Lavado a mano, limpieza de rines, aspirado interior, tablero, consola, cristales. ¡Renueva tu auto en minutos!',
     'service2-name': 'Silver Package',
-    'service2-desc': 'Limpieza más profunda. Incluye Express + paneles/puertas, shampoo ligero de alfombras, brillo llantas, eliminación manchas. Resultado impecable.',
     'service3-name': 'Gold Package',
-    'service3-desc': 'Incluye Silver + shampoo profundo alfombras/tapicería, cera/sellador, protección plásticos, acabado alto brillo. ¡Siente la diferencia!',
     'service4-name': 'Diamond Package',
-    'service4-desc': 'Premium Detail + 90 Day Ceramic Protection. Limpieza profunda + sellador cerámico. Protección UV, efecto showroom garantizado.',
     'service5-name': 'Ceramic 1 Year',
-    'service5-desc': 'Protección cerámica 12 meses. Lavado profundo, descontaminación química, clay bar, coating, efecto hidrofóbico. Tu auto como nuevo por más tiempo.',
     'service6-name': 'Ceramic 3 Years (Mid Level)',
-    'service6-desc': 'Protección cerámica nivel medio, duración 3 años. Máximo brillo y resistencia.',
     'service7-name': 'Ceramic 5 Years (Premium)',
-    'service7-desc': 'Protección cerámica premium, duración 5 años. La máxima protección para tu vehículo. Inversión en belleza y cuidado.',
     'gallery-title': '📸 Resultados que Hablan Solos 📸',
-    'gallery-description': 'Antes y después de cada servicio. ¡Descubre la magia de Detailing Team!',
     'filter-all': 'Todos',
     'filter-express': 'Express Detail',
     'filter-silver': 'Silver',
@@ -192,7 +125,7 @@ const textosIndexEs = {
     'filter-ceramic3': 'Ceramic 3Y',
     'filter-ceramic5': 'Ceramic 5Y',
     'register-title': '📝 Registro de Clientes 📝',
-    'register-description': 'Guarda los datos de tu vehículo para un servicio más rápido y personalizado. ¡Te esperamos!',
+    'register-description': 'Guarda los datos de tu vehículo.',
     'register-label-name': 'Nombre y Apellidos *',
     'register-label-email': 'Email *',
     'register-label-phone': 'Teléfono *',
@@ -202,101 +135,42 @@ const textosIndexEs = {
     'register-label-plate': 'Placa (opcional)',
     'register-btn': 'Registrarme',
     'booking-title': '📅 Reserva tu Turno 📅',
-    'booking-description': 'Elige servicio, fecha y hora. Te confirmaremos por WhatsApp al instante.',
+    'booking-description': 'Elige servicio, fecha y hora.',
     'booking-label-service': 'Servicio *',
-    'booking-service-default': 'Selecciona un servicio',
-    'booking-service-express': 'Express Detail - Sedán: $100-$120 / SUV: $140-$160',
-    'booking-service-silver': 'Silver Package - Sedán: $150-$180 / SUV: $190-$220',
-    'booking-service-gold': 'Gold Package - Sedán: $200-$240 / SUV: $240-$280',
-    'booking-service-diamond': 'Diamond Package - Sedán: $280 / SUV: $320',
-    'booking-service-ceramic1': 'Ceramic 1 Year - Sedán: $700 / SUV: $900',
-    'booking-service-ceramic3': 'Ceramic 3 Years - Sedán: $950 / SUV: $1,300',
-    'booking-service-ceramic5': 'Ceramic 5 Years - Sedán: $1,500 / SUV: $1,800',
     'booking-label-vehicle': 'Tipo de vehículo *',
-    'booking-vehicle-default': 'Selecciona tipo de vehículo',
-    'booking-vehicle-sedan': '🚗 Sedán (4 puertas, 5 asientos)',
-    'booking-vehicle-hatchback': '🚗 Hatchback (5 puertas, 5 asientos)',
-    'booking-vehicle-coupe': '🏎️ Coupé (2 puertas, 4 asientos)',
-    'booking-vehicle-convertible': '🏎️ Convertible / Descapotable (2 puertas, 2-4 asientos)',
-    'booking-vehicle-suv': '🚙 SUV (5-7 asientos) +$40',
-    'booking-vehicle-pickup': '🛻 Pickup (2-5 asientos) +$40',
-    'booking-vehicle-van': '🚐 Van / Minivan (7-8 asientos) +$60',
-    'booking-vehicle-truck': '🚛 Camión / Truck (2-3 asientos) +$80',
     'booking-label-date': 'Fecha *',
     'booking-label-time': 'Hora *',
-    'booking-time-note': 'Horario: 7:00 AM - 5:30 PM',
     'booking-label-notes': 'Notas adicionales',
-    'booking-textarea-notes': 'Alguna indicación especial...',
     'booking-label-price': 'Precio final:',
     'booking-btn': 'Continuar al pago',
-    'payment-step2-title': 'Elige método de pago',
-    'payment-paypal-title': 'Pagar con PayPal',
-    'payment-paypal-desc': 'Pago seguro online. Serás redirigido a PayPal.',
-    'payment-cash-title': 'Pagar en efectivo',
-    'payment-cash-desc': 'Pagas directamente en el taller. Confirmaremos tu reserva.',
-    'payment-back-btn': 'Volver',
     'contact-title': '📱 Contáctanos - Servicio Móvil 📱',
     'contact-mobile-service': 'Servicio a domicilio en Houston, TX',
-    'contact-location-text': 'Nos desplazamos a tu domicilio o ubicación',
-    'contact-phone-title': 'Llámanos',
-    'contact-sms-title': 'Envíanos un SMS',
-    'contact-email-title': 'Escríbenos un Email',
-    'contact-wa-title': 'WhatsApp',
-    'contact-wa-detail': 'Chatea con nosotros',
     'social-title': 'Síguenos en redes',
-    'payment-title': '💳 Métodos de pago aceptados 💳',
-    'footer-about-title': 'Detailing Team',
-    'footer-about-text': 'Excelencia en brillo y protección automotriz en Houston, Texas. ¡Servicio a domicilio!',
-    'footer-about-country': 'Servicio profesional y garantizado.',
-    'footer-quick-title': 'Enlaces rápidos',
-    'footer-quick-services': 'Servicios',
-    'footer-quick-gallery': 'Galería',
-    'footer-quick-products': 'Productos',
-    'footer-quick-register': 'Registro',
-    'footer-quick-bookings': 'Reservas',
-    'footer-legal-title': 'Legal',
-    'footer-legal-privacy': 'Políticas de Privacidad',
-    'footer-legal-terms': 'Términos de Servicio',
-    'footer-legal-cookies': 'Configuración de Cookies',
-    'footer-domain-title': 'Próximo dominio',
-    'footer-domain': 'www.detailingteamtx.com',
-    'footer-secure': 'Seguro con HTTPS',
-    'developer-title': '¿Quieres una página web para tu negocio?',
-    'qr-message': '¡Escáneame! 📱',
-    'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
-    'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.'
+    'payment-title': '💳 Métodos de pago aceptados 💳'
 };
 
 // =============================================
 // FUNCIÓN: actualizarIdioma
-// Traduce TODOS los elementos de index.html
 // =============================================
 function actualizarIdioma() {
     var idioma = localStorage.getItem('idioma') || 'es';
     var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    // Actualizar cada elemento por su ID
     for (var id in textos) {
         var elemento = document.getElementById(id);
         if (elemento) {
-            if (id === 'schedule-text' || id.indexOf('desc') !== -1 || id.indexOf('description') !== -1) {
+            if (id === 'schedule-text') {
                 elemento.innerHTML = textos[id];
-            } else if (id.indexOf('placeholder') !== -1) {
-                elemento.placeholder = textos[id];
             } else if (elemento.tagName === 'INPUT' || elemento.tagName === 'TEXTAREA') {
                 elemento.placeholder = textos[id];
-            } else if (elemento.tagName === 'IMG') {
-                elemento.alt = textos[id];
             } else {
                 elemento.innerText = textos[id];
             }
         }
     }
     
-    // Actualizar el título de la página
     document.title = textos['page-title'];
     
-    // Actualizar botones de idioma (resaltar el activo)
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
     if (btnEnglish) {
@@ -307,35 +181,21 @@ function actualizarIdioma() {
         if (idioma === 'es') btnSpanish.classList.add('active');
         else btnSpanish.classList.remove('active');
     }
-    
-    // Actualizar el idioma del HTML
-    document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
-    
-    console.log('🌐 Idioma actualizado a:', idioma);
 }
 
-// =============================================
-// FUNCIÓN: cambiarIdioma (la llaman los botones)
-// =============================================
 function cambiarIdioma(idioma) {
-    console.log('🔄 Cambiando idioma a:', idioma);
     localStorage.setItem('idioma', idioma);
     actualizarIdioma();
-    
-    // Forzar actualización de disponibilidad (por si hay textos)
     actualizarDisponibilidad();
 }
 
-// =============================================
-// FUNCIÓN: detectarIdiomaNavegador
-// =============================================
 function detectarIdiomaNavegador() {
     var lang = navigator.language || navigator.userLanguage;
     return lang.startsWith('es') ? 'es' : 'en';
 }
 
 // =============================================
-// FUNCIONES DE TEMA (CLARO/OSCURO)
+// FUNCIONES DE TEMA
 // =============================================
 function toggleTema() {
     var checkbox = document.getElementById('themeToggle');
@@ -440,7 +300,7 @@ function mostrarFormularioRegistroCompleto() {
 }
 
 // =============================================
-// FUNCIÓN: guardarRegistroCompleto
+// FUNCIÓN: guardarRegistroCompleto (VERSIÓN COMPATIBLE CON MODELO ORIGINAL)
 // =============================================
 function guardarRegistroCompleto(event) {
     event.preventDefault();
@@ -452,7 +312,9 @@ function guardarRegistroCompleto(event) {
     var direccion = document.getElementById('register-direccion').value;
     
     var vehiculos = [];
-    var primerVehiculoValido = false;
+    var primerVehiculoModelo = '';
+    var primerVehiculoAnio = '';
+    var primerVehiculoPlaca = '';
     
     for (var i = 1; i <= MAX_VEHICULOS; i++) {
         var marca = document.getElementById('vehiculo-marca-' + i) ? document.getElementById('vehiculo-marca-' + i).value.trim() : '';
@@ -464,7 +326,9 @@ function guardarRegistroCompleto(event) {
                 alert(idioma === 'es' ? 'El primer vehículo debe tener marca y placa' : 'The first vehicle must have make and license plate');
                 return;
             }
-            primerVehiculoValido = true;
+            primerVehiculoModelo = marca;
+            primerVehiculoAnio = anio;
+            primerVehiculoPlaca = placa;
             vehiculos.push({ marca: marca, modelo: marca, anio: anio, placa: placa });
         } else {
             if (marca && placa) {
@@ -473,17 +337,14 @@ function guardarRegistroCompleto(event) {
         }
     }
     
-    if (!primerVehiculoValido) {
-        alert(idioma === 'es' ? 'Debes completar los datos del primer vehículo' : 'You must complete the first vehicle data');
-        return;
-    }
-    
+    // Enviar en el formato que el modelo ORIGINAL espera (sin direccion, sin array)
     var clienteData = {
         nombre: nombre,
         email: email,
         telefono: telefono,
-        direccion: direccion,
-        vehiculos: vehiculos
+        modelo: primerVehiculoModelo,
+        anio: primerVehiculoAnio,
+        placa: primerVehiculoPlaca
     };
     
     console.log('📤 Enviando datos al backend:', clienteData);
@@ -508,7 +369,14 @@ function guardarRegistroCompleto(event) {
     })
     .then(function(data) {
         console.log('✅ Registro exitoso:', data);
-        localStorage.setItem('clienteActual', JSON.stringify(clienteData));
+        // Guardar toda la información en localStorage (incluyendo la dirección y múltiples vehículos)
+        localStorage.setItem('clienteActual', JSON.stringify({ 
+            nombre: nombre, 
+            email: email, 
+            telefono: telefono, 
+            direccion: direccion, 
+            vehiculos: vehiculos 
+        }));
         localStorage.setItem('clienteEmail', email);
         alert(idioma === 'es' 
             ? '✅ Registro exitoso. Has registrado ' + vehiculos.length + ' vehículo(s).'
@@ -569,7 +437,7 @@ function guardarRegistro(event) {
 }
 
 // =============================================
-// FUNCIÓN: procesarReserva (MODIFICADA con vehículo)
+// FUNCIÓN: procesarReserva
 // =============================================
 function procesarReserva(event) {
     event.preventDefault();
@@ -811,7 +679,6 @@ window.onload = function() {
     
     var idiomaGuardado = localStorage.getItem('idioma');
     var idiomaDetectado = detectarIdiomaNavegador();
-    var idiomaFinal = idiomaGuardado || idiomaDetectado;
     
     actualizarIdioma();
     if (idiomaGuardado) {
@@ -842,7 +709,6 @@ window.onload = function() {
     
     mostrarQRExterno();
     
-    // CONFIGURAR BOTONES DE IDIOMA CORRECTAMENTE
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
     
