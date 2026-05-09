@@ -1,7 +1,7 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 10.0 (IDIOMAS COMPLETOS + REGISTRO CON VEHÍCULOS)
+// VERSIÓN: 10.2 (SISTEMA DE IDIOMAS CORREGIDO - SIN F5)
 // FECHA: 19/04/2026
 // =============================================
 
@@ -269,17 +269,19 @@ const textosIndexEs = {
 
 // =============================================
 // FUNCIÓN: actualizarIdioma
+// Traduce TODOS los elementos de index.html
 // =============================================
 function actualizarIdioma() {
-    const idioma = localStorage.getItem('idioma') || 'es';
-    const textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    for (let id in textos) {
-        const elemento = document.getElementById(id);
+    // Actualizar cada elemento por su ID
+    for (var id in textos) {
+        var elemento = document.getElementById(id);
         if (elemento) {
-            if (id === 'schedule-text' || id.includes('desc') || id.includes('description')) {
+            if (id === 'schedule-text' || id.indexOf('desc') !== -1 || id.indexOf('description') !== -1) {
                 elemento.innerHTML = textos[id];
-            } else if (id.includes('placeholder')) {
+            } else if (id.indexOf('placeholder') !== -1) {
                 elemento.placeholder = textos[id];
             } else if (elemento.tagName === 'INPUT' || elemento.tagName === 'TEXTAREA') {
                 elemento.placeholder = textos[id];
@@ -291,23 +293,44 @@ function actualizarIdioma() {
         }
     }
     
+    // Actualizar el título de la página
     document.title = textos['page-title'];
     
-    const btnEnglish = document.getElementById('btnEnglish');
-    const btnSpanish = document.getElementById('btnSpanish');
-    if (btnEnglish) btnEnglish.classList.toggle('active', idioma === 'en');
-    if (btnSpanish) btnSpanish.classList.toggle('active', idioma === 'es');
+    // Actualizar botones de idioma (resaltar el activo)
+    var btnEnglish = document.getElementById('btnEnglish');
+    var btnSpanish = document.getElementById('btnSpanish');
+    if (btnEnglish) {
+        if (idioma === 'en') btnEnglish.classList.add('active');
+        else btnEnglish.classList.remove('active');
+    }
+    if (btnSpanish) {
+        if (idioma === 'es') btnSpanish.classList.add('active');
+        else btnSpanish.classList.remove('active');
+    }
     
+    // Actualizar el idioma del HTML
     document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
+    
+    console.log('🌐 Idioma actualizado a:', idioma);
 }
 
+// =============================================
+// FUNCIÓN: cambiarIdioma (la llaman los botones)
+// =============================================
 function cambiarIdioma(idioma) {
+    console.log('🔄 Cambiando idioma a:', idioma);
     localStorage.setItem('idioma', idioma);
     actualizarIdioma();
+    
+    // Forzar actualización de disponibilidad (por si hay textos)
+    actualizarDisponibilidad();
 }
 
+// =============================================
+// FUNCIÓN: detectarIdiomaNavegador
+// =============================================
 function detectarIdiomaNavegador() {
-    const lang = navigator.language || navigator.userLanguage;
+    var lang = navigator.language || navigator.userLanguage;
     return lang.startsWith('es') ? 'es' : 'en';
 }
 
@@ -315,7 +338,7 @@ function detectarIdiomaNavegador() {
 // FUNCIONES DE TEMA (CLARO/OSCURO)
 // =============================================
 function toggleTema() {
-    const checkbox = document.getElementById('themeToggle');
+    var checkbox = document.getElementById('themeToggle');
     if (checkbox && checkbox.checked) {
         document.body.classList.add('dark-mode');
         localStorage.setItem('tema', 'dark');
@@ -326,8 +349,8 @@ function toggleTema() {
 }
 
 function inicializarTema() {
-    const temaGuardado = localStorage.getItem('tema');
-    const checkbox = document.getElementById('themeToggle');
+    var temaGuardado = localStorage.getItem('tema');
+    var checkbox = document.getElementById('themeToggle');
     if (temaGuardado === 'dark') {
         document.body.classList.add('dark-mode');
         if (checkbox) checkbox.checked = true;
@@ -342,9 +365,9 @@ function inicializarTema() {
 // FUNCIÓN: verificarClienteExistente
 // =============================================
 function verificarClienteExistente() {
-    const emailGuardado = localStorage.getItem('clienteEmail');
+    var emailGuardado = localStorage.getItem('clienteEmail');
     if (emailGuardado) {
-        const clienteGuardado = localStorage.getItem('clienteActual');
+        var clienteGuardado = localStorage.getItem('clienteActual');
         if (clienteGuardado) {
             try {
                 clienteActualGlobal = JSON.parse(clienteGuardado);
@@ -363,26 +386,28 @@ function verificarClienteExistente() {
 // FUNCIÓN: mostrarFormularioRegistroCompleto
 // =============================================
 function mostrarFormularioRegistroCompleto() {
-    const idioma = localStorage.getItem('idioma') || 'es';
-    const formContainer = document.querySelector('#registro .form-container');
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var formContainer = document.querySelector('#registro .form-container');
     if (!formContainer) return;
     
-    let vehiculosHtml = '';
-    for (let i = 1; i <= MAX_VEHICULOS; i++) {
+    var vehiculosHtml = '';
+    for (var i = 1; i <= MAX_VEHICULOS; i++) {
+        var esObligatorio = i === 1 ? 'required' : '';
+        var textObligatorio = i === 1 ? ' *' : ' (opcional)';
         vehiculosHtml += `
             <div class="vehiculo-group" style="border: 1px solid var(--border-color, #ddd); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
-                <h4 style="color: var(--accent-gold);"><i class="fas fa-car"></i> ${idioma === 'es' ? 'Vehículo ' + i : 'Vehicle ' + i}</h4>
+                <h4 style="color: var(--accent-gold);"><i class="fas fa-car"></i> ${idioma === 'es' ? 'Vehículo ' + i : 'Vehicle ' + i}${i === 1 ? ' *' : ' (opcional)'}</h4>
                 <div class="form-group">
-                    <label>${idioma === 'es' ? 'Marca y Modelo' : 'Make and Model'} ${i} *</label>
-                    <input type="text" class="form-control" id="vehiculo-marca-${i}" placeholder="${idioma === 'es' ? 'Ej: Honda Civic' : 'Ex: Honda Civic'}" required>
+                    <label>${idioma === 'es' ? 'Marca y Modelo' : 'Make and Model'} ${i}${textObligatorio}</label>
+                    <input type="text" class="form-control" id="vehiculo-marca-${i}" placeholder="${idioma === 'es' ? 'Ej: Honda Civic' : 'Ex: Honda Civic'}" ${esObligatorio}>
                 </div>
                 <div class="form-group">
                     <label>${idioma === 'es' ? 'Año' : 'Year'} ${i}</label>
                     <input type="number" class="form-control" id="vehiculo-anio-${i}" placeholder="${idioma === 'es' ? 'Ej: 2020' : 'Ex: 2020'}">
                 </div>
                 <div class="form-group">
-                    <label>${idioma === 'es' ? 'Matrícula/Placa' : 'License Plate'} ${i} *</label>
-                    <input type="text" class="form-control" id="vehiculo-placa-${i}" placeholder="${idioma === 'es' ? 'Ej: ABC-1234' : 'Ex: ABC-1234'}" required>
+                    <label>${idioma === 'es' ? 'Matrícula/Placa' : 'License Plate'} ${i}${textObligatorio}</label>
+                    <input type="text" class="form-control" id="vehiculo-placa-${i}" placeholder="${idioma === 'es' ? 'Ej: ABC-1234' : 'Ex: ABC-1234'}" ${esObligatorio}>
                 </div>
             </div>
         `;
@@ -407,6 +432,7 @@ function mostrarFormularioRegistroCompleto() {
                 <input type="text" class="form-control" id="register-direccion" required>
             </div>
             <h3>${idioma === 'es' ? 'Datos de tus vehículos (máximo ' + MAX_VEHICULOS + ')' : 'Your vehicle data (max ' + MAX_VEHICULOS + ')'}</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 1rem;">${idioma === 'es' ? 'El primer vehículo es obligatorio. Los demás son opcionales.' : 'The first vehicle is required. Others are optional.'}</p>
             ${vehiculosHtml}
             <button type="submit" class="btn btn-block">${idioma === 'es' ? 'Registrarme' : 'Register'}</button>
         </form>
@@ -418,40 +444,70 @@ function mostrarFormularioRegistroCompleto() {
 // =============================================
 function guardarRegistroCompleto(event) {
     event.preventDefault();
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     
-    const nombre = document.getElementById('register-nombre').value;
-    const email = document.getElementById('register-email').value;
-    const telefono = document.getElementById('register-telefono').value;
-    const direccion = document.getElementById('register-direccion').value;
+    var nombre = document.getElementById('register-nombre').value;
+    var email = document.getElementById('register-email').value;
+    var telefono = document.getElementById('register-telefono').value;
+    var direccion = document.getElementById('register-direccion').value;
     
-    const vehiculos = [];
-    for (let i = 1; i <= MAX_VEHICULOS; i++) {
-        const marca = document.getElementById('vehiculo-marca-' + i) ? document.getElementById('vehiculo-marca-' + i).value : '';
-        const anio = document.getElementById('vehiculo-anio-' + i) ? document.getElementById('vehiculo-anio-' + i).value : '';
-        const placa = document.getElementById('vehiculo-placa-' + i) ? document.getElementById('vehiculo-placa-' + i).value : '';
-        if (marca && placa) {
+    var vehiculos = [];
+    var primerVehiculoValido = false;
+    
+    for (var i = 1; i <= MAX_VEHICULOS; i++) {
+        var marca = document.getElementById('vehiculo-marca-' + i) ? document.getElementById('vehiculo-marca-' + i).value.trim() : '';
+        var anio = document.getElementById('vehiculo-anio-' + i) ? document.getElementById('vehiculo-anio-' + i).value.trim() : '';
+        var placa = document.getElementById('vehiculo-placa-' + i) ? document.getElementById('vehiculo-placa-' + i).value.trim() : '';
+        
+        if (i === 1) {
+            if (!marca || !placa) {
+                alert(idioma === 'es' ? 'El primer vehículo debe tener marca y placa' : 'The first vehicle must have make and license plate');
+                return;
+            }
+            primerVehiculoValido = true;
             vehiculos.push({ marca: marca, modelo: marca, anio: anio, placa: placa });
+        } else {
+            if (marca && placa) {
+                vehiculos.push({ marca: marca, modelo: marca, anio: anio, placa: placa });
+            }
         }
     }
     
-    if (vehiculos.length === 0) {
-        alert(idioma === 'es' ? 'Debes registrar al menos un vehículo' : 'You must register at least one vehicle');
+    if (!primerVehiculoValido) {
+        alert(idioma === 'es' ? 'Debes completar los datos del primer vehículo' : 'You must complete the first vehicle data');
         return;
     }
     
-    const clienteData = { nombre: nombre, email: email, telefono: telefono, direccion: direccion, vehiculos: vehiculos };
+    var clienteData = {
+        nombre: nombre,
+        email: email,
+        telefono: telefono,
+        direccion: direccion,
+        vehiculos: vehiculos
+    };
+    
+    console.log('📤 Enviando datos al backend:', clienteData);
     
     fetch(BACKEND_URL + '/api/clientes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify(clienteData)
     })
     .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        console.log('📊 Status:', res.status);
+        if (!res.ok) {
+            return res.text().then(function(text) {
+                console.error('Error response:', text);
+                throw new Error('HTTP ' + res.status + ': ' + text);
+            });
+        }
         return res.json();
     })
     .then(function(data) {
+        console.log('✅ Registro exitoso:', data);
         localStorage.setItem('clienteActual', JSON.stringify(clienteData));
         localStorage.setItem('clienteEmail', email);
         alert(idioma === 'es' 
@@ -460,8 +516,10 @@ function guardarRegistroCompleto(event) {
         location.reload();
     })
     .catch(function(err) {
-        console.error('Error:', err);
-        alert(idioma === 'es' ? 'Error al registrar: ' + err.message : 'Registration error: ' + err.message);
+        console.error('❌ Error en registro:', err);
+        alert(idioma === 'es' 
+            ? 'Error al registrar: ' + err.message 
+            : 'Registration error: ' + err.message);
     });
 }
 
@@ -469,19 +527,19 @@ function guardarRegistroCompleto(event) {
 // FUNCIÓN: mostrarSelectorVehiculosEnReserva
 // =============================================
 function mostrarSelectorVehiculosEnReserva() {
-    const precioContainer = document.getElementById('precioCalculadoContainer');
+    var precioContainer = document.getElementById('precioCalculadoContainer');
     if (!precioContainer) return;
     
     if (vehiculosRegistrados.length > 0 && !document.getElementById('vehiculo-selector')) {
-        const idioma = localStorage.getItem('idioma') || 'es';
-        let selectorHtml = `
+        var idioma = localStorage.getItem('idioma') || 'es';
+        var selectorHtml = `
             <div class="form-group">
                 <label>${idioma === 'es' ? 'Selecciona el vehículo para este servicio' : 'Select the vehicle for this service'} *</label>
                 <select id="vehiculo-selector" class="form-control" required>
                     <option value="">${idioma === 'es' ? 'Selecciona un vehículo' : 'Select a vehicle'}</option>
         `;
-        for (let i = 0; i < vehiculosRegistrados.length; i++) {
-            const v = vehiculosRegistrados[i];
+        for (var i = 0; i < vehiculosRegistrados.length; i++) {
+            var v = vehiculosRegistrados[i];
             selectorHtml += '<option value="' + v.placa + '">' + v.marca + ' - ' + v.placa + (v.anio ? ' (' + v.anio + ')' : '') + '</option>';
         }
         selectorHtml += '</select></div>';
@@ -493,8 +551,8 @@ function mostrarSelectorVehiculosEnReserva() {
 // FUNCIÓN: ocultarPreciosServicios
 // =============================================
 function ocultarPreciosServicios() {
-    const precios = document.querySelectorAll('.service-price');
-    for (let i = 0; i < precios.length; i++) {
+    var precios = document.querySelectorAll('.service-price');
+    for (var i = 0; i < precios.length; i++) {
         precios[i].style.display = 'none';
     }
 }
@@ -504,7 +562,7 @@ function ocultarPreciosServicios() {
 // =============================================
 function guardarRegistro(event) {
     event.preventDefault();
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     alert(idioma === 'es' 
         ? 'Usa el formulario de registro completo en la sección "Registro"'
         : 'Use the complete registration form in the "Register" section');
@@ -515,7 +573,7 @@ function guardarRegistro(event) {
 // =============================================
 function procesarReserva(event) {
     event.preventDefault();
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     
     if (!verificarClienteExistente()) {
         alert(idioma === 'es' 
@@ -525,7 +583,7 @@ function procesarReserva(event) {
         return false;
     }
     
-    const vehiculoSelector = document.getElementById('vehiculo-selector');
+    var vehiculoSelector = document.getElementById('vehiculo-selector');
     if (!vehiculoSelector || !vehiculoSelector.value) {
         alert(idioma === 'es'
             ? '⚠️ Por favor selecciona un vehículo registrado.'
@@ -533,16 +591,16 @@ function procesarReserva(event) {
         return false;
     }
     
-    const matriculaSeleccionada = vehiculoSelector.value;
-    let vehiculoSeleccionado = null;
-    for (let i = 0; i < vehiculosRegistrados.length; i++) {
+    var matriculaSeleccionada = vehiculoSelector.value;
+    var vehiculoSeleccionado = null;
+    for (var i = 0; i < vehiculosRegistrados.length; i++) {
         if (vehiculosRegistrados[i].placa === matriculaSeleccionada) {
             vehiculoSeleccionado = vehiculosRegistrados[i];
             break;
         }
     }
     
-    const hora = document.getElementById('booking-input-time')?.value;
+    var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
     if (!hora || hora < HORARIO_INICIO || hora > HORARIO_FIN) {
         alert(idioma === 'es' 
             ? '❌ Horario no válido. Atendemos de 7:00 AM a 5:30 PM.'
@@ -550,7 +608,7 @@ function procesarReserva(event) {
         return false;
     }
     
-    const fecha = document.getElementById('booking-input-date')?.value;
+    var fecha = document.getElementById('booking-input-date') ? document.getElementById('booking-input-date').value : null;
     if (!fecha) return false;
     
     if (obtenerReservasPorFecha(fecha).length >= MAX_ORDENES_DIARIAS) {
@@ -560,13 +618,13 @@ function procesarReserva(event) {
         return false;
     }
     
-    const servicioSelect = document.getElementById('booking-select-service');
-    const tipoVehiculo = document.getElementById('booking-select-vehicle')?.value;
-    const notas = document.getElementById('booking-textarea-notes')?.value || '';
-    const servicioOption = servicioSelect.options[servicioSelect.selectedIndex];
-    const precioFinal = calcularPrecioFinal(servicioOption, tipoVehiculo);
+    var servicioSelect = document.getElementById('booking-select-service');
+    var tipoVehiculo = document.getElementById('booking-select-vehicle') ? document.getElementById('booking-select-vehicle').value : null;
+    var notas = document.getElementById('booking-textarea-notes') ? document.getElementById('booking-textarea-notes').value : '';
+    var servicioOption = servicioSelect.options[servicioSelect.selectedIndex];
+    var precioFinal = calcularPrecioFinal(servicioOption, tipoVehiculo);
     
-    const reserva = {
+    var reserva = {
         servicio: servicioOption.value,
         tipoVehiculo: tipoVehiculo,
         fecha: fecha,
@@ -579,21 +637,23 @@ function procesarReserva(event) {
         metodoPago: 'Efectivo'
     };
     
+    console.log('📤 Enviando reserva:', reserva);
+    
     fetch(BACKEND_URL + '/api/reservas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reserva)
     })
     .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) return res.text().then(function(text) { throw new Error('HTTP ' + res.status + ': ' + text); });
         return res.json();
     })
     .then(function(data) {
-        let reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
         reservas.push(reserva);
         localStorage.setItem('reservas', JSON.stringify(reservas));
         
-        const ticket = generarTicket(reserva, clienteActualGlobal);
+        var ticket = generarTicket(reserva, clienteActualGlobal);
         enviarWhatsApp(ticket);
         
         return fetch(BACKEND_URL + '/api/enviar-reserva', {
@@ -617,38 +677,38 @@ function procesarReserva(event) {
             : '✅ Booking confirmed. Confirmation emails have been sent.');
     })
     .catch(function(err) {
-        console.error('Error:', err);
+        console.error('Error en reserva:', err);
         alert(idioma === 'es'
-            ? '⚠️ Reserva guardada localmente, pero hubo un problema con el servidor.'
-            : '⚠️ Booking saved locally, but there was a server problem.');
+            ? '⚠️ Reserva guardada localmente, pero hubo un problema con el servidor. Error: ' + err.message
+            : '⚠️ Booking saved locally, but there was a server problem. Error: ' + err.message);
     });
     
-    const bookingForm = document.getElementById('bookingForm');
+    var bookingForm = document.getElementById('bookingForm');
     if (bookingForm) bookingForm.reset();
     actualizarDisponibilidad();
     return false;
 }
 
 function obtenerReservasPorFecha(fecha) {
-    const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-    const resultado = [];
-    for (let i = 0; i < reservas.length; i++) {
+    var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+    var resultado = [];
+    for (var i = 0; i < reservas.length; i++) {
         if (reservas[i].fecha === fecha) resultado.push(reservas[i]);
     }
     return resultado;
 }
 
 function actualizarDisponibilidad() {
-    const fechaInput = document.getElementById('booking-input-date');
+    var fechaInput = document.getElementById('booking-input-date');
     if (!fechaInput || !fechaInput.value) return;
     
-    const fecha = fechaInput.value;
-    const reservasDia = obtenerReservasPorFecha(fecha);
-    const disponibles = MAX_ORDENES_DIARIAS - reservasDia.length;
-    const msgDiv = document.getElementById('availabilityMessage');
+    var fecha = fechaInput.value;
+    var reservasDia = obtenerReservasPorFecha(fecha);
+    var disponibles = MAX_ORDENES_DIARIAS - reservasDia.length;
+    var msgDiv = document.getElementById('availabilityMessage');
     if (!msgDiv) return;
     
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     
     if (disponibles <= 0) {
         msgDiv.innerHTML = idioma === 'es' 
@@ -668,35 +728,35 @@ function validarHora(hora) {
 }
 
 function calcularPrecioFinal(servicioOption, tipoVehiculo) {
-    const precioBase = servicioOption.getAttribute('data-price-sedan');
-    let precio = parseInt(precioBase.split('-')[0]);
+    var precioBase = servicioOption.getAttribute('data-price-sedan');
+    var precio = parseInt(precioBase.split('-')[0]);
     if (tipoVehiculo === 'suv' || tipoVehiculo === 'pickup') precio += 40;
     else if (tipoVehiculo === 'van') precio += 60;
     else if (tipoVehiculo === 'truck') precio += 80;
     if (precioBase.indexOf('-') !== -1) {
-        const precioMaxOriginal = parseInt(precioBase.split('-')[1]);
-        const precioMax = precioMaxOriginal + (precio - parseInt(precioBase.split('-')[0]));
+        var precioMaxOriginal = parseInt(precioBase.split('-')[1]);
+        var precioMax = precioMaxOriginal + (precio - parseInt(precioBase.split('-')[0]));
         return precio + '-' + precioMax;
     }
     return precio.toString();
 }
 
 function enviarWhatsApp(mensaje) {
-    const mensajeCodificado = encodeURIComponent(mensaje);
-    const url = 'https://api.whatsapp.com/send?phone=' + TELEFONO_PROPIETARIO + '&text=' + mensajeCodificado;
+    var mensajeCodificado = encodeURIComponent(mensaje);
+    var url = 'https://api.whatsapp.com/send?phone=' + TELEFONO_PROPIETARIO + '&text=' + mensajeCodificado;
     window.open(url, '_blank');
 }
 
 function generarTicket(reserva, cliente) {
-    const idioma = localStorage.getItem('idioma') || 'es';
-    const linea = '══════════════════════════════';
-    const sep = '──────────────────────────';
-    const tipo = tipoVehiculoTexto[reserva.tipoVehiculo] || reserva.tipoVehiculo;
-    let precio = reserva.precio;
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var linea = '══════════════════════════════';
+    var sep = '──────────────────────────';
+    var tipo = tipoVehiculoTexto[reserva.tipoVehiculo] || reserva.tipoVehiculo;
+    var precio = reserva.precio;
     if (precio && precio.indexOf('$') === -1) precio = '$' + precio;
-    const matricula = reserva.matricula || 'No especificada';
-    const vehiculoMarca = (reserva.vehiculoInfo && reserva.vehiculoInfo.marca) || 'No especificado';
-    const vehiculoAnio = (reserva.vehiculoInfo && reserva.vehiculoInfo.anio) || 'N/E';
+    var matricula = reserva.matricula || 'No especificada';
+    var vehiculoMarca = (reserva.vehiculoInfo && reserva.vehiculoInfo.marca) || 'No especificado';
+    var vehiculoAnio = (reserva.vehiculoInfo && reserva.vehiculoInfo.anio) || 'N/E';
     
     if (idioma === 'es') {
         return '🔔 NUEVA RESERVA 🔔\n' + linea + '\n👤 CLIENTE\n' + sep + '\n📌 ' + cliente.nombre + '\n📧 ' + cliente.email + '\n📞 ' + cliente.telefono + '\n🏠 ' + cliente.direccion + '\n' + sep + '\n🚗 VEHÍCULO\n' + sep + '\n🔢 Tipo: ' + tipo + '\n🚙 Marca/Modelo: ' + vehiculoMarca + '\n🔖 Placa: ' + matricula + '\n📅 Año: ' + vehiculoAnio + '\n' + sep + '\n📋 SERVICIO\n' + sep + '\n🛠️ ' + reserva.servicio + '\n💰 ' + precio + '\n📅 Fecha: ' + reserva.fecha + '\n⏰ Hora: ' + reserva.hora + '\n📝 Notas: ' + (reserva.notas || 'Ninguna') + '\n' + sep + '\n💰 TOTAL: ' + precio + '\n' + linea + '\n📍 Servicio a domicilio\n📞 +1 (713) 928-0466';
@@ -706,27 +766,27 @@ function generarTicket(reserva, cliente) {
 }
 
 function volverAlFormulario() {
-    const step2 = document.getElementById('bookingStep2');
-    const step1 = document.getElementById('bookingStep1');
+    var step2 = document.getElementById('bookingStep2');
+    var step1 = document.getElementById('bookingStep1');
     if (step2) step2.classList.add('hidden');
     if (step1) step1.classList.remove('hidden');
 }
 
 function procesarPagoPayPal() { 
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     alert(idioma === 'es' ? 'Redirigiendo a PayPal...' : 'Redirecting to PayPal...'); 
 }
 
 function procesarPagoEfectivo() { 
-    const idioma = localStorage.getItem('idioma') || 'es';
+    var idioma = localStorage.getItem('idioma') || 'es';
     alert(idioma === 'es' ? 'Reserva confirmada para pago en efectivo.' : 'Booking confirmed for cash payment.'); 
 }
 
 function mostrarQRExterno() {
-    const qrContainer = document.getElementById('qrCode');
+    var qrContainer = document.getElementById('qrCode');
     if (!qrContainer) return;
     qrContainer.innerHTML = '';
-    const img = document.createElement('img');
+    var img = document.createElement('img');
     img.src = 'assets/images/qr-whatsapp.png';
     img.alt = 'Código QR - Contacto WhatsApp Business';
     img.style.width = '160px';
@@ -749,11 +809,16 @@ window.onload = function() {
     
     inicializarTema();
     
-    const idiomaGuardado = localStorage.getItem('idioma');
+    var idiomaGuardado = localStorage.getItem('idioma');
+    var idiomaDetectado = detectarIdiomaNavegador();
+    var idiomaFinal = idiomaGuardado || idiomaDetectado;
+    
     actualizarIdioma();
-    if (idiomaGuardado === 'en') cambiarIdioma('en');
-    else if (idiomaGuardado === 'es') cambiarIdioma('es');
-    else cambiarIdioma(detectarIdiomaNavegador());
+    if (idiomaGuardado) {
+        cambiarIdioma(idiomaGuardado);
+    } else {
+        cambiarIdioma(idiomaDetectado);
+    }
     
     ocultarPreciosServicios();
     
@@ -761,21 +826,32 @@ window.onload = function() {
         mostrarFormularioRegistroCompleto();
     } else {
         mostrarSelectorVehiculosEnReserva();
-        const registerForm = document.getElementById('registerForm');
+        var registerForm = document.getElementById('registerForm');
         if (registerForm) registerForm.style.display = 'none';
     }
     
-    const horaInput = document.getElementById('booking-input-time');
+    var horaInput = document.getElementById('booking-input-time');
     if (horaInput) {
         horaInput.min = HORARIO_INICIO;
         horaInput.max = HORARIO_FIN;
         horaInput.step = "1800";
     }
     
-    const fechaInput = document.getElementById('booking-input-date');
+    var fechaInput = document.getElementById('booking-input-date');
     if (fechaInput) fechaInput.addEventListener('change', actualizarDisponibilidad);
     
     mostrarQRExterno();
+    
+    // CONFIGURAR BOTONES DE IDIOMA CORRECTAMENTE
+    var btnEnglish = document.getElementById('btnEnglish');
+    var btnSpanish = document.getElementById('btnSpanish');
+    
+    if (btnEnglish) {
+        btnEnglish.onclick = function() { cambiarIdioma('en'); };
+    }
+    if (btnSpanish) {
+        btnSpanish.onclick = function() { cambiarIdioma('es'); };
+    }
     
     window.addEventListener('storage', function(e) {
         if (e.key === 'idioma') actualizarIdioma();

@@ -40,10 +40,10 @@
                         </label>
                     </div>
                     <div class="language-selector">
-                        <button type="button" class="lang-btn" id="btnEnglish" onclick="cambiarIdioma('en')">
+                        <button type="button" class="lang-btn" id="btnEnglish">
                             <span>🇺🇸</span> English
                         </button>
-                        <button type="button" class="lang-btn" id="btnSpanish" onclick="cambiarIdioma('es')">
+                        <button type="button" class="lang-btn" id="btnSpanish">
                             <span>🇲🇽</span> Español
                         </button>
                     </div>
@@ -76,24 +76,15 @@
                     <p id="schedule-text"><strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM</p>
                 </div>
                 <div class="services-grid">
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 1: EXPRESS DETAIL                -->
-                    <!-- ========================================= -->
                     <a href="servicio-express-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/express-detail.png" alt="Express Detail" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/0a2b5c/ffffff?text=Express+Detail'">
                             <div class="card-content">
                                 <div class="service-name" id="service1-name">Express Detail</div>
                                 <p id="service1-desc">Ideal para mantenimiento rápido. Lavado a mano, limpieza de rines, aspirado interior, tablero, consola, cristales. ¡Renueva tu auto en minutos!</p>
-                                <!-- PRECIO ELIMINADO - Se mostrará en la página de detalle del servicio -->
-                                <!-- BOTÓN RESERVAR ELIMINADO - Se mostrará en la página de detalle del servicio -->
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 2: SILVER PACKAGE                -->
-                    <!-- ========================================= -->
                     <a href="servicio-silver-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/silver-package.png" alt="Silver Package" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/1e4a7a/ffffff?text=Silver+Package'">
@@ -103,10 +94,6 @@
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 3: GOLD PACKAGE                  -->
-                    <!-- ========================================= -->
                     <a href="servicio-gold-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/gold-package.png" alt="Gold Package" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/c9a959/0a2b5c?text=Gold+Package'">
@@ -116,10 +103,6 @@
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 4: DIAMOND PACKAGE               -->
-                    <!-- ========================================= -->
                     <a href="servicio-diamond-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/diamond-package.png" alt="Diamond Package" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/0a2b5c/ffffff?text=Diamond+Package'">
@@ -129,10 +112,6 @@
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 5: CERAMIC 1 YEAR               -->
-                    <!-- ========================================= -->
                     <a href="servicio-ceramic1-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/ceramic-1year.png" alt="Ceramic 1 Year" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/2e7d32/ffffff?text=Ceramic+1+Year'">
@@ -142,10 +121,6 @@
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 6: CERAMIC 3 YEARS (MID LEVEL)  -->
-                    <!-- ========================================= -->
                     <a href="servicio-ceramic3-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/ceramic-3years.png" alt="Ceramic 3 Years" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/4a6fa5/ffffff?text=Ceramic+3+Years'">
@@ -155,10 +130,6 @@
                             </div>
                         </div>
                     </a>
-
-                    <!-- ========================================= -->
-                    <!-- SERVICIO 7: CERAMIC 5 YEARS (PREMIUM)    -->
-                    <!-- ========================================= -->
                     <a href="servicio-ceramic5-detail.html" class="service-card-link">
                         <div class="service-card">
                             <img src="assets/images/servicios/ceramic-5years.png" alt="Ceramic 5 Years" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/6a1b9a/ffffff?text=Ceramic+5+Years'">
@@ -199,53 +170,14 @@
         </section>
 
         <!-- ============================================= -->
-        <!-- SECCIÓN CATÁLOGO COMENTADA - OCULTA HASTA QUE EL CLIENTE COMPRE LOS PRODUCTOS -->
+        <!-- SECCIÓN CATÁLOGO COMENTADA                     -->
         <!-- ============================================= -->
         <!--
-        <section id="catalogo">
-            <div class="container">
-                <h2 id="products-title">🛒 Productos Profesionales 🛒</h2>
-                <p class="section-description" id="products-description">Los mejores aceites, refrigerantes y líquidos para tu vehículo. ¡Calidad garantizada!</p>
-                <div class="products-grid">
-                    <div class="product-card">
-                        <div class="card-content">
-                            <div class="product-name" id="product1-name">Aceite 5W-30</div>
-                            <p id="product1-desc">Galón (3.78L) - Mobil 1. Protección superior para tu motor.</p>
-                            <div class="product-price">$28</div>
-                            <button type="button" class="btn btn-gold" id="product1-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-content">
-                            <div class="product-name" id="product2-name">Refrigerante</div>
-                            <p id="product2-desc">Concentrado 50/50 - Galón. Mantén tu motor a temperatura ideal.</p>
-                            <div class="product-price">$18</div>
-                            <button type="button" class="btn btn-gold" id="product2-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-content">
-                            <div class="product-name" id="product3-name">Líquido Frenos DOT 4</div>
-                            <p id="product3-desc">12 oz - Prestone. Seguridad y confianza en cada frenada.</p>
-                            <div class="product-price">$9</div>
-                            <button type="button" class="btn btn-gold" id="product3-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="card-content">
-                            <div class="product-name" id="product4-name">Limpiaparabrisas</div>
-                            <p id="product4-desc">Galón - Ready to use. Visibilidad impecable.</p>
-                            <div class="product-price">$5</div>
-                            <button type="button" class="btn btn-gold" id="product4-btn" onclick="alert('Próximamente: compra en línea')"><i class="fas fa-cart-plus"></i> Añadir</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <section id="catalogo">...</section>
         -->
 
         <!-- ============================================= -->
-        <!-- SECCIÓN REGISTRO - FORMULARIO TRADUCIBLE      -->
+        <!-- SECCIÓN REGISTRO                               -->
         <!-- ============================================= -->
         <section id="registro">
             <div class="container">
@@ -302,7 +234,7 @@
         </section>
 
         <!-- ============================================= -->
-        <!-- SECCIÓN RESERVAS - FORMULARIO TRADUCIBLE      -->
+        <!-- SECCIÓN RESERVAS                               -->
         <!-- ============================================= -->
         <section id="reservas">
             <div class="container">
@@ -401,7 +333,7 @@
         </section>
 
         <!-- ============================================= -->
-        <!-- SECCIÓN CONTACTO                              -->
+        <!-- SECCIÓN CONTACTO                               -->
         <!-- ============================================= -->
         <section id="contacto">
             <div class="container">
@@ -517,10 +449,6 @@
     <script src="script.js"></script>
     <script>
         // =============================================
-        // SISTEMA DE IDIOMAS COMPLETO PARA INDEX.HTML
-        // =============================================
-
-        // =============================================
         // TEXTOS EN INGLÉS
         // =============================================
         const textosIndexEn = {
@@ -538,32 +466,18 @@
             'schedule-text': '<strong>Monday to Sunday:</strong> 7:00 AM - 5:30 PM',
             'service1-name': 'Express Detail',
             'service1-desc': 'Ideal for quick maintenance. Hand wash, wheel cleaning, interior vacuuming, dashboard, console, windows. Renew your car in minutes!',
-            'service1-price': '$100 – $120',
-            'service1-btn': 'Book Now',
             'service2-name': 'Silver Package',
             'service2-desc': 'Deeper cleaning. Includes Express + panels/doors, light carpet shampoo, tire shine, stain removal. Impeccable result.',
-            'service2-price': '$150 – $180',
-            'service2-btn': 'Book Now',
             'service3-name': 'Gold Package',
             'service3-desc': 'Includes Silver + deep carpet/upholstery shampoo, wax/sealant, plastic protection, high gloss finish. Feel the difference!',
-            'service3-price': '$200 – $240',
-            'service3-btn': 'Book Now',
             'service4-name': 'Diamond Package',
             'service4-desc': 'Premium Detail + 90 Day Ceramic Protection. Deep cleaning + ceramic sealant. UV protection, guaranteed showroom effect.',
-            'service4-price': '$280',
-            'service4-btn': 'Book Now',
             'service5-name': 'Ceramic 1 Year',
             'service5-desc': '12-month ceramic protection. Deep wash, chemical decontamination, clay bar, coating, hydrophobic effect. Your car like new longer.',
-            'service5-price': '$700',
-            'service5-btn': 'Book Now',
             'service6-name': 'Ceramic 3 Years (Mid Level)',
             'service6-desc': 'Mid-level ceramic protection, lasts 3 years. Maximum shine and resistance.',
-            'service6-price': '$950',
-            'service6-btn': 'Book Now',
             'service7-name': 'Ceramic 5 Years (Premium)',
             'service7-desc': 'Premium ceramic protection, lasts 5 years. Maximum protection for your vehicle. Investment in beauty and care.',
-            'service7-price': '$1,500',
-            'service7-btn': 'Book Now',
             'gallery-title': '📸 Results That Speak for Themselves 📸',
             'gallery-description': 'Before and after each service. Discover the magic of Detailing Team!',
             'filter-all': 'All',
@@ -574,32 +488,15 @@
             'filter-ceramic1': 'Ceramic 1Y',
             'filter-ceramic3': 'Ceramic 3Y',
             'filter-ceramic5': 'Ceramic 5Y',
-            'products-title': '🛒 Professional Products 🛒',
-            'products-description': 'The best oils, coolants and fluids for your vehicle. Quality guaranteed!',
-            'product1-name': '5W-30 Oil',
-            'product1-desc': 'Gallon (3.78L) - Mobil 1. Superior protection for your engine.',
-            'product2-name': 'Coolant',
-            'product2-desc': '50/50 Concentrate - Gallon. Keep your engine at ideal temperature.',
-            'product3-name': 'Brake Fluid DOT 4',
-            'product3-desc': '12 oz - Prestone. Safety and confidence in every brake.',
-            'product4-name': 'Windshield Washer',
-            'product4-desc': 'Gallon - Ready to use. Impeccable visibility.',
             'register-title': '📝 Customer Registration 📝',
             'register-description': 'Save your vehicle data for faster, personalized service. We look forward to seeing you!',
             'register-label-name': 'Full Name *',
-            'register-input-name': 'Full name',
             'register-label-email': 'Email *',
-            'register-input-email': 'customer@example.com',
             'register-label-phone': 'Phone *',
-            'register-input-phone': '+1 123 456 7890',
             'register-label-address': 'Address *',
-            'register-input-address': 'Street, number, city, zip code',
             'register-label-model': 'Make and Model *',
-            'register-input-model': 'Ex: Honda Civic',
             'register-label-year': 'Year',
-            'register-input-year': '2020',
             'register-label-plate': 'License Plate (optional)',
-            'register-input-plate': 'ABC-1234',
             'register-btn': 'Register Me',
             'booking-title': '📅 Book Your Appointment 📅',
             'booking-description': 'Choose service, date and time. We will confirm via WhatsApp instantly.',
@@ -663,7 +560,7 @@
             'footer-secure': 'Secure with HTTPS',
             'developer-title': 'Want a website for your business?',
             'qr-message': 'Scan me! 📱',
-            'copyright-text': '© 2024 Detailing Team. All rights reserved.',
+            'copyright-text': '© 2025 Detailing Team. All rights reserved.',
             'copyright-security': 'By using this site, you accept our privacy and security practices.'
         };
 
@@ -671,7 +568,7 @@
         // TEXTOS EN ESPAÑOL
         // =============================================
         const textosIndexEs = {
-            'page-title': 'Detailing Team TX - Excellence in Shine',
+            'page-title': 'Detailing Team TX - Excelencia en Brillo',
             'nav-services': 'Servicios',
             'nav-gallery': 'Galería',
             'nav-catalog': 'Catálogo',
@@ -685,32 +582,18 @@
             'schedule-text': '<strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM',
             'service1-name': 'Express Detail',
             'service1-desc': 'Ideal para mantenimiento rápido. Lavado a mano, limpieza de rines, aspirado interior, tablero, consola, cristales. ¡Renueva tu auto en minutos!',
-            'service1-price': '$100 – $120',
-            'service1-btn': 'Reservar',
             'service2-name': 'Silver Package',
             'service2-desc': 'Limpieza más profunda. Incluye Express + paneles/puertas, shampoo ligero de alfombras, brillo llantas, eliminación manchas. Resultado impecable.',
-            'service2-price': '$150 – $180',
-            'service2-btn': 'Reservar',
             'service3-name': 'Gold Package',
             'service3-desc': 'Incluye Silver + shampoo profundo alfombras/tapicería, cera/sellador, protección plásticos, acabado alto brillo. ¡Siente la diferencia!',
-            'service3-price': '$200 – $240',
-            'service3-btn': 'Reservar',
             'service4-name': 'Diamond Package',
             'service4-desc': 'Premium Detail + 90 Day Ceramic Protection. Limpieza profunda + sellador cerámico. Protección UV, efecto showroom garantizado.',
-            'service4-price': '$280',
-            'service4-btn': 'Reservar',
             'service5-name': 'Ceramic 1 Year',
             'service5-desc': 'Protección cerámica 12 meses. Lavado profundo, descontaminación química, clay bar, coating, efecto hidrofóbico. Tu auto como nuevo por más tiempo.',
-            'service5-price': '$700',
-            'service5-btn': 'Reservar',
             'service6-name': 'Ceramic 3 Years (Mid Level)',
             'service6-desc': 'Protección cerámica nivel medio, duración 3 años. Máximo brillo y resistencia.',
-            'service6-price': '$950',
-            'service6-btn': 'Reservar',
             'service7-name': 'Ceramic 5 Years (Premium)',
             'service7-desc': 'Protección cerámica premium, duración 5 años. La máxima protección para tu vehículo. Inversión en belleza y cuidado.',
-            'service7-price': '$1,500',
-            'service7-btn': 'Reservar',
             'gallery-title': '📸 Resultados que Hablan Solos 📸',
             'gallery-description': 'Antes y después de cada servicio. ¡Descubre la magia de Detailing Team!',
             'filter-all': 'Todos',
@@ -721,32 +604,15 @@
             'filter-ceramic1': 'Ceramic 1Y',
             'filter-ceramic3': 'Ceramic 3Y',
             'filter-ceramic5': 'Ceramic 5Y',
-            'products-title': '🛒 Productos Profesionales 🛒',
-            'products-description': 'Los mejores aceites, refrigerantes y líquidos para tu vehículo. ¡Calidad garantizada!',
-            'product1-name': 'Aceite 5W-30',
-            'product1-desc': 'Galón (3.78L) - Mobil 1. Protección superior para tu motor.',
-            'product2-name': 'Refrigerante',
-            'product2-desc': 'Concentrado 50/50 - Galón. Mantén tu motor a temperatura ideal.',
-            'product3-name': 'Líquido Frenos DOT 4',
-            'product3-desc': '12 oz - Prestone. Seguridad y confianza en cada frenada.',
-            'product4-name': 'Limpiaparabrisas',
-            'product4-desc': 'Galón - Ready to use. Visibilidad impecable.',
             'register-title': '📝 Registro de Clientes 📝',
             'register-description': 'Guarda los datos de tu vehículo para un servicio más rápido y personalizado. ¡Te esperamos!',
             'register-label-name': 'Nombre y Apellidos *',
-            'register-input-name': 'Nombre completo',
             'register-label-email': 'Email *',
-            'register-input-email': 'cliente@ejemplo.com',
             'register-label-phone': 'Teléfono *',
-            'register-input-phone': '+1 123 456 7890',
             'register-label-address': 'Dirección *',
-            'register-input-address': 'Calle, número, ciudad, código postal',
             'register-label-model': 'Marca y Modelo *',
-            'register-input-model': 'Ej: Honda Civic',
             'register-label-year': 'Año',
-            'register-input-year': '2020',
             'register-label-plate': 'Placa (opcional)',
-            'register-input-plate': 'ABC-1234',
             'register-btn': 'Registrarme',
             'booking-title': '📅 Reserva tu Turno 📅',
             'booking-description': 'Elige servicio, fecha y hora. Te confirmaremos por WhatsApp al instante.',
@@ -810,7 +676,7 @@
             'footer-secure': 'Seguro con HTTPS',
             'developer-title': '¿Quieres una página web para tu negocio?',
             'qr-message': '¡Escáneame! 📱',
-            'copyright-text': '© 2024 Detailing Team. Todos los derechos reservados.',
+            'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
             'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.'
         };
 
@@ -849,6 +715,11 @@
             document.title = textos['page-title'];
             const logo = document.getElementById('header-logo');
             if (logo && textos['header-logo']) logo.alt = textos['header-logo'];
+            
+            const btnEnglish = document.getElementById('btnEnglish');
+            const btnSpanish = document.getElementById('btnSpanish');
+            if (btnEnglish) btnEnglish.classList.toggle('active', idioma === 'en');
+            if (btnSpanish) btnSpanish.classList.toggle('active', idioma === 'es');
         }
 
         function cambiarIdioma(idioma) {
