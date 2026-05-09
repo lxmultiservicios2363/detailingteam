@@ -6,8 +6,33 @@
 // Cada clave corresponde a un campo en la base de datos.
 // =============================================
 
+// 📌 Modo estricto - ayuda a prevenir errores
+'use strict';
+
 // 📦 Importar mongoose (ODM para MongoDB)
 const mongoose = require('mongoose');
+
+// =============================================
+// SUB-ESQUEMA PARA VEHÍCULOS
+// =============================================
+// Este subdocumento permite guardar múltiples vehículos por cliente
+// Fue agregado el 19/04/2026 para soportar la solicitud del cliente:
+// "Registrar hasta 3 vehículos por persona"
+// =============================================
+const vehiculoSchema = new mongoose.Schema({
+    // 📌 marca: Marca del vehículo (requerido)
+    marca: { type: String, required: true },
+    
+    // 📌 modelo: Modelo del vehículo (requerido)
+    modelo: { type: String, required: true },
+    
+    // 📌 anio: Año del vehículo (opcional)
+    anio: { type: String },
+    
+    // 📌 placa: Placa/matrícula del vehículo (requerido)
+    // Este campo es clave para identificar el vehículo al hacer una reserva
+    placa: { type: String, required: true }
+});
 
 // =============================================
 // DEFINICIÓN DEL ESQUEMA DE CLIENTE
@@ -32,21 +57,19 @@ const clienteSchema = new mongoose.Schema({
         required: true 
     },
     
-    // 📌 modelo: Marca y modelo del vehículo (requerido)
-    modelo: { 
+    // 📌 direccion: Dirección del cliente
+    // CAMBIO REALIZADO EL 19/04/2026: Este campo se agregó porque el formulario de registro
+    // lo solicita. Antes no existía y causaba error HTTP 400.
+    direccion: { 
         type: String, 
         required: true 
     },
     
-    // 📌 anio: Año del vehículo (opcional)
-    anio: { 
-        type: String 
-    },
-    
-    // 📌 placa: Placa del vehículo (opcional)
-    placa: { 
-        type: String 
-    },
+    // 📌 vehiculos: Array de vehículos del cliente
+    // CAMBIO REALIZADO EL 19/04/2026: Antes solo se permitía un vehículo con los campos
+    // modelo, anio, placa. Ahora se pueden registrar hasta 3 vehículos por cliente.
+    // Los vehículos se guardan como un array de subdocumentos usando vehiculoSchema.
+    vehiculos: [vehiculoSchema],
     
     // 📌 fecha: Fecha de registro (se genera automáticamente)
     fecha: { 
