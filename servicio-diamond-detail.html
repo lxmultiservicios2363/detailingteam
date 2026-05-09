@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/images/logos/favicon.png">
+    <link rel="apple-touch-icon" href="assets/images/logos/apple-touch-icon.png">
+    <title>Diamond Package - Detailing Team TX</title>
+    <meta name="description" content="Diamond Package: Detail premium con protección cerámica por 90 días. Incluye sellador cerámico y efecto showroom. ¡Reserva ahora!">
+    <meta name="keywords" content="Diamond Package, protección cerámica, sellador cerámico, detailing premium">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="header-top">
+                <div class="logo-container">
+                    <a href="index.html" class="logo-link">
+                        <img src="assets/images/logos/logo.png" alt="Detailing Team Logo" class="logo">
+                    </a>
+                </div>
+                <div class="header-controls">
+                    <div class="theme-switch-wrapper">
+                        <label class="theme-switch">
+                            <input type="checkbox" id="themeToggle">
+                            <span class="slider round">
+                                <i class="fas fa-sun"></i>
+                                <i class="fas fa-moon"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="language-selector">
+                        <button type="button" class="lang-btn" onclick="cambiarIdioma('en')">
+                            <span>🇺🇸</span> English
+                        </button>
+                        <button type="button" class="lang-btn" onclick="cambiarIdioma('es')">
+                            <span>🇲🇽</span> Español
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-menu">
+                <a href="index.html#servicios" id="nav-services"><i class="fas fa-car"></i> Servicios</a>
+                <a href="index.html#galeria" id="nav-gallery"><i class="fas fa-images"></i> Galería</a>
+                <a href="index.html#catalogo" id="nav-catalog"><i class="fas fa-oil-can"></i> Catálogo</a>
+                <a href="index.html#registro" id="nav-register"><i class="fas fa-user-plus"></i> Registro</a>
+                <a href="index.html#reservas" id="nav-bookings"><i class="fas fa-calendar-alt"></i> Reservas</a>
+                <a href="index.html#contacto" id="nav-contact"><i class="fas fa-map-marker-alt"></i> Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="service-detail-section">
+            <div class="container">
+                <div class="back-button-container">
+                    <a href="index.html#servicios" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Volver a Servicios
+                    </a>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-detail-header">
+                        <img src="assets/images/servicios/diamond-package.png" alt="Diamond Package" class="service-detail-image">
+                        <h1 class="service-detail-title">Diamond Package</h1>
+                    </div>
+                    <div class="service-detail-content">
+                        <div class="service-detail-description">
+                            <h2><i class="fas fa-info-circle"></i> Descripción del Servicio</h2>
+                            <p>Premium Detail con protección cerámica por 90 días. Incluye:</p>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> Todo lo incluido en Gold Package</li>
+                                <li><i class="fas fa-check-circle"></i> Limpieza profunda de pintura</li>
+                                <li><i class="fas fa-check-circle"></i> Aplicación de sellador cerámico</li>
+                                <li><i class="fas fa-check-circle"></i> Protección UV avanzada</li>
+                                <li><i class="fas fa-check-circle"></i> Efecto hidrofóbico</li>
+                                <li><i class="fas fa-check-circle"></i> Garantía de 90 días en el brillo</li>
+                            </ul>
+                            <p class="service-note">✨ <strong>Nota:</strong> Tu auto lucirá como en un showroom. La protección cerámica repele agua, suciedad y rayos UV.</p>
+                        </div>
+
+                        <div class="service-detail-prices">
+                            <h2><i class="fas fa-tag"></i> Precios</h2>
+
+                            <!-- ========================================= -->
+                            <!-- PRECIOS TEMPORALES - AJUSTAR SEGÚN CLIENTE -->
+                            <!-- ========================================= -->
+
+                            <div class="price-option">
+                                <div class="price-option-header">
+                                    <i class="fas fa-car"></i>
+                                    <h3>Sin acabado interior</h3>
+                                </div>
+                                <div class="price-amount-container">
+                                    <span class="price-amount">$280</span>
+                                    <span class="price-note">(Precio base - Sedán)</span>
+                                </div>
+                                <p class="price-description">Protección cerámica exterior + sellador. Ideal para mantener tu auto como nuevo por 3 meses.</p>
+                            </div>
+
+                            <div class="price-option featured">
+                                <div class="price-option-header">
+                                    <i class="fas fa-gem"></i>
+                                    <h3>Con acabado completo</h3>
+                                </div>
+                                <div class="price-amount-container">
+                                    <span class="price-amount">$350</span>
+                                    <span class="price-note">(Precio base - Sedán)</span>
+                                </div>
+                                <p class="price-description">Incluye limpieza profunda de interior más protección cerámica exterior.</p>
+                            </div>
+
+                            <div class="price-additional-info">
+                                <p><i class="fas fa-plus-circle"></i> <strong>Vehículos grandes (SUV, Pickup):</strong> Consultar precio adicional</p>
+                                <p><i class="fas fa-clock"></i> <strong>Tiempo estimado:</strong> 120 - 180 minutos</p>
+                            </div>
+                        </div>
+
+                        <div class="service-detail-action">
+                            <a href="index.html#reservas" class="btn btn-primary btn-large">
+                                <i class="fas fa-calendar-check"></i> Reservar Diamond Package
+                            </a>
+                            <p class="action-note">Al reservar, selecciona "Diamond Package" en el formulario</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Detailing Team</h4>
+                    <p>Excelencia en brillo y protección automotriz en Houston, Texas. ¡Servicio a domicilio!</p>
+                    <p><i class="fas fa-flag-usa"></i> Servicio profesional y garantizado.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <p><a href="index.html#servicios"><i class="fas fa-car"></i> Servicios</a></p>
+                    <p><a href="index.html#galeria"><i class="fas fa-images"></i> Galería</a></p>
+                    <p><a href="index.html#registro"><i class="fas fa-user-plus"></i> Registro</a></p>
+                    <p><a href="index.html#reservas"><i class="fas fa-calendar-alt"></i> Reservas</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <p><a href="privacy.html"><i class="fas fa-shield-alt"></i> Políticas de Privacidad</a></p>
+                    <p><a href="terms.html"><i class="fas fa-file-contract"></i> Términos de Servicio</a></p>
+                    <p><a href="cookies.html"><i class="fas fa-cookie-bite"></i> Configuración de Cookies</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Próximo dominio</h4>
+                    <p><i class="fas fa-globe"></i> www.detailingteamtx.com</p>
+                    <p><i class="fas fa-lock"></i> Seguro con HTTPS</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Detailing Team. Todos los derechos reservados.</p>
+                <p><i class="fas fa-check-circle"></i> Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function inicializarTemaDetalle() {
+            var temaGuardado = localStorage.getItem('tema');
+            var checkbox = document.getElementById('themeToggle');
+            if (temaGuardado === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (checkbox) checkbox.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                if (checkbox) checkbox.checked = false;
+                if (!temaGuardado) localStorage.setItem('tema', 'light');
+            }
+        }
+
+        function toggleTemaDetalle() {
+            var checkbox = document.getElementById('themeToggle');
+            if (checkbox.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('tema', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('tema', 'light');
+            }
+        }
+
+        var textosDetalleEn = {
+            'nav-services': 'Services',
+            'nav-gallery': 'Gallery',
+            'nav-catalog': 'Catalog',
+            'nav-register': 'Register',
+            'nav-bookings': 'Bookings',
+            'nav-contact': 'Contact',
+            'price-basic': 'Basic finish',
+            'price-premium': 'Premium finish'
+        };
+
+        var textosDetalleEs = {
+            'nav-services': 'Servicios',
+            'nav-gallery': 'Galería',
+            'nav-catalog': 'Catálogo',
+            'nav-register': 'Registro',
+            'nav-bookings': 'Reservas',
+            'nav-contact': 'Contacto',
+            'price-basic': 'Sin acabado interior',
+            'price-premium': 'Con acabado completo'
+        };
+
+        function actualizarIdiomaDetalle() {
+            var idioma = localStorage.getItem('idioma') || 'es';
+            var textos = idioma === 'en' ? textosDetalleEn : textosDetalleEs;
+
+            var navIds = ['nav-services', 'nav-gallery', 'nav-catalog', 'nav-register', 'nav-bookings', 'nav-contact'];
+            for (var i = 0; i < navIds.length; i++) {
+                var el = document.getElementById(navIds[i]);
+                if (el && textos[navIds[i]]) el.innerText = textos[navIds[i]];
+            }
+
+            var priceOptionHeaders = document.querySelectorAll('.price-option-header h3');
+            if (priceOptionHeaders.length >= 2) {
+                priceOptionHeaders[0].innerText = textos['price-basic'];
+                priceOptionHeaders[1].innerText = textos['price-premium'];
+            }
+        }
+
+        function cambiarIdioma(idioma) {
+            localStorage.setItem('idioma', idioma);
+            actualizarIdiomaDetalle();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('change', toggleTemaDetalle);
+            }
+            inicializarTemaDetalle();
+            actualizarIdiomaDetalle();
+        });
+    </script>
+</body>
+</html>

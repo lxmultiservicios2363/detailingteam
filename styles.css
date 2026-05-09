@@ -1380,3 +1380,270 @@ body.dark-mode .contact-btn.email-btn {
 body.dark-mode .contact-btn.whatsapp-btn {
     background: linear-gradient(135deg, #1a6e4a, #0d4a33);
 }
+/* ============================================= */
+/* ESTILO PARA ENLACES DE TARJETAS DE SERVICIOS  */
+/* Agregado el 19/04/2026 para los enlaces a páginas detalle */
+/* ============================================= */
+
+.service-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.service-card-link:hover {
+    text-decoration: none;
+}
+
+.service-card-link .service-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-card-link:hover .service-card {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .service-card-link:hover .service-card {
+    box-shadow: 0 12px 25px rgba(255, 215, 0, 0.2);
+}
+/* ============================================= */
+/* ESTILOS PARA PÁGINAS DE DETALLE DE SERVICIOS  */
+/* ============================================= */
+
+.service-detail-section {
+    padding: 4rem 0;
+    min-height: 60vh;
+}
+
+.back-button-container {
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    background: var(--primary-blue);
+    color: var(--white);
+    transform: translateX(-5px);
+}
+
+.service-detail-card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.service-detail-header {
+    position: relative;
+    text-align: center;
+}
+
+.service-detail-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.service-detail-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #0a2b5c 0%, #1e4a7a 100%);
+    color: var(--white);
+    margin: 0;
+    padding: 1rem;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.service-detail-content {
+    padding: 2.5rem;
+}
+
+.service-detail-description h2,
+.service-detail-prices h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-blue);
+}
+
+.service-detail-description ul {
+    list-style: none;
+    padding: 0;
+}
+
+.service-detail-description ul li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.service-detail-description ul li i {
+    color: var(--success-green);
+    font-size: 1.2rem;
+}
+
+.service-note {
+    background: var(--bg-secondary, #f5f5f5);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    border-left: 4px solid var(--accent-gold);
+}
+
+.service-detail-prices {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color, #e0e0e0);
+}
+
+.price-option {
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.price-option:hover {
+    transform: translateY(-3px);
+}
+
+.price-option.featured {
+    background: linear-gradient(135deg, #0a2b5c 0%, #1e4a7a 100%);
+    color: white;
+}
+
+.price-option.featured .price-amount-container .price-amount {
+    color: var(--accent-gold);
+}
+
+.price-option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.price-option-header i {
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+}
+
+.price-option-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.price-amount-container {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.price-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--success-green);
+}
+
+.price-option.featured .price-amount {
+    color: var(--accent-gold);
+}
+
+.price-note {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.price-description {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.price-additional-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 12px;
+}
+
+.price-additional-info p {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price-additional-info i {
+    color: var(--accent-gold);
+}
+
+.service-detail-action {
+    margin-top: 2rem;
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color, #e0e0e0);
+}
+
+.btn-large {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+}
+
+.action-note {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Modo oscuro */
+body.dark-mode .service-note,
+body.dark-mode .price-option,
+body.dark-mode .price-additional-info {
+    background-color: #2a2a3a;
+}
+
+body.dark-mode .price-option.featured {
+    background: linear-gradient(135deg, #0a1a3a 0%, #0d1117 100%);
+}
+
+@media (max-width: 768px) {
+    .service-detail-content {
+        padding: 1.5rem;
+    }
+    
+    .service-detail-title {
+        font-size: 1.25rem;
+    }
+    
+    .price-amount {
+        font-size: 1.5rem;
+    }
+    
+    .price-option-header h3 {
+        font-size: 1rem;
+    }
+    
+    .btn-large {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
