@@ -1,8 +1,8 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 10.3 (COMPATIBLE CON MODELO CLIENTE ORIGINAL)
-// FECHA: 19/04/2026
+// VERSIÓN: 10.4 (REGISTRO CORREGIDO - dirección y vehículos opcionales)
+// FECHA: 26/05/2026
 // =============================================
 
 // =============================================
@@ -36,7 +36,7 @@ const tipoVehiculoTexto = {
 };
 
 // =============================================
-// TEXTOS EN INGLÉS (RESUMIDOS PARA ESPACIO)
+// TEXTOS EN INGLÉS
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
@@ -93,7 +93,7 @@ const textosIndexEn = {
 };
 
 // =============================================
-// TEXTOS EN ESPAÑOL (RESUMIDOS PARA ESPACIO)
+// TEXTOS EN ESPAÑOL
 // =============================================
 const textosIndexEs = {
     'page-title': 'Detailing Team TX - Excelencia en Brillo',
@@ -300,7 +300,7 @@ function mostrarFormularioRegistroCompleto() {
 }
 
 // =============================================
-// FUNCIÓN: guardarRegistroCompleto (VERSIÓN COMPATIBLE CON MODELO ORIGINAL)
+// FUNCIÓN: guardarRegistroCompleto (CORREGIDA)
 // =============================================
 function guardarRegistroCompleto(event) {
     event.preventDefault();
@@ -310,6 +310,12 @@ function guardarRegistroCompleto(event) {
     var email = document.getElementById('register-email').value;
     var telefono = document.getElementById('register-telefono').value;
     var direccion = document.getElementById('register-direccion').value;
+    
+    // Validar campos obligatorios
+    if (!nombre || !email || !telefono || !direccion) {
+        alert(idioma === 'es' ? 'Todos los campos obligatorios deben estar llenos' : 'All required fields must be filled');
+        return;
+    }
     
     var vehiculos = [];
     var primerVehiculoModelo = '';
@@ -322,6 +328,7 @@ function guardarRegistroCompleto(event) {
         var placa = document.getElementById('vehiculo-placa-' + i) ? document.getElementById('vehiculo-placa-' + i).value.trim() : '';
         
         if (i === 1) {
+            // Primer vehículo: OBLIGATORIO
             if (!marca || !placa) {
                 alert(idioma === 'es' ? 'El primer vehículo debe tener marca y placa' : 'The first vehicle must have make and license plate');
                 return;
@@ -331,17 +338,20 @@ function guardarRegistroCompleto(event) {
             primerVehiculoPlaca = placa;
             vehiculos.push({ marca: marca, modelo: marca, anio: anio, placa: placa });
         } else {
+            // Vehículos 2 y 3: OPCIONALES (solo se agregan si tienen marca Y placa)
             if (marca && placa) {
                 vehiculos.push({ marca: marca, modelo: marca, anio: anio, placa: placa });
             }
         }
     }
     
-    // Enviar en el formato que el modelo ORIGINAL espera (sin direccion, sin array)
+    // Enviar en el formato que el modelo espera
+    // NOTA: Se envía 'direccion' (sin acento) como está en el modelo
     var clienteData = {
         nombre: nombre,
         email: email,
         telefono: telefono,
+        direccion: direccion,
         modelo: primerVehiculoModelo,
         anio: primerVehiculoAnio,
         placa: primerVehiculoPlaca
