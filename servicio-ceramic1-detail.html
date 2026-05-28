@@ -10,8 +10,21 @@
     <meta name="keywords" content="ceramic coating, protección cerámica 1 año, detailing, car wash Houston">
     <meta name="robots" content="index, follow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        h1, h2, h3, h4, .service-name, .product-name, .service-detail-title, .price-option-header h3, .footer-section h4, .developer-section h4 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        body, p, a, button, .btn, .nav-menu a, .form-control, label, .price-description, .price-note, .service-modal-description, .service-card p, .contact-btn .btn-title, .contact-btn .btn-detail, .payment-option-info h4, .payment-option-info p {
+            font-family: 'Poppins', sans-serif;
+        }
+        .price-amount, .price-note {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -33,10 +46,10 @@
                         </label>
                     </div>
                     <div class="language-selector">
-                        <button type="button" class="lang-btn" onclick="cambiarIdioma('en')">
+                        <button type="button" class="lang-btn" id="btnEnglish">
                             <span>🇺🇸</span> English
                         </button>
-                        <button type="button" class="lang-btn" onclick="cambiarIdioma('es')">
+                        <button type="button" class="lang-btn" id="btnSpanish">
                             <span>🇲🇽</span> Español
                         </button>
                     </div>
@@ -62,7 +75,7 @@
         <section class="service-detail-section">
             <div class="container">
                 <div class="back-button-container">
-                    <a href="index.html#servicios" class="btn-back">
+                    <a href="index.html#servicios" class="btn-back" id="back-button">
                         <i class="fas fa-arrow-left"></i> Volver a Servicios
                     </a>
                 </div>
@@ -74,61 +87,56 @@
                     </div>
                     <div class="service-detail-content">
                         <div class="service-detail-description">
-                            <h2><i class="fas fa-info-circle"></i> Descripción del Servicio</h2>
-                            <p>Protección cerámica de alta duración por 12 meses. Incluye:</p>
-                            <ul>
-                                <li><i class="fas fa-check-circle"></i> Lavado profundo de pintura</li>
-                                <li><i class="fas fa-check-circle"></i> Descontaminación química</li>
-                                <li><i class="fas fa-check-circle"></i> Clay bar para eliminar contaminantes</li>
-                                <li><i class="fas fa-check-circle"></i> Aplicación de coating cerámico</li>
-                                <li><i class="fas fa-check-circle"></i> Efecto hidrofóbico avanzado</li>
-                                <li><i class="fas fa-check-circle"></i> Protección UV, química y ambiental</li>
+                            <h2 id="service-description-title"><i class="fas fa-info-circle"></i> Descripción del Servicio</h2>
+                            <p id="service-description-text">Protección cerámica de alta duración por 12 meses. Incluye:</p>
+                            <ul id="service-includes-list">
+                                <li id="service-include-1"><i class="fas fa-check-circle"></i> Lavado profundo de pintura</li>
+                                <li id="service-include-2"><i class="fas fa-check-circle"></i> Descontaminación química</li>
+                                <li id="service-include-3"><i class="fas fa-check-circle"></i> Clay bar para eliminar contaminantes</li>
+                                <li id="service-include-4"><i class="fas fa-check-circle"></i> Aplicación de coating cerámico</li>
+                                <li id="service-include-5"><i class="fas fa-check-circle"></i> Efecto hidrofóbico avanzado</li>
+                                <li id="service-include-6"><i class="fas fa-check-circle"></i> Protección UV, química y ambiental</li>
                             </ul>
-                            <p class="service-note">✨ <strong>Nota:</strong> Tu auto se mantendrá más limpio por más tiempo, el agua resbalará fácilmente y el brillo será impresionante.</p>
+                            <p id="service-note" class="service-note">✨ <strong>Nota:</strong> Tu auto se mantendrá más limpio por más tiempo, el agua resbalará fácilmente y el brillo será impresionante.</p>
                         </div>
 
                         <div class="service-detail-prices">
-                            <h2><i class="fas fa-tag"></i> Precios</h2>
-
-                            <!-- ========================================= -->
-                            <!-- PRECIOS TEMPORALES - AJUSTAR SEGÚN CLIENTE -->
-                            <!-- ========================================= -->
+                            <h2 id="prices-title"><i class="fas fa-tag"></i> Precios</h2>
 
                             <div class="price-option">
                                 <div class="price-option-header">
                                     <i class="fas fa-car"></i>
-                                    <h3>Sin acabado interior</h3>
+                                    <h3 id="price-basic-title" class="price-basic-title">Sin acabado interior</h3>
                                 </div>
                                 <div class="price-amount-container">
-                                    <span class="price-amount">$700</span>
-                                    <span class="price-note">(Precio base - Sedán)</span>
+                                    <span id="price-amount-basic" class="price-amount">$700</span>
+                                    <span id="price-note-basic" class="price-note">(Precio base - Sedán)</span>
                                 </div>
-                                <p class="price-description">Protección cerámica exterior por 12 meses. Ideal para mantener tu auto como nuevo todo el año.</p>
+                                <p id="price-basic-desc" class="price-description">Protección cerámica exterior por 12 meses. Ideal para mantener tu auto como nuevo todo el año.</p>
                             </div>
 
                             <div class="price-option featured">
                                 <div class="price-option-header">
                                     <i class="fas fa-gem"></i>
-                                    <h3>Con acabado completo</h3>
+                                    <h3 id="price-premium-title" class="price-premium-title">Con acabado completo</h3>
                                 </div>
                                 <div class="price-amount-container">
-                                    <span class="price-amount">$850</span>
-                                    <span class="price-note">(Precio base - Sedán)</span>
+                                    <span id="price-amount-premium" class="price-amount">$700</span>
+                                    <span id="price-note-premium" class="price-note">(Precio base - Sedán)</span>
                                 </div>
-                                <p class="price-description">Incluye limpieza profunda de interior más protección cerámica exterior por 12 meses.</p>
+                                <p id="price-premium-desc" class="price-description">Incluye limpieza profunda de interior más protección cerámica exterior por 12 meses.</p>
                             </div>
 
                             <div class="price-additional-info">
-                                <p><i class="fas fa-plus-circle"></i> <strong>Vehículos grandes (SUV, Pickup):</strong> Consultar precio adicional (+$150)</p>
-                                <p><i class="fas fa-clock"></i> <strong>Tiempo estimado:</strong> 4 - 6 horas</p>
+                                <p id="additional-info-text"><i class="fas fa-plus-circle"></i> <strong>Vehículos grandes (SUV, Pickup, Van):</strong> Consultar precio adicional</p>
                             </div>
                         </div>
 
                         <div class="service-detail-action">
-                            <a href="index.html#reservas" class="btn btn-primary btn-large">
-                                <i class="fas fa-calendar-check"></i> Reservar Ceramic 1 Year
+                            <a href="index.html#reservas" class="btn btn-primary btn-large" id="booking-btn-link">
+                                <i class="fas fa-calendar-check"></i> <span id="booking-btn-text" class="booking-btn-text">Reservar Ceramic 1 Year</span>
                             </a>
-                            <p class="action-note">Al reservar, selecciona "Ceramic 1 Year" en el formulario</p>
+                            <p id="action-note" class="action-note">Al reservar, selecciona "Ceramic 1 Year" en el formulario</p>
                         </div>
                     </div>
                 </div>
