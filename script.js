@@ -1,19 +1,19 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 10.12 (FORMULARIOS DINÁMICOS TRADUCIDOS)
-// FECHA: 27/05/2026
+// VERSIÓN: 10.13 (CORREGIDO - BACKEND Y HORARIO 24/7)
+// FECHA: 20/06/2026
 // =============================================
 
 // =============================================
 // CONSTANTES GLOBALES
 // =============================================
 const MAX_ORDENES_DIARIAS = 30;
-const HORARIO_INICIO = "07:00";
-const HORARIO_FIN = "17:30";
+const HORARIO_INICIO = "00:00";
+const HORARIO_FIN = "23:59";
 const TELEFONO_PROPIETARIO = "17139280466";
 const MAX_VEHICULOS = 3;
-const BACKEND_URL = 'https://detailingteam-backend.onrender.com';
+const BACKEND_URL = 'https://detailingteam.onrender.com';
 
 // =============================================
 // PRECIOS BASE DE SERVICIOS (SEDÁN / STANDARD)
@@ -275,7 +275,7 @@ const textosIndexEn = {
     'services-title': '✨ Professional Services ✨',
     'services-description': '🌟 The shine your car deserves, the protection it needs. Competitive prices in Houston, TX. 🌟',
     'schedule-title': '🕒 Business Hours',
-    'schedule-text': '<strong>Monday to Sunday:</strong> 7:00 AM - 5:30 PM',
+    'schedule-text': '<strong>24/7 - Every day of the year</strong>',
     'service1-name': 'Express Detail',
     'service1-desc': 'Ideal for quick maintenance. Hand wash, wheel cleaning, interior vacuuming, dashboard, console, windows. Renew your car in minutes!',
     'service2-name': 'Silver Package',
@@ -330,7 +330,7 @@ const textosIndexEn = {
     'booking-vehicle-van': '🚐 Van / Minivan (7-8 seats)',
     'booking-label-date': 'Date *',
     'booking-label-time': 'Time *',
-    'booking-time-note': 'Schedule: 7:00 AM - 5:30 PM',
+    'booking-time-note': '24/7 - Always open',
     'booking-label-notes': 'Additional Notes',
     'booking-textarea-notes': 'Any special instructions...',
     'booking-label-price': 'Final price:',
@@ -388,7 +388,7 @@ const textosIndexEs = {
     'services-title': '✨ Servicios Profesionales ✨',
     'services-description': '🌟 El brillo que tu auto merece, la protección que necesita. Precios competitivos en Houston, TX. 🌟',
     'schedule-title': '🕒 Horario de atención',
-    'schedule-text': '<strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM',
+    'schedule-text': '<strong>24/7 - Todos los días del año</strong>',
     'service1-name': 'Express Detail',
     'service1-desc': 'Ideal para mantenimiento rápido. Lavado a mano, limpieza de rines, aspirado interior, tablero, consola, cristales. ¡Renueva tu auto en minutos!',
     'service2-name': 'Silver Package',
@@ -443,7 +443,7 @@ const textosIndexEs = {
     'booking-vehicle-van': '🚐 Van / Minivan (7-8 asientos)',
     'booking-label-date': 'Fecha *',
     'booking-label-time': 'Hora *',
-    'booking-time-note': 'Horario: 7:00 AM - 5:30 PM',
+    'booking-time-note': '24/7 - Siempre abiertos',
     'booking-label-notes': 'Notas adicionales',
     'booking-textarea-notes': 'Alguna indicación especial...',
     'booking-label-price': 'Precio final:',
@@ -1204,8 +1204,8 @@ function procesarReserva(event) {
     var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
     if (!hora || hora < HORARIO_INICIO || hora > HORARIO_FIN) {
         alert(idioma === 'es' 
-            ? '❌ Horario no válido. Atendemos de 7:00 AM a 5:30 PM.'
-            : '❌ Invalid time. We are open from 7:00 AM to 5:30 PM.');
+            ? '❌ Horario no válido. Atendemos 24/7, cualquier hora es válida.'
+            : '❌ Invalid time. We are 24/7, any time is valid.');
         return false;
     }
     
