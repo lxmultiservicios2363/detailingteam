@@ -5,8 +5,8 @@
 // conecta a MongoDB Atlas y maneja las rutas API
 // para clientes, reservas y envío de emails.
 // 
-// 📌 Versión: 5.0 (CORREGIDA - SIRVE FRONTEND)
-// 📌 Fecha: 18/04/2026
+// 📌 Versión: 6.0 (CORS CORREGIDO - DOMINIO FINAL)
+// 📌 Fecha: 20/06/2026
 // 📌 Autor: Luis Enrique Reina Mesa
 // =============================================
 
@@ -52,21 +52,27 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // =============================================
-// 🌐 CONFIGURACIÓN DE CORS (ACTUALIZADA PARA RENDER)
+// 🌐 CONFIGURACIÓN DE CORS (CORREGIDA)
 // =============================================
 const allowedOrigins = [
+    // Desarrollo local
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
     'http://localhost:3001',
+    // Dominios de prueba
     'https://detailingteam.onrender.com',
-    'https://detailingteam.vercel.app',
+    // DOMINIO FINAL (el que estás usando)
+    'https://detailingteamtx.com',
+    'https://www.detailingteamtx.com',
+    // Para casos especiales
     'null',
     'file://'
 ];
 
 app.use(cors({
     origin: function(origin, callback) {
+        // Permitir si no hay origen (ej: Postman) o si está en la lista blanca
         if (!origin || allowedOrigins.includes(origin) || origin.startsWith('file://')) {
             callback(null, true);
         } else {
@@ -338,7 +344,9 @@ app.post('/api/enviar-reserva', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`📧 Email configurado para: ${EMAIL_USER}`);
-    console.log(`🌐 CORS configurado con credenciales permitidas`);
+    console.log(`🌐 CORS configurado con dominios permitidos`);
+    console.log(`   ✅ https://detailingteamtx.com`);
+    console.log(`   ✅ https://www.detailingteamtx.com`);
 });
 
 // =============================================
