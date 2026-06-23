@@ -5,8 +5,8 @@
 // conecta a MongoDB Atlas y maneja las rutas API
 // para clientes, reservas y envío de emails.
 // 
-// 📌 Versión: 6.0 (CORS CORREGIDO - DOMINIO FINAL)
-// 📌 Fecha: 20/06/2026
+// 📌 Versión: 7.0 (CONEXIÓN MONGODB OPTIMIZADA)
+// 📌 Fecha: 22/06/2026
 // 📌 Autor: Luis Enrique Reina Mesa
 // =============================================
 
@@ -100,7 +100,7 @@ app.get('/', (req, res) => {
 });
 
 // =============================================
-// 🗄️ CONEXIÓN A MONGODB ATLAS
+// 🗄️ CONEXIÓN A MONGODB ATLAS (OPTIMIZADA)
 // =============================================
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -109,16 +109,89 @@ if (!MONGO_URI) {
     process.exit(1);
 }
 
-mongoose.connect(MONGO_URI, {
+// OPCIONES DE CONEXIÓN PARA EVITAR DESCONEXIONES
+const mongoOptions = {
     serverApi: {
         version: '1',
         strict: true,
         deprecationErrors: true,
     },
-    family: 4
-})
-.then(() => console.log('✅ Conectado a MongoDB Atlas'))
-.catch(err => console.error('❌ Error conectando a MongoDB:', err));
+    family: 4,
+    // 🔥 NUEVAS OPCIONES PARA EVITAR DESCONEXIONES
+    maxPoolSize: 10,                    // Conexiones simultáneas
+    minPoolSize: 2,                     // Mantiene conexiones activas
+    maxIdleTimeMS: 60000,               // Cierra conexiones inactivas después de 1 minuto
+    connectTimeoutMS: 30000,            // Tiempo máximo para conectar
+    socketTimeoutMS: 45000,             // Tiempo máximo para operaciones
+    serverSelectionTimeoutMS: 30000,    // Tiempo para seleccionar servidor
+    heartbeatFrequencyMS: 10000,        // Revisa el estado del servidor cada 10s
+    retryWrites: true,
+    retryReads: true
+};
+
+// CONEXIÓN INICIAL
+mongoose.connect(MONGO_URI, mongoOptions)
+    .then(() => console.log('✅ Conectado a MongoDB Atlas'))
+    .catch(err => console.error('❌ Error conectando a MongoDB:', err));
+
+// =============================================
+// 🔄 MANEJO DE EVENTOS DE CONEXIÓN MONGODB
+// =============================================
+const db = mongoose.connection;
+
+db.on('connected', () => {
+    console.log('✅ MongoDB conectado');
+});
+
+db.on('disconnected', () => {
+    console.log('⚠️ MongoDB desconectado - Intentando reconectar...');
+    // Intentar reconectar automáticamente
+    setTimeout(() => {
+        mongoose.connect(MONGO_URI, mongoOptions)
+            .then(() => console.log('✅ MongoDB reconectado exitosamente'))
+            .catch(err => console.error('❌ Error en reconexión:', err));
+    }, 5000);
+});
+
+db.on('error', (err) => {
+    console.error('❌ Error en MongoDB:', err);
+});
+
+db.on('reconnected', () => {
+    console.log('✅ MongoDB reconectado exitosamente');
+});
+
+// =============================================
+// 🔧 FUNCIÓN PARA FORZAR RECONEXIÓN
+// =============================================
+async function ensureConnection() {
+    if (mongoose.connection.readyState !== 1) {
+        console.log('🔄 Reconectando a MongoDB...');
+        try {
+            await mongoose.connect(MONGO_URI, mongoOptions);
+            console.log('✅ Reconexión exitosa');
+        } catch (err) {
+            console.error('❌ Error en reconexión:', err);
+            // Reintentar después de 5 segundos
+            setTimeout(ensureConnection, 5000);
+        }
+    }
+}
+
+// =============================================
+// 🔄 PING A MONGODB PARA MANTENER CONEXIÓN ACTIVA
+// =============================================
+setInterval(async () => {
+    try {
+        if (mongoose.connection.readyState === 1) {
+            await mongoose.connection.db.admin().ping();
+            console.log('🔄 Ping a MongoDB - Conexión activa');
+        }
+    } catch (err) {
+        console.log('⚠️ Ping falló - Reconectando...');
+        await ensureConnection();
+    }
+}, 30000); // Cada 30 segundos
 
 // =============================================
 // 📧 CONFIGURACIÓN DE EMAIL
@@ -155,6 +228,8 @@ transporter.verify((error, success) => {
 // 👥 RUTAS DE CLIENTES
 app.get('/api/clientes', async (req, res) => {
     try {
+        // Verificar conexión antes de operar
+        await ensureConnection();
         const clientes = await Cliente.find().sort({ fecha: -1 });
         res.json(clientes);
     } catch (error) {
@@ -165,6 +240,8 @@ app.get('/api/clientes', async (req, res) => {
 
 app.post('/api/clientes', async (req, res) => {
     try {
+        // Verificar conexión antes de operar
+        await ensureConnection();
         const { nombre, email, telefono, modelo } = req.body;
         if (!nombre || !email || !telefono || !modelo) {
             return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -183,6 +260,7 @@ app.post('/api/clientes', async (req, res) => {
 // 📅 RUTAS DE RESERVAS
 app.get('/api/reservas', async (req, res) => {
     try {
+        await ensureConnection();
         const reservas = await Reserva.find().sort({ fechaSolicitud: -1 });
         res.json(reservas);
     } catch (error) {
@@ -193,6 +271,7 @@ app.get('/api/reservas', async (req, res) => {
 
 app.post('/api/reservas', async (req, res) => {
     try {
+        await ensureConnection();
         const { servicio, tipoVehiculo, fecha, hora, precio, clienteEmail } = req.body;
         if (!servicio || !tipoVehiculo || !fecha || !hora || !precio || !clienteEmail) {
             return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -339,6 +418,17 @@ app.post('/api/enviar-reserva', async (req, res) => {
 });
 
 // =============================================
+// 🏓 RUTA DE PING PARA MANTENER SERVIDOR ACTIVO
+// =============================================
+app.get('/api/ping', (req, res) => {
+    res.json({ 
+        status: 'alive', 
+        time: new Date().toISOString(),
+        mongo: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    });
+});
+
+// =============================================
 // 🚀 INICIAR SERVIDOR
 // =============================================
 app.listen(PORT, () => {
@@ -347,6 +437,7 @@ app.listen(PORT, () => {
     console.log(`🌐 CORS configurado con dominios permitidos`);
     console.log(`   ✅ https://detailingteamtx.com`);
     console.log(`   ✅ https://www.detailingteamtx.com`);
+    console.log(`🔄 Ping a MongoDB cada 30 segundos para mantener conexión activa`);
 });
 
 // =============================================
