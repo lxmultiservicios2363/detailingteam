@@ -1,7 +1,7 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 10.13 (CORREGIDO - BACKEND Y HORARIO 24/7)
+// VERSIÓN: 11.4 (FORMULARIO DE REGISTRO SIEMPRE VISIBLE)
 // FECHA: 20/06/2026
 // =============================================
 
@@ -9,38 +9,81 @@
 // CONSTANTES GLOBALES
 // =============================================
 const MAX_ORDENES_DIARIAS = 30;
-const HORARIO_INICIO = "00:00";
-const HORARIO_FIN = "23:59";
 const TELEFONO_PROPIETARIO = "17139280466";
 const MAX_VEHICULOS = 3;
-const BACKEND_URL = 'https://detailingteam.onrender.com';
+const BACKEND_URL = 'https://detailingteamtx.com';
 
 // =============================================
-// PRECIOS BASE DE SERVICIOS (SEDÁN / STANDARD)
+// MATRIZ DE PRECIOS POR SERVICIO Y TIPO DE VEHÍCULO
 // =============================================
-const PRECIOS_BASE = {
-    'Express Detail': [100, 120],
-    'Silver Package': [150, 180],
-    'Gold Package': [200, 220],
-    'Diamond Package': [280, 280],
-    'Ceramic 1 Year': [700, 700],
-    'Ceramic 3 Years': [950, 950],
-    'Ceramic 5 Years': [1500, 1500]
+const PRECIOS_MATRIZ = {
+    'Express Detail': {
+        'sedan': 100,
+        'coupe': 110,
+        'convertible': 120,
+        'suv': 140,
+        'pickup': 150,
+        'van': 160
+    },
+    'Silver Package': {
+        'sedan': 150,
+        'coupe': 160,
+        'convertible': 170,
+        'suv': 190,
+        'pickup': 200,
+        'van': 220
+    },
+    'Gold Package': {
+        'sedan': 200,
+        'coupe': 210,
+        'convertible': 220,
+        'suv': 240,
+        'pickup': 260,
+        'van': 280
+    },
+    'Diamond Package': {
+        'sedan': 280,
+        'coupe': 290,
+        'convertible': 300,
+        'suv': 320,
+        'pickup': 340,
+        'van': 360
+    },
+    'Ceramic 1 Year': {
+        'sedan': 700,
+        'coupe': 720,
+        'convertible': 740,
+        'suv': 900,
+        'pickup': 950,
+        'van': 1000
+    },
+    'Ceramic 3 Years': {
+        'sedan': 950,
+        'coupe': 980,
+        'convertible': 1000,
+        'suv': 1300,
+        'pickup': 1350,
+        'van': 1400
+    },
+    'Ceramic 5 Years': {
+        'sedan': 1500,
+        'coupe': 1550,
+        'convertible': 1600,
+        'suv': 1800,
+        'pickup': 1900,
+        'van': 2000
+    }
 };
 
 // =============================================
-// INCREMENTOS POR TIPO DE VEHÍCULO
+// AGREGADOS/EXTRAS (precio fijo)
 // =============================================
-const INCREMENTOS_EXPRESS = {
-    'suv': 45,
-    'pickup': 35,
-    'van': 60
-};
-
-const INCREMENTOS_STANDARD = {
-    'suv': 30,
-    'pickup': 20,
-    'van': 40
+const AGREGADOS = {
+    'pulido_faros': { es: 'Pulido de Faros', en: 'Headlight Polishing', precio: 50 },
+    'limpieza_tapizados': { es: 'Limpieza de Tapizados', en: 'Upholstery Cleaning', precio: 60 },
+    'ozonizado': { es: 'Ozonizado (eliminación olores)', en: 'Ozonization (odor removal)', precio: 40 },
+    'tratamiento_cuero': { es: 'Tratamiento de Cuero', en: 'Leather Treatment', precio: 80 },
+    'cera_extra': { es: 'Aplicación de Cera Extra', en: 'Extra Wax Application', precio: 30 }
 };
 
 // =============================================
@@ -53,7 +96,20 @@ let vehiculosRegistrados = [];
 // OBJETO PARA MAPEAR TIPOS DE VEHÍCULO A TEXTO
 // =============================================
 const tipoVehiculoTexto = {
+    'sedan': '🚗 Sedán',
+    'coupe': '🏎️ Coupé',
+    'convertible': '🏎️ Convertible',
+    'suv': '🚙 SUV',
+    'pickup': '🛻 Pickup',
+    'van': '🚐 Van / Minivan'
+};
+
+// =============================================
+// TEXTO COMPLETO PARA TICKET
+// =============================================
+const tipoVehiculoTicket = {
     'sedan': '🚗 Sedán (4 puertas, 5 asientos)',
+    'coupe': '🏎️ Coupé (2 puertas, 4 asientos)',
     'convertible': '🏎️ Convertible / Descapotable (2 puertas, 2-4 asientos)',
     'suv': '🚙 SUV (5-7 asientos)',
     'pickup': '🛻 Pickup (2-5 asientos)',
@@ -61,213 +117,12 @@ const tipoVehiculoTexto = {
 };
 
 // =============================================
-// TRADUCCIONES DE DESCRIPCIONES DE SERVICIOS
-// =============================================
-const serviceDescriptions = {
-    'Express Detail': {
-        es: 'Ideal para mantenimiento rápido y efectivo. Este servicio incluye:',
-        en: 'Ideal for quick and effective maintenance. This service includes:'
-    },
-    'Silver Package': {
-        es: 'Limpieza profunda que va más allá del mantenimiento básico. Este servicio incluye:',
-        en: 'Deep cleaning that goes beyond basic maintenance. This service includes:'
-    },
-    'Gold Package': {
-        es: 'Limpieza premium con protección de cera. Incluye:',
-        en: 'Premium cleaning with wax protection. Includes:'
-    },
-    'Diamond Package': {
-        es: 'Premium Detail con protección cerámica por 90 días. Incluye:',
-        en: 'Premium Detail with 90-day ceramic protection. Includes:'
-    },
-    'Ceramic 1 Year': {
-        es: 'Protección cerámica de alta duración por 12 meses. Incluye:',
-        en: 'High durability ceramic protection for 12 months. Includes:'
-    },
-    'Ceramic 3 Years': {
-        es: 'Protección cerámica nivel medio con duración de 3 años. Incluye:',
-        en: 'Mid-level ceramic protection lasting 3 years. Includes:'
-    },
-    'Ceramic 5 Years': {
-        es: 'Protección cerámica premium con duración de 5 años. Incluye:',
-        en: 'Premium ceramic protection lasting 5 years. Includes:'
-    }
-};
-
-// =============================================
-// TRADUCCIONES DE ÍTEMS DE LISTA POR SERVICIO
-// =============================================
-const serviceListItems = {
-    'Express Detail': {
-        es: [
-            'Lavado a mano de toda la carrocería',
-            'Limpieza profesional de rines y llantas',
-            'Aspirado completo del interior',
-            'Limpieza de tablero, consola y paneles',
-            'Limpieza de cristales por dentro y por fuera',
-            'Secado con microfibra para evitar rayones'
-        ],
-        en: [
-            'Hand wash of the entire body',
-            'Professional cleaning of rims and tires',
-            'Complete interior vacuuming',
-            'Dashboard, console and panel cleaning',
-            'Window cleaning inside and out',
-            'Microfiber drying to prevent scratches'
-        ]
-    },
-    'Silver Package': {
-        es: [
-            'Todo lo incluido en Express Detail',
-            'Limpieza de paneles y puertas a fondo',
-            'Shampoo ligero de alfombras',
-            'Brillo de llantas',
-            'Eliminación de manchas superficiales',
-            'Limpieza de áreas difíciles (respiradores, molduras)'
-        ],
-        en: [
-            'Everything included in Express Detail',
-            'Thorough cleaning of panels and doors',
-            'Light carpet shampoo',
-            'Tire shine',
-            'Removal of light stains',
-            'Cleaning of difficult areas (vents, moldings)'
-        ]
-    },
-    'Gold Package': {
-        es: [
-            'Todo lo incluido en Silver Package',
-            'Shampoo profundo de alfombras y tapicería',
-            'Aplicación de cera o sellador de pintura',
-            'Protección de plásticos exteriores e interiores',
-            'Acabado de alto brillo',
-            'Eliminación de manchas difíciles'
-        ],
-        en: [
-            'Everything included in Silver Package',
-            'Deep carpet and upholstery shampoo',
-            'Wax or paint sealant application',
-            'Protection of exterior and interior plastics',
-            'High gloss finish',
-            'Removal of difficult stains'
-        ]
-    },
-    'Diamond Package': {
-        es: [
-            'Todo lo incluido en Gold Package',
-            'Limpieza profunda de pintura',
-            'Aplicación de sellador cerámico',
-            'Protección UV avanzada',
-            'Efecto hidrofóbico',
-            'Garantía de 90 días en el brillo'
-        ],
-        en: [
-            'Everything included in Gold Package',
-            'Deep paint cleaning',
-            'Ceramic sealant application',
-            'Advanced UV protection',
-            'Hydrophobic effect',
-            '90-day shine guarantee'
-        ]
-    },
-    'Ceramic 1 Year': {
-        es: [
-            'Lavado profundo de pintura',
-            'Descontaminación química',
-            'Clay bar para eliminar contaminantes',
-            'Aplicación de coating cerámico',
-            'Efecto hidrofóbico avanzado',
-            'Protección UV, química y ambiental'
-        ],
-        en: [
-            'Deep paint washing',
-            'Chemical decontamination',
-            'Clay bar to remove contaminants',
-            'Ceramic coating application',
-            'Advanced hydrophobic effect',
-            'UV, chemical and environmental protection'
-        ]
-    },
-    'Ceramic 3 Years': {
-        es: [
-            'Preparación avanzada de pintura',
-            'Descontaminación química y mecánica',
-            'Aplicación de capa cerámica base',
-            'Aplicación de capa cerámica de sacrificio',
-            'Efecto hidrofóbico mejorado',
-            'Protección contra rayos UV y contaminantes'
-        ],
-        en: [
-            'Advanced paint preparation',
-            'Chemical and mechanical decontamination',
-            'Base ceramic layer application',
-            'Sacrificial ceramic layer application',
-            'Enhanced hydrophobic effect',
-            'Protection against UV rays and contaminants'
-        ]
-    },
-    'Ceramic 5 Years': {
-        es: [
-            'Preparación profesional de pintura (pulido de una etapa)',
-            'Descontaminación química y mecánica completa',
-            'Aplicación de capa cerámica base premium',
-            'Aplicación de capa cerámica reforzada',
-            'Aplicación de capa de sacrificio hidrofóbica',
-            'Protección superior contra rayos UV, químicos y contaminantes'
-        ],
-        en: [
-            'Professional paint preparation (one-stage polishing)',
-            'Complete chemical and mechanical decontamination',
-            'Premium base ceramic layer application',
-            'Reinforced ceramic layer application',
-            'Hydrophobic sacrificial layer application',
-            'Superior protection against UV rays, chemicals and contaminants'
-        ]
-    }
-};
-
-// =============================================
-// TRADUCCIONES DE NOTAS DE SERVICIOS
-// =============================================
-const serviceNotes = {
-    'Express Detail': {
-        es: '✨ Tu auto quedará renovado en minutos, con un brillo espectacular y protección básica.',
-        en: '✨ Your car will be renewed in minutes, with spectacular shine and basic protection.'
-    },
-    'Silver Package': {
-        es: '✨ Resultado impecable para tu vehículo, ideal si buscas una limpieza completa pero no necesitas un detailing completo.',
-        en: '✨ Impeccable result for your vehicle, ideal if you are looking for a complete cleaning but do not need a full detailing.'
-    },
-    'Gold Package': {
-        es: '✨ Tu auto lucirá como recién salido del concesionario. Ideal para ocasiones especiales o si quieres mimar tu vehículo.',
-        en: '✨ Your car will look like it just left the dealership. Ideal for special occasions or if you want to pamper your vehicle.'
-    },
-    'Diamond Package': {
-        es: '✨ Tu auto lucirá como en un showroom. La protección cerámica repele agua, suciedad y rayos UV.',
-        en: '✨ Your car will look like in a showroom. Ceramic protection repels water, dirt and UV rays.'
-    },
-    'Ceramic 1 Year': {
-        es: '✨ Tu auto se mantendrá más limpio por más tiempo, el agua resbalará fácilmente y el brillo será impresionante.',
-        en: '✨ Your car will stay cleaner longer, water will slide off easily, and the shine will be impressive.'
-    },
-    'Ceramic 3 Years': {
-        es: '✨ Resistencia superior a químicos y contaminantes. Garantía de 3 años en condiciones normales de uso.',
-        en: '✨ Superior resistance to chemicals and contaminants. 3-year warranty under normal use conditions.'
-    },
-    'Ceramic 5 Years': {
-        es: '✨ La máxima protección disponible para tu vehículo. Inversión en belleza y cuidado a largo plazo.',
-        en: '✨ The maximum protection available for your vehicle. Investment in long-term beauty and care.'
-    }
-};
-
-// =============================================
-// TEXTOS EN INGLÉS (COMPLETOS CON FOOTER)
+// TEXTOS EN INGLÉS
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
     'nav-services': 'Services',
     'nav-gallery': 'Gallery',
-    'nav-catalog': 'Catalog',
     'nav-register': 'Register',
     'nav-bookings': 'Bookings',
     'nav-contact': 'Contact',
@@ -311,19 +166,20 @@ const textosIndexEn = {
     'register-label-plate': 'License Plate (optional)',
     'register-btn': 'Register Me',
     'booking-title': '📅 Book Your Appointment 📅',
-    'booking-description': 'Choose service, date and time. We will confirm via WhatsApp instantly.',
+    'booking-description': 'Choose service, vehicle type and extras. We will confirm via WhatsApp instantly.',
     'booking-label-service': 'Service *',
     'booking-service-default': 'Select a service',
-    'booking-service-express': 'Express Detail - Exterior: $100 / Interior+Exterior: $120 (+SUV/Pickup/Van)',
-    'booking-service-silver': 'Silver Package - Exterior: $150 / Interior+Exterior: $180 (+SUV/Pickup/Van)',
-    'booking-service-gold': 'Gold Package - Exterior: $200 / Interior+Exterior: $220 (+SUV/Pickup/Van)',
-    'booking-service-diamond': 'Diamond Package - $280 (+SUV/Pickup/Van)',
-    'booking-service-ceramic1': 'Ceramic 1 Year - $700 (+SUV/Pickup/Van)',
-    'booking-service-ceramic3': 'Ceramic 3 Years - $950 (+SUV/Pickup/Van)',
-    'booking-service-ceramic5': 'Ceramic 5 Years - $1,500 (+SUV/Pickup/Van)',
+    'booking-service-express': 'Express Detail',
+    'booking-service-silver': 'Silver Package',
+    'booking-service-gold': 'Gold Package',
+    'booking-service-diamond': 'Diamond Package',
+    'booking-service-ceramic1': 'Ceramic 1 Year',
+    'booking-service-ceramic3': 'Ceramic 3 Years',
+    'booking-service-ceramic5': 'Ceramic 5 Years',
     'booking-label-vehicle': 'Vehicle Type *',
     'booking-vehicle-default': 'Select vehicle type',
     'booking-vehicle-sedan': '🚗 Sedan (4 doors, 5 seats)',
+    'booking-vehicle-coupe': '🏎️ Coupe (2 doors, 4 seats)',
     'booking-vehicle-convertible': '🏎️ Convertible (2 doors, 2-4 seats)',
     'booking-vehicle-suv': '🚙 SUV (5-7 seats)',
     'booking-vehicle-pickup': '🛻 Pickup (2-5 seats)',
@@ -333,6 +189,7 @@ const textosIndexEn = {
     'booking-time-note': '24/7 - Always open',
     'booking-label-notes': 'Additional Notes',
     'booking-textarea-notes': 'Any special instructions...',
+    'booking-label-extras': 'Extras (optional)',
     'booking-label-price': 'Final price:',
     'booking-btn': 'Continue to payment',
     'payment-step2-title': 'Choose payment method',
@@ -357,7 +214,6 @@ const textosIndexEn = {
     'footer-quick-title': 'Quick links',
     'footer-quick-services': 'Services',
     'footer-quick-gallery': 'Gallery',
-    'footer-quick-products': 'Products',
     'footer-quick-register': 'Register',
     'footer-quick-bookings': 'Bookings',
     'footer-legal-title': 'Legal',
@@ -370,17 +226,18 @@ const textosIndexEn = {
     'developer-title': 'Want a website for your business?',
     'qr-message': 'Scan me! 📱',
     'copyright-text': '© 2025 Detailing Team. All rights reserved.',
-    'copyright-security': 'By using this site, you accept our privacy and security practices.'
+    'copyright-security': 'By using this site, you accept our privacy and security practices.',
+    'header-visits-label': 'visits this month',
+    'header-bookings-label': 'total bookings'
 };
 
 // =============================================
-// TEXTOS EN ESPAÑOL (COMPLETOS CON FOOTER)
+// TEXTOS EN ESPAÑOL
 // =============================================
 const textosIndexEs = {
     'page-title': 'Detailing Team TX - Excelencia en Brillo',
     'nav-services': 'Servicios',
     'nav-gallery': 'Galería',
-    'nav-catalog': 'Catálogo',
     'nav-register': 'Registro',
     'nav-bookings': 'Reservas',
     'nav-contact': 'Contacto',
@@ -424,19 +281,20 @@ const textosIndexEs = {
     'register-label-plate': 'Placa (opcional)',
     'register-btn': 'Registrarme',
     'booking-title': '📅 Reserva tu Turno 📅',
-    'booking-description': 'Elige servicio, fecha y hora. Te confirmaremos por WhatsApp al instante.',
+    'booking-description': 'Elige servicio, tipo de vehículo y extras. Te confirmaremos por WhatsApp al instante.',
     'booking-label-service': 'Servicio *',
     'booking-service-default': 'Selecciona un servicio',
-    'booking-service-express': 'Express Detail - Exterior: $100 / Interior+Exterior: $120 (+SUV/Pickup/Van)',
-    'booking-service-silver': 'Silver Package - Exterior: $150 / Interior+Exterior: $180 (+SUV/Pickup/Van)',
-    'booking-service-gold': 'Gold Package - Exterior: $200 / Interior+Exterior: $220 (+SUV/Pickup/Van)',
-    'booking-service-diamond': 'Diamond Package - $280 (+SUV/Pickup/Van)',
-    'booking-service-ceramic1': 'Ceramic 1 Year - $700 (+SUV/Pickup/Van)',
-    'booking-service-ceramic3': 'Ceramic 3 Years - $950 (+SUV/Pickup/Van)',
-    'booking-service-ceramic5': 'Ceramic 5 Years - $1,500 (+SUV/Pickup/Van)',
+    'booking-service-express': 'Express Detail',
+    'booking-service-silver': 'Silver Package',
+    'booking-service-gold': 'Gold Package',
+    'booking-service-diamond': 'Diamond Package',
+    'booking-service-ceramic1': 'Ceramic 1 Year',
+    'booking-service-ceramic3': 'Ceramic 3 Years',
+    'booking-service-ceramic5': 'Ceramic 5 Years',
     'booking-label-vehicle': 'Tipo de vehículo *',
     'booking-vehicle-default': 'Selecciona tipo de vehículo',
     'booking-vehicle-sedan': '🚗 Sedán (4 puertas, 5 asientos)',
+    'booking-vehicle-coupe': '🏎️ Coupé (2 puertas, 4 asientos)',
     'booking-vehicle-convertible': '🏎️ Convertible / Descapotable (2 puertas, 2-4 asientos)',
     'booking-vehicle-suv': '🚙 SUV (5-7 asientos)',
     'booking-vehicle-pickup': '🛻 Pickup (2-5 asientos)',
@@ -446,6 +304,7 @@ const textosIndexEs = {
     'booking-time-note': '24/7 - Siempre abiertos',
     'booking-label-notes': 'Notas adicionales',
     'booking-textarea-notes': 'Alguna indicación especial...',
+    'booking-label-extras': 'Extras (opcional)',
     'booking-label-price': 'Precio final:',
     'booking-btn': 'Continuar al pago',
     'payment-step2-title': 'Elige método de pago',
@@ -470,7 +329,6 @@ const textosIndexEs = {
     'footer-quick-title': 'Enlaces rápidos',
     'footer-quick-services': 'Servicios',
     'footer-quick-gallery': 'Galería',
-    'footer-quick-products': 'Productos',
     'footer-quick-register': 'Registro',
     'footer-quick-bookings': 'Reservas',
     'footer-legal-title': 'Legal',
@@ -483,7 +341,9 @@ const textosIndexEs = {
     'developer-title': '¿Quieres una página web para tu negocio?',
     'qr-message': '¡Escáneame! 📱',
     'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
-    'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.'
+    'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.',
+    'header-visits-label': 'visitas este mes',
+    'header-bookings-label': 'reservas totales'
 };
 
 // =============================================
@@ -493,7 +353,6 @@ function actualizarIdioma() {
     var idioma = localStorage.getItem('idioma') || 'es';
     var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    // Traducir elementos con ID
     for (var id in textos) {
         var elemento = document.getElementById(id);
         if (elemento) {
@@ -511,391 +370,35 @@ function actualizarIdioma() {
         }
     }
     
-    // Traducir navegación
-    var navIds = ['nav-services', 'nav-gallery', 'nav-catalog', 'nav-register', 'nav-bookings', 'nav-contact'];
-    for (var i = 0; i < navIds.length; i++) {
-        var navEl = document.getElementById(navIds[i]);
-        if (navEl && textos[navIds[i]]) {
-            navEl.innerText = textos[navIds[i]];
-        }
+    // ACTUALIZAR LABELS DE CONTADORES
+    var visitsLabel = document.getElementById('header-visits-label');
+    if (visitsLabel && textos['header-visits-label']) {
+        visitsLabel.innerText = textos['header-visits-label'];
     }
-    
-    // Traducir título "Descripción del Servicio"
-    var descTitle = document.getElementById('service-description-title');
-    if (descTitle) {
-        descTitle.innerHTML = '<i class="fas fa-info-circle"></i> ' + (idioma === 'en' ? 'Service Description' : 'Descripción del Servicio');
-    }
-    
-    // Traducir título "Precios"
-    var pricesTitle = document.getElementById('prices-title');
-    if (pricesTitle) {
-        pricesTitle.innerHTML = '<i class="fas fa-tag"></i> ' + (idioma === 'en' ? 'Prices' : 'Precios');
-    }
-    
-    // Traducir texto de descripción principal del servicio
-    var serviceDescText = document.getElementById('service-description-text');
-    if (serviceDescText) {
-        var serviceName = getServiceNameFromPage();
-        if (serviceName && serviceDescriptions[serviceName]) {
-            serviceDescText.innerText = serviceDescriptions[serviceName][idioma];
-        }
-    }
-    
-    // Traducir los ítems de la lista
-    for (var j = 1; j <= 6; j++) {
-        var item = document.getElementById('service-include-' + j);
-        if (item) {
-            var serviceName = getServiceNameFromPage();
-            if (serviceName && serviceListItems[serviceName]) {
-                var icon = item.querySelector('i');
-                var text = serviceListItems[serviceName][idioma][j-1];
-                if (icon) {
-                    item.innerHTML = '';
-                    item.appendChild(icon);
-                    item.appendChild(document.createTextNode(' ' + text));
-                } else {
-                    item.innerText = text;
-                }
-            }
-        }
-    }
-    
-    // Traducir la nota del servicio
-    var serviceNoteElem = document.getElementById('service-note');
-    if (serviceNoteElem) {
-        var serviceName = getServiceNameFromPage();
-        if (serviceName && serviceNotes[serviceName]) {
-            var strong = serviceNoteElem.querySelector('strong');
-            var noteText = serviceNotes[serviceName][idioma];
-            if (strong) {
-                serviceNoteElem.innerHTML = '✨ ' + strong.outerHTML + ' ' + noteText.substring(noteText.indexOf(' '));
-            } else {
-                serviceNoteElem.innerHTML = '✨ ' + noteText;
-            }
-        }
-    }
-    
-    // Traducir títulos de precios
-    var priceBasicTitle = document.getElementById('price-basic-title');
-    if (priceBasicTitle) {
-        priceBasicTitle.innerText = idioma === 'en' ? 'Basic finish' : 'Sin acabado interior';
-    }
-    
-    var pricePremiumTitle = document.getElementById('price-premium-title');
-    if (pricePremiumTitle) {
-        pricePremiumTitle.innerText = idioma === 'en' ? 'Premium finish' : 'Con acabado completo';
-    }
-    
-    // Traducir notas de precios
-    var priceNoteBasic = document.getElementById('price-note-basic');
-    if (priceNoteBasic) {
-        priceNoteBasic.innerText = idioma === 'en' ? '(Base price - Sedan)' : '(Precio base - Sedán)';
-    }
-    
-    var priceNotePremium = document.getElementById('price-note-premium');
-    if (priceNotePremium) {
-        priceNotePremium.innerText = idioma === 'en' ? '(Base price - Sedan)' : '(Precio base - Sedán)';
-    }
-    
-    // Traducir información de vehículos grandes
-    var additionalInfo = document.getElementById('additional-info-text');
-    if (additionalInfo) {
-        var strong = additionalInfo.querySelector('strong');
-        if (idioma === 'en') {
-            if (strong) {
-                additionalInfo.innerHTML = '<i class="fas fa-plus-circle"></i> <strong>Large vehicles (SUV, Pickup, Van):</strong> Additional price';
-            }
-        } else {
-            if (strong) {
-                additionalInfo.innerHTML = '<i class="fas fa-plus-circle"></i> <strong>Vehículos grandes (SUV, Pickup, Van):</strong> Consultar precio adicional';
-            }
-        }
-    }
-    
-    // Traducir texto del botón de reserva
-    var bookingBtnText = document.getElementById('booking-btn-text');
-    if (bookingBtnText) {
-        bookingBtnText.innerText = idioma === 'en' ? 'Book' : 'Reservar';
-    }
-    
-    // Traducir nota de acción
-    var actionNote = document.getElementById('action-note');
-    if (actionNote) {
-        actionNote.innerText = idioma === 'en' 
-            ? 'When booking, select "' + getServiceNameFromPage() + '" in the form'
-            : 'Al reservar, selecciona "' + getServiceNameFromPage() + '" en el formulario';
-    }
-    
-    // Traducir "Volver a Servicios"
-    var backButton = document.getElementById('back-button');
-    if (backButton) {
-        var icon = backButton.querySelector('i');
-        var backText = idioma === 'en' ? 'Back to Services' : 'Volver a Servicios';
-        if (icon) {
-            backButton.innerHTML = '';
-            backButton.appendChild(icon);
-            backButton.appendChild(document.createTextNode(' ' + backText));
-        } else {
-            backButton.innerText = backText;
-        }
+    var bookingsLabel = document.getElementById('header-bookings-label');
+    if (bookingsLabel && textos['header-bookings-label']) {
+        bookingsLabel.innerText = textos['header-bookings-label'];
     }
     
     document.title = textos['page-title'];
     
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
-    if (btnEnglish) {
-        if (idioma === 'en') btnEnglish.classList.add('active');
-        else btnEnglish.classList.remove('active');
-    }
-    if (btnSpanish) {
-        if (idioma === 'es') btnSpanish.classList.add('active');
-        else btnSpanish.classList.remove('active');
-    }
+    if (btnEnglish) btnEnglish.classList.toggle('active', idioma === 'en');
+    if (btnSpanish) btnSpanish.classList.toggle('active', idioma === 'es');
     
     document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
     
-    // Regenerar formularios dinámicos con el nuevo idioma
     regenerarFormularioRegistro();
     regenerarFormularioReserva();
+    actualizarPrecio();
     
     console.log('🌐 Idioma actualizado a:', idioma);
-}
-
-function getServiceNameFromPage() {
-    var url = window.location.pathname;
-    var serviceMap = {
-        'express-detail': 'Express Detail',
-        'silver-detail': 'Silver Package',
-        'gold-detail': 'Gold Package',
-        'diamond-detail': 'Diamond Package',
-        'ceramic1-detail': 'Ceramic 1 Year',
-        'ceramic3-detail': 'Ceramic 3 Years',
-        'ceramic5-detail': 'Ceramic 5 Years'
-    };
-    
-    for (var key in serviceMap) {
-        if (url.indexOf(key) !== -1) {
-            return serviceMap[key];
-        }
-    }
-    
-    var titleElem = document.querySelector('.service-detail-title');
-    if (titleElem) {
-        var titleText = titleElem.innerText;
-        if (titleText.indexOf('Express') !== -1) return 'Express Detail';
-        if (titleText.indexOf('Silver') !== -1) return 'Silver Package';
-        if (titleText.indexOf('Gold') !== -1) return 'Gold Package';
-        if (titleText.indexOf('Diamond') !== -1) return 'Diamond Package';
-        if (titleText.indexOf('Ceramic 1') !== -1) return 'Ceramic 1 Year';
-        if (titleText.indexOf('Ceramic 3') !== -1) return 'Ceramic 3 Years';
-        if (titleText.indexOf('Ceramic 5') !== -1) return 'Ceramic 5 Years';
-    }
-    
-    return 'Express Detail';
-}
-
-// =============================================
-// FUNCIÓN: regenerarFormularioRegistro
-// =============================================
-function regenerarFormularioRegistro() {
-    var idioma = localStorage.getItem('idioma') || 'es';
-    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
-    
-    var formContainer = document.querySelector('#registro .form-container');
-    if (!formContainer) return;
-    
-    // Verificar si el formulario completo ya existe
-    var existingForm = document.getElementById('registerFormCompleto');
-    if (existingForm) {
-        // Si existe, solo actualizar los textos sin regenerar todo
-        var labels = document.querySelectorAll('#registerFormCompleto .form-group label');
-        if (labels.length >= 4) {
-            if (labels[0] && textos['register-label-name']) labels[0].innerHTML = textos['register-label-name'];
-            if (labels[1] && textos['register-label-email']) labels[1].innerHTML = textos['register-label-email'];
-            if (labels[2] && textos['register-label-phone']) labels[2].innerHTML = textos['register-label-phone'];
-            if (labels[3] && textos['register-label-address']) labels[3].innerHTML = textos['register-label-address'];
-        }
-        
-        // Actualizar placeholders
-        var inputs = ['register-nombre', 'register-email', 'register-telefono', 'register-direccion'];
-        for (var i = 0; i < inputs.length; i++) {
-            var input = document.getElementById(inputs[i]);
-            if (input) {
-                if (inputs[i] === 'register-nombre') input.placeholder = textos['register-label-name'] || 'Full Name';
-                else if (inputs[i] === 'register-email') input.placeholder = 'Email';
-                else if (inputs[i] === 'register-telefono') input.placeholder = textos['register-label-phone'] || 'Phone';
-                else if (inputs[i] === 'register-direccion') input.placeholder = textos['register-label-address'] || 'Address';
-            }
-        }
-        
-        // Actualizar título de vehículos
-        var titleElement = document.querySelector('#registerFormCompleto h3');
-        if (titleElement) {
-            titleElement.innerText = idioma === 'es' 
-                ? 'Datos de tus vehículos (máximo ' + MAX_VEHICULOS + ')'
-                : 'Your vehicle data (max ' + MAX_VEHICULOS + ')';
-        }
-        
-        // Actualizar texto de ayuda
-        var helpText = document.querySelector('#registerFormCompleto > p');
-        if (helpText) {
-            helpText.innerText = idioma === 'es'
-                ? 'El primer vehículo es obligatorio. Los demás son opcionales.'
-                : 'The first vehicle is required. Others are optional.';
-        }
-        
-        // Actualizar etiquetas de vehículos
-        for (var i = 1; i <= MAX_VEHICULOS; i++) {
-            var vehiculoGroup = document.getElementById('vehiculo-group-' + i);
-            if (vehiculoGroup) {
-                var h4 = vehiculoGroup.querySelector('h4');
-                if (h4) {
-                    h4.innerHTML = '<i class="fas fa-car"></i> ' + (idioma === 'es' ? 'Vehículo ' + i : 'Vehicle ' + i) + (i === 1 ? ' *' : ' (opcional)');
-                }
-                
-                var labelsGroup = vehiculoGroup.querySelectorAll('label');
-                if (labelsGroup[0]) labelsGroup[0].innerHTML = (idioma === 'es' ? 'Marca y Modelo' : 'Make and Model') + ' ' + i + (i === 1 ? ' *' : ' (opcional)');
-                if (labelsGroup[1]) labelsGroup[1].innerHTML = (idioma === 'es' ? 'Año' : 'Year') + ' ' + i;
-                if (labelsGroup[2]) labelsGroup[2].innerHTML = (idioma === 'es' ? 'Matrícula/Placa' : 'License Plate') + ' ' + i + (i === 1 ? ' *' : ' (opcional)');
-                
-                var inputsGroup = vehiculoGroup.querySelectorAll('input');
-                if (inputsGroup[0]) inputsGroup[0].placeholder = idioma === 'es' ? 'Ej: Honda Civic' : 'Ex: Honda Civic';
-                if (inputsGroup[1]) inputsGroup[1].placeholder = idioma === 'es' ? 'Ej: 2020' : 'Ex: 2020';
-                if (inputsGroup[2]) inputsGroup[2].placeholder = idioma === 'es' ? 'Ej: ABC-1234' : 'Ex: ABC-1234';
-            }
-        }
-        
-        // Actualizar botón de registro
-        var submitBtn = document.querySelector('#registerFormCompleto button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.innerText = idioma === 'es' ? 'Registrarme' : 'Register';
-        }
-    }
-}
-
-// =============================================
-// FUNCIÓN: regenerarFormularioReserva
-// =============================================
-function regenerarFormularioReserva() {
-    var idioma = localStorage.getItem('idioma') || 'es';
-    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
-    
-    // Actualizar opciones del select de servicios
-    var serviceSelect = document.getElementById('booking-select-service');
-    if (serviceSelect) {
-        var defaultOption = document.getElementById('booking-service-default');
-        if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
-        
-        var expressOption = document.getElementById('booking-service-express');
-        if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
-        
-        var silverOption = document.getElementById('booking-service-silver');
-        if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
-        
-        var goldOption = document.getElementById('booking-service-gold');
-        if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
-        
-        var diamondOption = document.getElementById('booking-service-diamond');
-        if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
-        
-        var ceramic1Option = document.getElementById('booking-service-ceramic1');
-        if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
-        
-        var ceramic3Option = document.getElementById('booking-service-ceramic3');
-        if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
-        
-        var ceramic5Option = document.getElementById('booking-service-ceramic5');
-        if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
-    }
-    
-    // Actualizar opciones del select de vehículos
-    var vehicleSelect = document.getElementById('booking-select-vehicle');
-    if (vehicleSelect) {
-        var currentValue = vehicleSelect.value;
-        
-        vehicleSelect.innerHTML = '';
-        
-        var defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.id = 'booking-vehicle-default';
-        defaultOption.innerText = textos['booking-vehicle-default'];
-        vehicleSelect.appendChild(defaultOption);
-        
-        var allowedVehicles = [
-            { value: 'sedan', id: 'booking-vehicle-sedan', text: textos['booking-vehicle-sedan'] },
-            { value: 'convertible', id: 'booking-vehicle-convertible', text: textos['booking-vehicle-convertible'] },
-            { value: 'suv', id: 'booking-vehicle-suv', text: textos['booking-vehicle-suv'] },
-            { value: 'pickup', id: 'booking-vehicle-pickup', text: textos['booking-vehicle-pickup'] },
-            { value: 'van', id: 'booking-vehicle-van', text: textos['booking-vehicle-van'] }
-        ];
-        
-        for (var j = 0; j < allowedVehicles.length; j++) {
-            var option = document.createElement('option');
-            option.value = allowedVehicles[j].value;
-            option.id = allowedVehicles[j].id;
-            option.innerText = allowedVehicles[j].text;
-            vehicleSelect.appendChild(option);
-        }
-        
-        if (currentValue && (currentValue === 'sedan' || currentValue === 'convertible' || currentValue === 'suv' || currentValue === 'pickup' || currentValue === 'van')) {
-            vehicleSelect.value = currentValue;
-        }
-    }
-    
-    // Actualizar etiquetas del formulario de reserva
-    var bookingLabels = document.querySelectorAll('#bookingStep1 .form-group label .label-text');
-    if (bookingLabels.length >= 6) {
-        if (bookingLabels[0] && textos['booking-label-service']) bookingLabels[0].innerText = textos['booking-label-service'];
-        if (bookingLabels[1] && textos['booking-label-vehicle']) bookingLabels[1].innerText = textos['booking-label-vehicle'];
-        if (bookingLabels[2] && textos['booking-label-date']) bookingLabels[2].innerText = textos['booking-label-date'];
-        if (bookingLabels[3] && textos['booking-label-time']) bookingLabels[3].innerText = textos['booking-label-time'];
-        if (bookingLabels[4] && textos['booking-label-notes']) bookingLabels[4].innerText = textos['booking-label-notes'];
-        if (bookingLabels[5] && textos['booking-label-price']) bookingLabels[5].innerText = textos['booking-label-price'];
-    }
-    
-    // Actualizar placeholders
-    var dateInput = document.getElementById('booking-input-date');
-    if (dateInput && textos['booking-label-date']) dateInput.placeholder = textos['booking-label-date'];
-    
-    var timeInput = document.getElementById('booking-input-time');
-    if (timeInput && textos['booking-label-time']) timeInput.placeholder = textos['booking-label-time'];
-    
-    var notesTextarea = document.getElementById('booking-textarea-notes');
-    if (notesTextarea && textos['booking-label-notes']) notesTextarea.placeholder = textos['booking-label-notes'];
-    
-    // Actualizar nota de horario
-    var timeNote = document.getElementById('booking-time-note');
-    if (timeNote && textos['booking-time-note']) timeNote.innerText = textos['booking-time-note'];
-    
-    // Actualizar texto del botón
-    var bookingBtn = document.getElementById('booking-btn');
-    if (bookingBtn && textos['booking-btn']) bookingBtn.innerText = textos['booking-btn'];
-    
-    // Actualizar textos del paso de pago
-    var paymentStep2Title = document.getElementById('payment-step2-title');
-    if (paymentStep2Title && textos['payment-step2-title']) paymentStep2Title.innerText = textos['payment-step2-title'];
-    
-    var paymentPaypalTitle = document.getElementById('payment-paypal-title');
-    if (paymentPaypalTitle && textos['payment-paypal-title']) paymentPaypalTitle.innerText = textos['payment-paypal-title'];
-    
-    var paymentPaypalDesc = document.getElementById('payment-paypal-desc');
-    if (paymentPaypalDesc && textos['payment-paypal-desc']) paymentPaypalDesc.innerText = textos['payment-paypal-desc'];
-    
-    var paymentCashTitle = document.getElementById('payment-cash-title');
-    if (paymentCashTitle && textos['payment-cash-title']) paymentCashTitle.innerText = textos['payment-cash-title'];
-    
-    var paymentCashDesc = document.getElementById('payment-cash-desc');
-    if (paymentCashDesc && textos['payment-cash-desc']) paymentCashDesc.innerText = textos['payment-cash-desc'];
-    
-    var paymentBackBtn = document.getElementById('payment-back-btn');
-    if (paymentBackBtn && textos['payment-back-btn']) paymentBackBtn.innerText = textos['payment-back-btn'];
 }
 
 function cambiarIdioma(idioma) {
     localStorage.setItem('idioma', idioma);
     actualizarIdioma();
-    actualizarDisponibilidad();
 }
 
 function detectarIdiomaNavegador() {
@@ -952,6 +455,18 @@ function verificarClienteExistente() {
 }
 
 // =============================================
+// FUNCIÓN: generarOpcionesAnios (1990 - 2050)
+// =============================================
+function generarOpcionesAnios(selected) {
+    var html = '';
+    for (var year = 2050; year >= 1990; year--) {
+        var sel = (selected && selected == year) ? 'selected' : '';
+        html += '<option value="' + year + '" ' + sel + '>' + year + '</option>';
+    }
+    return html;
+}
+
+// =============================================
 // FUNCIÓN: mostrarFormularioRegistroCompleto
 // =============================================
 function mostrarFormularioRegistroCompleto() {
@@ -963,6 +478,7 @@ function mostrarFormularioRegistroCompleto() {
     for (var i = 1; i <= MAX_VEHICULOS; i++) {
         var esObligatorio = i === 1 ? 'required' : '';
         var textObligatorio = i === 1 ? ' *' : ' (opcional)';
+        var opcionesAnios = generarOpcionesAnios('');
         vehiculosHtml += `
             <div class="vehiculo-group" style="border: 1px solid var(--border-color, #ddd); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;" id="vehiculo-group-${i}">
                 <h4 style="color: var(--accent-gold);"><i class="fas fa-car"></i> ${idioma === 'es' ? 'Vehículo ' + i : 'Vehicle ' + i}${i === 1 ? ' *' : ' (opcional)'}</h4>
@@ -972,7 +488,10 @@ function mostrarFormularioRegistroCompleto() {
                 </div>
                 <div class="form-group">
                     <label>${idioma === 'es' ? 'Año' : 'Year'} ${i}</label>
-                    <input type="number" class="form-control" id="vehiculo-anio-${i}" placeholder="${idioma === 'es' ? 'Ej: 2020' : 'Ex: 2020'}">
+                    <select class="form-control" id="vehiculo-anio-${i}">
+                        <option value="">${idioma === 'es' ? 'Selecciona año' : 'Select year'}</option>
+                        ${opcionesAnios}
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>${idioma === 'es' ? 'Matrícula/Placa' : 'License Plate'} ${i}${textObligatorio}</label>
@@ -1100,37 +619,276 @@ function guardarRegistroCompleto(event) {
 }
 
 // =============================================
-// FUNCIÓN: mostrarSelectorVehiculosEnReserva
+// FUNCIÓN: regenerarFormularioRegistro
 // =============================================
-function mostrarSelectorVehiculosEnReserva() {
-    var precioContainer = document.getElementById('precioCalculadoContainer');
-    if (!precioContainer) return;
+function regenerarFormularioRegistro() {
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    if (vehiculosRegistrados.length > 0 && !document.getElementById('vehiculo-selector')) {
-        var idioma = localStorage.getItem('idioma') || 'es';
-        var selectorHtml = `
-            <div class="form-group">
-                <label>${idioma === 'es' ? 'Selecciona el vehículo para este servicio' : 'Select the vehicle for this service'} *</label>
-                <select id="vehiculo-selector" class="form-control" required>
-                    <option value="">${idioma === 'es' ? 'Selecciona un vehículo' : 'Select a vehicle'}</option>
-        `;
-        for (var i = 0; i < vehiculosRegistrados.length; i++) {
-            var v = vehiculosRegistrados[i];
-            selectorHtml += '<option value="' + v.placa + '">' + v.marca + ' - ' + v.placa + (v.anio ? ' (' + v.anio + ')' : '') + '</option>';
+    var formContainer = document.querySelector('#registro .form-container');
+    if (!formContainer) return;
+    
+    var existingForm = document.getElementById('registerFormCompleto');
+    if (existingForm) {
+        var labels = document.querySelectorAll('#registerFormCompleto .form-group label');
+        if (labels.length >= 4) {
+            if (labels[0] && textos['register-label-name']) labels[0].innerHTML = textos['register-label-name'];
+            if (labels[1] && textos['register-label-email']) labels[1].innerHTML = 'Email *';
+            if (labels[2] && textos['register-label-phone']) labels[2].innerHTML = textos['register-label-phone'];
+            if (labels[3] && textos['register-label-address']) labels[3].innerHTML = textos['register-label-address'];
         }
-        selectorHtml += '</select></div>';
-        precioContainer.insertAdjacentHTML('beforebegin', selectorHtml);
+        
+        var inputs = ['register-nombre', 'register-email', 'register-telefono', 'register-direccion'];
+        for (var i = 0; i < inputs.length; i++) {
+            var input = document.getElementById(inputs[i]);
+            if (input) {
+                if (inputs[i] === 'register-nombre') input.placeholder = textos['register-label-name'] || 'Full Name';
+                else if (inputs[i] === 'register-email') input.placeholder = 'Email';
+                else if (inputs[i] === 'register-telefono') input.placeholder = textos['register-label-phone'] || 'Phone';
+                else if (inputs[i] === 'register-direccion') input.placeholder = textos['register-label-address'] || 'Address';
+            }
+        }
+        
+        var titleElement = document.querySelector('#registerFormCompleto h3');
+        if (titleElement) {
+            titleElement.innerText = idioma === 'es' 
+                ? 'Datos de tus vehículos (máximo ' + MAX_VEHICULOS + ')'
+                : 'Your vehicle data (max ' + MAX_VEHICULOS + ')';
+        }
+        
+        var helpText = document.querySelector('#registerFormCompleto > p');
+        if (helpText) {
+            helpText.innerText = idioma === 'es'
+                ? 'El primer vehículo es obligatorio. Los demás son opcionales.'
+                : 'The first vehicle is required. Others are optional.';
+        }
+        
+        for (var j = 1; j <= MAX_VEHICULOS; j++) {
+            var vehiculoGroup = document.getElementById('vehiculo-group-' + j);
+            if (vehiculoGroup) {
+                var h4 = vehiculoGroup.querySelector('h4');
+                if (h4) {
+                    h4.innerHTML = '<i class="fas fa-car"></i> ' + (idioma === 'es' ? 'Vehículo ' + j : 'Vehicle ' + j) + (j === 1 ? ' *' : ' (opcional)');
+                }
+                
+                var labelsGroup = vehiculoGroup.querySelectorAll('label');
+                if (labelsGroup[0]) labelsGroup[0].innerHTML = (idioma === 'es' ? 'Marca y Modelo' : 'Make and Model') + ' ' + j + (j === 1 ? ' *' : ' (opcional)');
+                if (labelsGroup[1]) labelsGroup[1].innerHTML = (idioma === 'es' ? 'Año' : 'Year') + ' ' + j;
+                if (labelsGroup[2]) labelsGroup[2].innerHTML = (idioma === 'es' ? 'Matrícula/Placa' : 'License Plate') + ' ' + j + (j === 1 ? ' *' : ' (opcional)');
+                
+                var anioSelect = vehiculoGroup.querySelector('select[id^="vehiculo-anio-"]');
+                if (anioSelect) {
+                    var currentValue = anioSelect.value;
+                    var opciones = generarOpcionesAnios(currentValue);
+                    anioSelect.innerHTML = '<option value="">' + (idioma === 'es' ? 'Selecciona año' : 'Select year') + '</option>' + opciones;
+                }
+                
+                var inputsGroup = vehiculoGroup.querySelectorAll('input');
+                if (inputsGroup[0]) inputsGroup[0].placeholder = idioma === 'es' ? 'Ej: Honda Civic' : 'Ex: Honda Civic';
+                if (inputsGroup[1]) inputsGroup[1].placeholder = idioma === 'es' ? 'Ej: ABC-1234' : 'Ex: ABC-1234';
+            }
+        }
+        
+        var submitBtn = document.querySelector('#registerFormCompleto button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerText = idioma === 'es' ? 'Registrarme' : 'Register';
+        }
     }
 }
 
 // =============================================
-// FUNCIÓN: ocultarPreciosServicios
+// FUNCIÓN: regenerarFormularioReserva
 // =============================================
-function ocultarPreciosServicios() {
-    var precios = document.querySelectorAll('.service-price');
-    for (var i = 0; i < precios.length; i++) {
-        precios[i].style.display = 'none';
+function regenerarFormularioReserva() {
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
+    
+    var serviceSelect = document.getElementById('booking-select-service');
+    if (serviceSelect) {
+        var defaultOption = document.getElementById('booking-service-default');
+        if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
+        
+        var expressOption = document.getElementById('booking-service-express');
+        if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
+        
+        var silverOption = document.getElementById('booking-service-silver');
+        if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
+        
+        var goldOption = document.getElementById('booking-service-gold');
+        if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
+        
+        var diamondOption = document.getElementById('booking-service-diamond');
+        if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
+        
+        var ceramic1Option = document.getElementById('booking-service-ceramic1');
+        if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
+        
+        var ceramic3Option = document.getElementById('booking-service-ceramic3');
+        if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
+        
+        var ceramic5Option = document.getElementById('booking-service-ceramic5');
+        if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
     }
+    
+    var vehicleSelect = document.getElementById('booking-select-vehicle');
+    if (vehicleSelect) {
+        var currentValue = vehicleSelect.value;
+        
+        vehicleSelect.innerHTML = '';
+        
+        var defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.id = 'booking-vehicle-default';
+        defaultOption.innerText = textos['booking-vehicle-default'];
+        vehicleSelect.appendChild(defaultOption);
+        
+        var allowedVehicles = [
+            { value: 'sedan', id: 'booking-vehicle-sedan', text: textos['booking-vehicle-sedan'] },
+            { value: 'coupe', id: 'booking-vehicle-coupe', text: textos['booking-vehicle-coupe'] },
+            { value: 'convertible', id: 'booking-vehicle-convertible', text: textos['booking-vehicle-convertible'] },
+            { value: 'suv', id: 'booking-vehicle-suv', text: textos['booking-vehicle-suv'] },
+            { value: 'pickup', id: 'booking-vehicle-pickup', text: textos['booking-vehicle-pickup'] },
+            { value: 'van', id: 'booking-vehicle-van', text: textos['booking-vehicle-van'] }
+        ];
+        
+        for (var j = 0; j < allowedVehicles.length; j++) {
+            var option = document.createElement('option');
+            option.value = allowedVehicles[j].value;
+            option.id = allowedVehicles[j].id;
+            option.innerText = allowedVehicles[j].text;
+            vehicleSelect.appendChild(option);
+        }
+        
+        if (currentValue && (currentValue === 'sedan' || currentValue === 'coupe' || currentValue === 'convertible' || currentValue === 'suv' || currentValue === 'pickup' || currentValue === 'van')) {
+            vehicleSelect.value = currentValue;
+        }
+    }
+    
+    var bookingLabels = document.querySelectorAll('#bookingStep1 .form-group label .label-text');
+    if (bookingLabels.length >= 6) {
+        if (bookingLabels[0] && textos['booking-label-service']) bookingLabels[0].innerText = textos['booking-label-service'];
+        if (bookingLabels[1] && textos['booking-label-vehicle']) bookingLabels[1].innerText = textos['booking-label-vehicle'];
+        if (bookingLabels[2] && textos['booking-label-date']) bookingLabels[2].innerText = textos['booking-label-date'];
+        if (bookingLabels[3] && textos['booking-label-time']) bookingLabels[3].innerText = textos['booking-label-time'];
+        if (bookingLabels[4] && textos['booking-label-notes']) bookingLabels[4].innerText = textos['booking-label-notes'];
+        if (bookingLabels[5] && textos['booking-label-price']) bookingLabels[5].innerText = textos['booking-label-price'];
+    }
+    
+    var dateInput = document.getElementById('booking-input-date');
+    if (dateInput && textos['booking-label-date']) dateInput.placeholder = textos['booking-label-date'];
+    
+    var timeInput = document.getElementById('booking-input-time');
+    if (timeInput && textos['booking-label-time']) timeInput.placeholder = textos['booking-label-time'];
+    
+    var notesTextarea = document.getElementById('booking-textarea-notes');
+    if (notesTextarea && textos['booking-label-notes']) notesTextarea.placeholder = textos['booking-label-notes'];
+    
+    var timeNote = document.getElementById('booking-time-note');
+    if (timeNote && textos['booking-time-note']) timeNote.innerText = textos['booking-time-note'];
+    
+    var bookingBtn = document.getElementById('booking-btn');
+    if (bookingBtn && textos['booking-btn']) bookingBtn.innerText = textos['booking-btn'];
+    
+    var paymentStep2Title = document.getElementById('payment-step2-title');
+    if (paymentStep2Title && textos['payment-step2-title']) paymentStep2Title.innerText = textos['payment-step2-title'];
+    
+    var paymentPaypalTitle = document.getElementById('payment-paypal-title');
+    if (paymentPaypalTitle && textos['payment-paypal-title']) paymentPaypalTitle.innerText = textos['payment-paypal-title'];
+    
+    var paymentPaypalDesc = document.getElementById('payment-paypal-desc');
+    if (paymentPaypalDesc && textos['payment-paypal-desc']) paymentPaypalDesc.innerText = textos['payment-paypal-desc'];
+    
+    var paymentCashTitle = document.getElementById('payment-cash-title');
+    if (paymentCashTitle && textos['payment-cash-title']) paymentCashTitle.innerText = textos['payment-cash-title'];
+    
+    var paymentCashDesc = document.getElementById('payment-cash-desc');
+    if (paymentCashDesc && textos['payment-cash-desc']) paymentCashDesc.innerText = textos['payment-cash-desc'];
+    
+    var paymentBackBtn = document.getElementById('payment-back-btn');
+    if (paymentBackBtn && textos['payment-back-btn']) paymentBackBtn.innerText = textos['payment-back-btn'];
+    
+    regenerarAgregados();
+}
+
+// =============================================
+// FUNCIÓN: regenerarAgregados
+// =============================================
+function regenerarAgregados() {
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var container = document.getElementById('extrasContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    var label = document.createElement('span');
+    label.className = 'label-text';
+    label.id = 'booking-label-extras';
+    label.innerText = idioma === 'es' ? 'Extras (opcional)' : 'Extras (optional)';
+    container.appendChild(label);
+    
+    var extrasGrid = document.createElement('div');
+    extrasGrid.className = 'extras-grid';
+    
+    for (var key in AGREGADOS) {
+        var extra = AGREGADOS[key];
+        var nombre = idioma === 'es' ? extra.es : extra.en;
+        var precio = extra.precio;
+        
+        var labelCheck = document.createElement('label');
+        labelCheck.className = 'extra-checkbox';
+        
+        var input = document.createElement('input');
+        input.type = 'checkbox';
+        input.className = 'extra-input';
+        input.dataset.key = key;
+        input.dataset.precio = precio;
+        input.onchange = actualizarPrecio;
+        
+        var span = document.createElement('span');
+        span.className = 'extra-label';
+        span.innerText = nombre + ' (+$' + precio + ')';
+        
+        labelCheck.appendChild(input);
+        labelCheck.appendChild(span);
+        extrasGrid.appendChild(labelCheck);
+    }
+    
+    container.appendChild(extrasGrid);
+}
+
+// =============================================
+// FUNCIÓN: actualizarPrecio
+// =============================================
+function actualizarPrecio() {
+    var serviceSelect = document.getElementById('booking-select-service');
+    var vehicleSelect = document.getElementById('booking-select-vehicle');
+    var precioDiv = document.getElementById('precioCalculado');
+    
+    if (!serviceSelect || !vehicleSelect || !precioDiv) return;
+    
+    var servicio = serviceSelect.value;
+    var vehiculo = vehicleSelect.value;
+    
+    if (!servicio || !vehiculo || !PRECIOS_MATRIZ[servicio]) {
+        precioDiv.innerText = '$0';
+        return;
+    }
+    
+    var precioBase = PRECIOS_MATRIZ[servicio][vehiculo];
+    if (precioBase === undefined) {
+        precioDiv.innerText = '$0';
+        return;
+    }
+    
+    var total = precioBase;
+    
+    var extras = document.querySelectorAll('.extra-input:checked');
+    for (var i = 0; i < extras.length; i++) {
+        total += parseInt(extras[i].dataset.precio);
+    }
+    
+    var idioma = localStorage.getItem('idioma') || 'es';
+    precioDiv.innerText = '$' + total;
 }
 
 // =============================================
@@ -1142,31 +900,6 @@ function guardarRegistro(event) {
     alert(idioma === 'es' 
         ? 'Usa el formulario de registro completo en la sección "Registro"'
         : 'Use the complete registration form in the "Register" section');
-}
-
-// =============================================
-// FUNCIÓN: calcularPrecioFinal
-// =============================================
-function calcularPrecioFinal(servicioOption, tipoVehiculo) {
-    var servicioNombre = servicioOption.value;
-    var precios = PRECIOS_BASE[servicioNombre];
-    
-    if (!precios) {
-        console.error('Servicio no encontrado:', servicioNombre);
-        return '0';
-    }
-    
-    var precioBase = precios[1];
-    
-    var incremento = 0;
-    if (servicioNombre === 'Express Detail') {
-        incremento = INCREMENTOS_EXPRESS[tipoVehiculo] || 0;
-    } else {
-        incremento = INCREMENTOS_STANDARD[tipoVehiculo] || 0;
-    }
-    
-    var precioFinal = precioBase + incremento;
-    return precioFinal.toString();
 }
 
 // =============================================
@@ -1202,10 +935,10 @@ function procesarReserva(event) {
     }
     
     var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
-    if (!hora || hora < HORARIO_INICIO || hora > HORARIO_FIN) {
+    if (!hora) {
         alert(idioma === 'es' 
-            ? '❌ Horario no válido. Atendemos 24/7, cualquier hora es válida.'
-            : '❌ Invalid time. We are 24/7, any time is valid.');
+            ? '❌ Por favor selecciona una hora.'
+            : '❌ Please select a time.');
         return false;
     }
     
@@ -1223,7 +956,21 @@ function procesarReserva(event) {
     var tipoVehiculo = document.getElementById('booking-select-vehicle') ? document.getElementById('booking-select-vehicle').value : null;
     var notas = document.getElementById('booking-textarea-notes') ? document.getElementById('booking-textarea-notes').value : '';
     
-    var precioFinal = calcularPrecioFinal(servicioSelect.options[servicioSelect.selectedIndex], tipoVehiculo);
+    var precioBase = PRECIOS_MATRIZ[servicioSelect.value] ? PRECIOS_MATRIZ[servicioSelect.value][tipoVehiculo] : 0;
+    if (precioBase === undefined) precioBase = 0;
+    
+    var totalExtras = 0;
+    var extrasSeleccionados = [];
+    var extrasInputs = document.querySelectorAll('.extra-input:checked');
+    for (var j = 0; j < extrasInputs.length; j++) {
+        var key = extrasInputs[j].dataset.key;
+        var precio = parseInt(extrasInputs[j].dataset.precio);
+        totalExtras += precio;
+        var extraInfo = AGREGADOS[key];
+        extrasSeleccionados.push((idioma === 'es' ? extraInfo.es : extraInfo.en) + ' (+$' + precio + ')');
+    }
+    
+    var precioFinal = precioBase + totalExtras;
     
     var reserva = {
         servicio: servicioSelect.value,
@@ -1232,6 +979,9 @@ function procesarReserva(event) {
         hora: hora,
         notas: notas,
         precio: precioFinal,
+        precioBase: precioBase,
+        extras: extrasSeleccionados,
+        totalExtras: totalExtras,
         clienteEmail: clienteActualGlobal.email,
         matricula: matriculaSeleccionada,
         vehiculoInfo: vehiculoSeleccionado,
@@ -1286,7 +1036,6 @@ function procesarReserva(event) {
     
     var bookingForm = document.getElementById('bookingForm');
     if (bookingForm) bookingForm.reset();
-    actualizarDisponibilidad();
     return false;
 }
 
@@ -1299,35 +1048,6 @@ function obtenerReservasPorFecha(fecha) {
     return resultado;
 }
 
-function actualizarDisponibilidad() {
-    var fechaInput = document.getElementById('booking-input-date');
-    if (!fechaInput || !fechaInput.value) return;
-    
-    var fecha = fechaInput.value;
-    var reservasDia = obtenerReservasPorFecha(fecha);
-    var disponibles = MAX_ORDENES_DIARIAS - reservasDia.length;
-    var msgDiv = document.getElementById('availabilityMessage');
-    if (!msgDiv) return;
-    
-    var idioma = localStorage.getItem('idioma') || 'es';
-    
-    if (disponibles <= 0) {
-        msgDiv.innerHTML = idioma === 'es' 
-            ? '❌ No hay cupos disponibles para esta fecha.'
-            : '❌ No slots available for this date.';
-        msgDiv.className = 'availability-message error';
-    } else {
-        msgDiv.innerHTML = idioma === 'es'
-            ? '✅ Cupos disponibles: ' + disponibles + ' de ' + MAX_ORDENES_DIARIAS
-            : '✅ Available slots: ' + disponibles + ' out of ' + MAX_ORDENES_DIARIAS;
-        msgDiv.className = 'availability-message success';
-    }
-}
-
-function validarHora(hora) {
-    return hora >= HORARIO_INICIO && hora <= HORARIO_FIN;
-}
-
 function enviarWhatsApp(mensaje) {
     var mensajeCodificado = encodeURIComponent(mensaje);
     var url = 'https://api.whatsapp.com/send?phone=' + TELEFONO_PROPIETARIO + '&text=' + mensajeCodificado;
@@ -1338,17 +1058,17 @@ function generarTicket(reserva, cliente) {
     var idioma = localStorage.getItem('idioma') || 'es';
     var linea = '══════════════════════════════';
     var sep = '──────────────────────────';
-    var tipo = tipoVehiculoTexto[reserva.tipoVehiculo] || reserva.tipoVehiculo;
-    var precio = reserva.precio;
-    if (precio && precio.indexOf('$') === -1) precio = '$' + precio;
+    var tipo = tipoVehiculoTicket[reserva.tipoVehiculo] || reserva.tipoVehiculo;
+    var precio = '$' + reserva.precio;
     var matricula = reserva.matricula || 'No especificada';
     var vehiculoMarca = (reserva.vehiculoInfo && reserva.vehiculoInfo.marca) || 'No especificado';
     var vehiculoAnio = (reserva.vehiculoInfo && reserva.vehiculoInfo.anio) || 'N/E';
+    var extrasTexto = reserva.extras && reserva.extras.length > 0 ? reserva.extras.join(', ') : 'Ninguno';
     
     if (idioma === 'es') {
-        return '🔔 NUEVA RESERVA 🔔\n' + linea + '\n👤 CLIENTE\n' + sep + '\n📌 ' + cliente.nombre + '\n📧 ' + cliente.email + '\n📞 ' + cliente.telefono + '\n🏠 ' + cliente.direccion + '\n' + sep + '\n🚗 VEHÍCULO\n' + sep + '\n🔢 Tipo: ' + tipo + '\n🚙 Marca/Modelo: ' + vehiculoMarca + '\n🔖 Placa: ' + matricula + '\n📅 Año: ' + vehiculoAnio + '\n' + sep + '\n📋 SERVICIO\n' + sep + '\n🛠️ ' + reserva.servicio + '\n💰 ' + precio + '\n📅 Fecha: ' + reserva.fecha + '\n⏰ Hora: ' + reserva.hora + '\n📝 Notas: ' + (reserva.notas || 'Ninguna') + '\n' + sep + '\n💰 TOTAL: ' + precio + '\n' + linea + '\n📍 Servicio a domicilio\n📞 +1 (713) 928-0466';
+        return '🔔 NUEVA RESERVA 🔔\n' + linea + '\n👤 CLIENTE\n' + sep + '\n📌 ' + cliente.nombre + '\n📧 ' + cliente.email + '\n📞 ' + cliente.telefono + '\n🏠 ' + cliente.direccion + '\n' + sep + '\n🚗 VEHÍCULO\n' + sep + '\n🔢 Tipo: ' + tipo + '\n🚙 Marca/Modelo: ' + vehiculoMarca + '\n🔖 Placa: ' + matricula + '\n📅 Año: ' + vehiculoAnio + '\n' + sep + '\n📋 SERVICIO\n' + sep + '\n🛠️ ' + reserva.servicio + '\n💰 Precio base: $' + reserva.precioBase + '\n➕ Extras: ' + extrasTexto + '\n💰 TOTAL: ' + precio + '\n📅 Fecha: ' + reserva.fecha + '\n⏰ Hora: ' + reserva.hora + '\n📝 Notas: ' + (reserva.notas || 'Ninguna') + '\n' + sep + '\n💰💰 TOTAL A PAGAR: ' + precio + '\n' + linea + '\n📍 Servicio a domicilio\n📞 +1 (713) 928-0466';
     } else {
-        return '🔔 NEW BOOKING 🔔\n' + linea + '\n👤 CUSTOMER\n' + sep + '\n📌 ' + cliente.nombre + '\n📧 ' + cliente.email + '\n📞 ' + cliente.telefono + '\n🏠 ' + cliente.direccion + '\n' + sep + '\n🚗 VEHICLE\n' + sep + '\n🔢 Type: ' + tipo + '\n🚙 Make/Model: ' + vehiculoMarca + '\n🔖 Plate: ' + matricula + '\n📅 Year: ' + vehiculoAnio + '\n' + sep + '\n📋 SERVICE\n' + sep + '\n🛠️ ' + reserva.servicio + '\n💰 ' + precio + '\n📅 Date: ' + reserva.fecha + '\n⏰ Time: ' + reserva.hora + '\n📝 Notes: ' + (reserva.notas || 'None') + '\n' + sep + '\n💰 TOTAL: ' + precio + '\n' + linea + '\n📍 Mobile service\n📞 +1 (713) 928-0466';
+        return '🔔 NEW BOOKING 🔔\n' + linea + '\n👤 CUSTOMER\n' + sep + '\n📌 ' + cliente.nombre + '\n📧 ' + cliente.email + '\n📞 ' + cliente.telefono + '\n🏠 ' + cliente.direccion + '\n' + sep + '\n🚗 VEHICLE\n' + sep + '\n🔢 Type: ' + tipo + '\n🚙 Make/Model: ' + vehiculoMarca + '\n🔖 Plate: ' + matricula + '\n📅 Year: ' + vehiculoAnio + '\n' + sep + '\n📋 SERVICE\n' + sep + '\n🛠️ ' + reserva.servicio + '\n💰 Base price: $' + reserva.precioBase + '\n➕ Extras: ' + extrasTexto + '\n💰 TOTAL: ' + precio + '\n📅 Date: ' + reserva.fecha + '\n⏰ Time: ' + reserva.hora + '\n📝 Notes: ' + (reserva.notas || 'None') + '\n' + sep + '\n💰💰 TOTAL TO PAY: ' + precio + '\n' + linea + '\n📍 Mobile service\n📞 +1 (713) 928-0466';
     }
 }
 
@@ -1388,8 +1108,29 @@ function mostrarQRExterno() {
     qrContainer.appendChild(img);
 }
 
+function mostrarSelectorVehiculosEnReserva() {
+    var precioContainer = document.getElementById('precioCalculadoContainer');
+    if (!precioContainer) return;
+    
+    if (vehiculosRegistrados.length > 0 && !document.getElementById('vehiculo-selector')) {
+        var idioma = localStorage.getItem('idioma') || 'es';
+        var selectorHtml = `
+            <div class="form-group">
+                <label>${idioma === 'es' ? 'Selecciona el vehículo para este servicio' : 'Select the vehicle for this service'} *</label>
+                <select id="vehiculo-selector" class="form-control" required>
+                    <option value="">${idioma === 'es' ? 'Selecciona un vehículo' : 'Select a vehicle'}</option>
+        `;
+        for (var i = 0; i < vehiculosRegistrados.length; i++) {
+            var v = vehiculosRegistrados[i];
+            selectorHtml += '<option value="' + v.placa + '">' + v.marca + ' - ' + v.placa + (v.anio ? ' (' + v.anio + ')' : '') + '</option>';
+        }
+        selectorHtml += '</select></div>';
+        precioContainer.insertAdjacentHTML('beforebegin', selectorHtml);
+    }
+}
+
 // =============================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN - CORREGIDA
 // =============================================
 window.onload = function() {
     console.log('🚀 Página cargada');
@@ -1399,52 +1140,44 @@ window.onload = function() {
     var idiomaGuardado = localStorage.getItem('idioma');
     var idiomaDetectado = detectarIdiomaNavegador();
     
-    actualizarIdioma();
     if (idiomaGuardado) {
         cambiarIdioma(idiomaGuardado);
     } else {
         cambiarIdioma(idiomaDetectado);
     }
     
-    ocultarPreciosServicios();
+    regenerarAgregados();
     
-    if (!verificarClienteExistente()) {
-        mostrarFormularioRegistroCompleto();
-    } else {
+    // SIEMPRE mostrar el formulario de registro completo
+    mostrarFormularioRegistroCompleto();
+    
+    // Si ya hay un cliente registrado, mostrar también el selector de vehículos
+    if (verificarClienteExistente()) {
         mostrarSelectorVehiculosEnReserva();
-        var registerForm = document.getElementById('registerForm');
-        if (registerForm) registerForm.style.display = 'none';
     }
     
     var horaInput = document.getElementById('booking-input-time');
     if (horaInput) {
-        horaInput.min = HORARIO_INICIO;
-        horaInput.max = HORARIO_FIN;
+        horaInput.min = "00:00";
+        horaInput.max = "23:59";
         horaInput.step = "1800";
     }
     
-    var fechaInput = document.getElementById('booking-input-date');
-    if (fechaInput) fechaInput.addEventListener('change', actualizarDisponibilidad);
+    var serviceSelect = document.getElementById('booking-select-service');
+    var vehicleSelect = document.getElementById('booking-select-vehicle');
+    if (serviceSelect) serviceSelect.onchange = actualizarPrecio;
+    if (vehicleSelect) vehicleSelect.onchange = actualizarPrecio;
     
     mostrarQRExterno();
     
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
+    if (btnEnglish) btnEnglish.onclick = function() { cambiarIdioma('en'); };
+    if (btnSpanish) btnSpanish.onclick = function() { cambiarIdioma('es'); };
     
-    if (btnEnglish) {
-        btnEnglish.onclick = function() { cambiarIdioma('en'); };
-    }
-    if (btnSpanish) {
-        btnSpanish.onclick = function() { cambiarIdioma('es'); };
-    }
-    
-    // CONFIGURAR SWITCH DE TEMA (MODO OSCURO)
     var themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('change', toggleTema);
-    }
+    if (themeToggle) themeToggle.addEventListener('change', toggleTema);
     
-    // Sincronizar tema entre pestañas
     window.addEventListener('storage', function(e) {
         if (e.key === 'idioma') actualizarIdioma();
         if (e.key === 'tema') inicializarTema();

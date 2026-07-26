@@ -16,9 +16,67 @@
     <meta property="og:url" content="https://detailingteamtx.com">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- NUEVAS FUENTES: Montserrat + Lato -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <!-- Estilos para alinear contadores en el header -->
+    <style>
+        .stats-header {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .stats-header .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0;
+        }
+        .stats-header .stat-box i {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+        }
+        .stats-header .stat-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent-gold);
+        }
+        .stats-header .stat-label {
+            font-size: 0.85rem;
+            font-family: 'Lato', sans-serif;
+            color: var(--footer-text);
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .stats-header {
+                gap: 1.5rem;
+            }
+            .stats-header .stat-number {
+                font-size: 1rem;
+            }
+            .stats-header .stat-label {
+                font-size: 0.75rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-header {
+                gap: 1rem;
+            }
+            .stats-header .stat-number {
+                font-size: 0.9rem;
+            }
+            .stats-header .stat-label {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -49,20 +107,37 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ============================================= -->
+            <!-- CONTADORES EN EL HEADER                       -->
+            <!-- ============================================= -->
+            <div class="stats-header">
+                <div class="stat-box">
+                    <i class="fas fa-eye"></i>
+                    <span class="stat-number" id="visitsCount">0</span>
+                    <span class="stat-label" id="header-visits-label">visitas este mes</span>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-calendar-check"></i>
+                    <span class="stat-number" id="bookingsCount">0</span>
+                    <span class="stat-label" id="header-bookings-label">reservas totales</span>
+                </div>
+            </div>
         </div>
     </header>
+
     <nav>
         <div class="container">
             <div class="nav-menu">
                 <a href="#servicios" id="nav-services"><i class="fas fa-car"></i> Servicios</a>
                 <a href="#galeria" id="nav-gallery"><i class="fas fa-images"></i> Galería</a>
-                <a href="#catalogo" id="nav-catalog"><i class="fas fa-oil-can"></i> Catálogo</a>
                 <a href="#registro" id="nav-register"><i class="fas fa-user-plus"></i> Registro</a>
                 <a href="#reservas" id="nav-bookings"><i class="fas fa-calendar-alt"></i> Reservas</a>
                 <a href="#contacto" id="nav-contact"><i class="fas fa-map-marker-alt"></i> Contacto</a>
             </div>
         </div>
     </nav>
+
     <main>
         <!-- ============================================= -->
         <!-- SECCIÓN SERVICIOS                             -->
@@ -73,7 +148,7 @@
                 <p class="section-description" id="services-description">🌟 El brillo que tu auto merece, la protección que necesita. Precios competitivos en Houston, TX. 🌟</p>
                 <div class="schedule-box">
                     <h4 id="schedule-title"><i class="far fa-clock"></i> 🕒 Horario de atención</h4>
-                    <p id="schedule-text"><strong>Lunes a Domingo:</strong> 7:00 AM - 5:30 PM</p>
+                    <p id="schedule-text"><strong>24/7 - Todos los días del año</strong></p>
                 </div>
                 <div class="services-grid">
                     <a href="servicio-express-detail.html" class="service-card-link">
@@ -170,13 +245,6 @@
         </section>
 
         <!-- ============================================= -->
-        <!-- SECCIÓN CATÁLOGO COMENTADA                     -->
-        <!-- ============================================= -->
-        <!--
-        <section id="catalogo">...</section>
-        -->
-
-        <!-- ============================================= -->
         <!-- SECCIÓN REGISTRO                               -->
         <!-- ============================================= -->
         <section id="registro">
@@ -184,51 +252,7 @@
                 <h2 id="register-title">📝 Registro de Clientes 📝</h2>
                 <p class="section-description" id="register-description">Guarda los datos de tu vehículo para un servicio más rápido y personalizado. ¡Te esperamos!</p>
                 <div class="form-container">
-                    <form id="registerForm" onsubmit="guardarRegistro(event)">
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-name">Nombre y Apellidos *</span>
-                                <input type="text" name="nombre" class="form-control" id="register-input-name" placeholder="Nombre completo" required>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-email">Email *</span>
-                                <input type="email" name="email" class="form-control" id="register-input-email" placeholder="cliente@ejemplo.com" required>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-phone">Teléfono *</span>
-                                <input type="tel" name="telefono" class="form-control" id="register-input-phone" placeholder="+1 123 456 7890" required>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-address">Dirección *</span>
-                                <input type="text" name="direccion" class="form-control" id="register-input-address" placeholder="Calle, número, ciudad, código postal" required>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-model">Marca y Modelo *</span>
-                                <input type="text" name="modelo" class="form-control" id="register-input-model" placeholder="Ej: Honda Civic" required>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-year">Año</span>
-                                <input type="number" name="anio" class="form-control" id="register-input-year" placeholder="2020">
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <span class="label-text" id="register-label-plate">Placa (opcional)</span>
-                                <input type="text" name="placa" class="form-control" id="register-input-plate" placeholder="ABC-1234">
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-block" id="register-btn"><i class="fas fa-save"></i> Registrarme</button>
-                    </form>
+                    <!-- El formulario completo se genera dinámicamente con JavaScript -->
                 </div>
             </div>
         </section>
@@ -239,7 +263,7 @@
         <section id="reservas">
             <div class="container">
                 <h2 id="booking-title">📅 Reserva tu Turno 📅</h2>
-                <p class="section-description" id="booking-description">Elige servicio, fecha y hora. Te confirmaremos por WhatsApp al instante.</p>
+                <p class="section-description" id="booking-description">Elige servicio, tipo de vehículo y extras. Te confirmaremos por WhatsApp al instante.</p>
                 <div id="availabilityMessage" class="availability-message"></div>
                 <div id="bookingStep1" class="form-container">
                     <form id="bookingForm" onsubmit="return procesarReserva(event)">
@@ -248,13 +272,13 @@
                                 <span class="label-text" id="booking-label-service">Servicio *</span>
                                 <select name="servicio" class="form-control" id="booking-select-service" required>
                                     <option value="" id="booking-service-default">Selecciona un servicio</option>
-                                    <option value="Express Detail" data-price-sedan="100-120" data-price-suv="140-160" id="booking-service-express">Express Detail - Sedán: $100-$120 / SUV: $140-$160</option>
-                                    <option value="Silver Package" data-price-sedan="150-180" data-price-suv="190-220" id="booking-service-silver">Silver Package - Sedán: $150-$180 / SUV: $190-$220</option>
-                                    <option value="Gold Package" data-price-sedan="200-240" data-price-suv="240-280" id="booking-service-gold">Gold Package - Sedán: $200-$240 / SUV: $240-$280</option>
-                                    <option value="Diamond Package" data-price-sedan="280" data-price-suv="320" id="booking-service-diamond">Diamond Package - Sedán: $280 / SUV: $320</option>
-                                    <option value="Ceramic 1 Year" data-price-sedan="700" data-price-suv="900" id="booking-service-ceramic1">Ceramic 1 Year - Sedán: $700 / SUV: $900</option>
-                                    <option value="Ceramic 3 Years" data-price-sedan="950" data-price-suv="1300" id="booking-service-ceramic3">Ceramic 3 Years - Sedán: $950 / SUV: $1,300</option>
-                                    <option value="Ceramic 5 Years" data-price-sedan="1500" data-price-suv="1800" id="booking-service-ceramic5">Ceramic 5 Years - Sedán: $1,500 / SUV: $1,800</option>
+                                    <option value="Express Detail" id="booking-service-express">Express Detail</option>
+                                    <option value="Silver Package" id="booking-service-silver">Silver Package</option>
+                                    <option value="Gold Package" id="booking-service-gold">Gold Package</option>
+                                    <option value="Diamond Package" id="booking-service-diamond">Diamond Package</option>
+                                    <option value="Ceramic 1 Year" id="booking-service-ceramic1">Ceramic 1 Year</option>
+                                    <option value="Ceramic 3 Years" id="booking-service-ceramic3">Ceramic 3 Years</option>
+                                    <option value="Ceramic 5 Years" id="booking-service-ceramic5">Ceramic 5 Years</option>
                                 </select>
                             </label>
                         </div>
@@ -264,13 +288,11 @@
                                 <select name="tipoVehiculo" class="form-control" id="booking-select-vehicle" required>
                                     <option value="" id="booking-vehicle-default">Selecciona tipo de vehículo</option>
                                     <option value="sedan" id="booking-vehicle-sedan">🚗 Sedán (4 puertas, 5 asientos)</option>
-                                    <option value="hatchback" id="booking-vehicle-hatchback">🚗 Hatchback (5 puertas, 5 asientos)</option>
                                     <option value="coupe" id="booking-vehicle-coupe">🏎️ Coupé (2 puertas, 4 asientos)</option>
                                     <option value="convertible" id="booking-vehicle-convertible">🏎️ Convertible / Descapotable (2 puertas, 2-4 asientos)</option>
-                                    <option value="suv" id="booking-vehicle-suv">🚙 SUV (5-7 asientos) +$40</option>
-                                    <option value="pickup" id="booking-vehicle-pickup">🛻 Pickup (2-5 asientos) +$40</option>
-                                    <option value="van" id="booking-vehicle-van">🚐 Van / Minivan (7-8 asientos) +$60</option>
-                                    <option value="truck" id="booking-vehicle-truck">🚛 Camión / Truck (2-3 asientos) +$80</option>
+                                    <option value="suv" id="booking-vehicle-suv">🚙 SUV (5-7 asientos)</option>
+                                    <option value="pickup" id="booking-vehicle-pickup">🛻 Pickup (2-5 asientos)</option>
+                                    <option value="van" id="booking-vehicle-van">🚐 Van / Minivan (7-8 asientos)</option>
                                 </select>
                             </label>
                         </div>
@@ -283,9 +305,9 @@
                         <div class="form-group">
                             <label>
                                 <span class="label-text" id="booking-label-time">Hora *</span>
-                                <input type="time" name="hora" class="form-control" id="booking-input-time" required min="07:00" max="17:30" step="1800">
+                                <input type="time" name="hora" class="form-control" id="booking-input-time" required min="00:00" max="23:59" step="1800">
                             </label>
-                            <small id="booking-time-note">Horario: 7:00 AM - 5:30 PM</small>
+                            <small id="booking-time-note">24/7 - Siempre abiertos</small>
                         </div>
                         <div class="form-group">
                             <label>
@@ -293,9 +315,12 @@
                                 <textarea name="notas" class="form-control" id="booking-textarea-notes" rows="3" placeholder="Alguna indicación especial..."></textarea>
                             </label>
                         </div>
+                        <div class="form-group" id="extrasContainer">
+                            <!-- Extras se generan dinámicamente con JavaScript -->
+                        </div>
                         <div class="form-group" id="precioCalculadoContainer">
                             <span class="label-text" id="booking-label-price">Precio final:</span>
-                            <div id="precioCalculado" class="service-price"></div>
+                            <div id="precioCalculado" class="service-price">$0</div>
                         </div>
                         <button type="submit" class="btn btn-block" id="booking-btn"><i class="fas fa-arrow-right"></i> Continuar al pago</button>
                     </form>
@@ -416,7 +441,6 @@
                     <h4 id="footer-quick-title">Enlaces rápidos</h4>
                     <p><a href="#servicios" id="footer-quick-services"><i class="fas fa-car"></i> Servicios</a></p>
                     <p><a href="#galeria" id="footer-quick-gallery"><i class="fas fa-images"></i> Galería</a></p>
-                    <p><a href="#catalogo" id="footer-quick-products"><i class="fas fa-oil-can"></i> Productos</a></p>
                     <p><a href="#registro" id="footer-quick-register"><i class="fas fa-user-plus"></i> Registro</a></p>
                     <p><a href="#reservas" id="footer-quick-bookings"><i class="fas fa-calendar-alt"></i> Reservas</a></p>
                 </div>
@@ -432,23 +456,77 @@
                     <p id="footer-secure"><i class="fas fa-lock"></i> Seguro con HTTPS</p>
                 </div>
             </div>
+
+            <!-- SECCIÓN DESARROLLADOR ACTUALIZADA -->
             <div class="developer-section">
-                <h4 id="developer-title"><i class="fas fa-code"></i> ¿Quieres una página web para tu negocio?</h4>
-                <p class="qr-message" id="qr-message"><strong>¡Escáneame! 📱</strong></p>
+                <h4 id="developer-title"><i class="fas fa-code"></i> ¿Hablamos de tu proyecto?</h4>
+                <p class="qr-message" id="qr-message"><strong>Escanea el QR y chatea conmigo</strong></p>
                 <div class="developer-info">
                     <div class="qr-container" id="qrCode"></div>
                 </div>
             </div>
+
+            <!-- ============================================= -->
+            <!-- CONTADORES ELIMINADOS DEL FOOTER              -->
+            <!-- (Ahora están en el header)                    -->
+            <!-- ============================================= -->
+
             <div class="copyright">
-                <p id="copyright-text">© 2024 Detailing Team. Todos los derechos reservados.</p>
+                <p id="copyright-text">© 2025 Detailing Team. Todos los derechos reservados.</p>
                 <p id="copyright-security"><i class="fas fa-check-circle"></i> Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.</p>
             </div>
         </div>
     </footer>
 
     <!-- ============================================= -->
-    <!-- SOLO EL SCRIPT EXTERNO (EL RESTO DE FUNCIONES ESTÁN EN script.js) -->
+    <!-- SCRIPTS                                       -->
     <!-- ============================================= -->
     <script src="script.js"></script>
+
+    <!-- ============================================= -->
+    <!-- SCRIPT DE CONTADORES (VISITAS Y RESERVAS)     -->
+    <!-- ============================================= -->
+    <script>
+        // Función para actualizar ambos contadores
+        function actualizarContadores() {
+            // Obtener visitas del mes
+            fetch('https://detailingteamtx.com/api/visitas/mes')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('visitsCount').innerText = data.total || 0;
+                })
+                .catch(() => {
+                    document.getElementById('visitsCount').innerText = '—';
+                });
+
+            // Obtener total de reservas
+            fetch('https://detailingteamtx.com/api/reservas/total')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('bookingsCount').innerText = data.total || 0;
+                })
+                .catch(() => {
+                    document.getElementById('bookingsCount').innerText = '—';
+                });
+        }
+
+        // Registrar visita (solo si no existe en el mes)
+        function registrarVisita() {
+            fetch('https://detailingteamtx.com/api/visita', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            }).catch(err => console.log('Error registrando visita:', err));
+        }
+
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            registrarVisita();       // Solo se ejecuta una vez por IP y mes
+            actualizarContadores();  // Muestra los números actuales
+        });
+
+        // También actualizar contadores después de una reserva exitosa
+        // (se llama desde procesarReserva en script.js)
+        window.actualizarContadores = actualizarContadores;
+    </script>
 </body>
 </html>
