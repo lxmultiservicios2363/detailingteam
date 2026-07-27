@@ -481,16 +481,18 @@
     <!-- ============================================= -->
     <!-- SCRIPTS                                       -->
     <!-- ============================================= -->
-    <script src="script.js"></script>
+    <!-- ✅ Se agregó ?v=2 para forzar recarga de caché -->
+    <script src="script.js?v=2"></script>
 
     <!-- ============================================= -->
     <!-- SCRIPT DE CONTADORES (VISITAS Y RESERVAS)     -->
     <!-- ============================================= -->
+    <!-- ✅ Corregido: ahora usa la URL del backend en Render -->
     <script>
         // Función para actualizar ambos contadores
         function actualizarContadores() {
-            // Obtener visitas del mes
-            fetch('https://detailingteamtx.com/api/visitas/mes')
+            // Obtener visitas del mes (usando backend correcto)
+            fetch('https://detailingteam.onrender.com/api/visitas/mes')
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('visitsCount').innerText = data.total || 0;
@@ -499,8 +501,8 @@
                     document.getElementById('visitsCount').innerText = '—';
                 });
 
-            // Obtener total de reservas
-            fetch('https://detailingteamtx.com/api/reservas/total')
+            // Obtener total de reservas (usando backend correcto)
+            fetch('https://detailingteam.onrender.com/api/reservas/total')
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('bookingsCount').innerText = data.total || 0;
@@ -512,7 +514,7 @@
 
         // Registrar visita (solo si no existe en el mes)
         function registrarVisita() {
-            fetch('https://detailingteamtx.com/api/visita', {
+            fetch('https://detailingteam.onrender.com/api/visita', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             }).catch(err => console.log('Error registrando visita:', err));
