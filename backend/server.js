@@ -1,18 +1,10 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Este archivo configura el backend con Express,
-// conecta a MongoDB Atlas y maneja las rutas API
-// para clientes, reservas, visitas y envío de emails.
-// 
-// 📌 Versión: 7.2 (SIN RESTRICCIÓN DE IP ÚNICA POR MES)
-// 📌 Fecha: 27/07/2026
-// 📌 Autor: Luis Enrique Reina Mesa
+// Versión: 7.2 (SIN RESTRICCIÓN DE IP ÚNICA POR MES)
+// Fecha: 27/07/2026
 // =============================================
 
-// =============================================
-// 📦 IMPORTACIÓN DE DEPENDENCIAS
-// =============================================
 const express = require('express');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
@@ -21,40 +13,24 @@ const dns = require('dns');
 const cors = require('cors');
 const path = require('path');
 
-// =============================================
-// 🔐 CARGAR VARIABLES DE ENTORNO (FORZADO)
-// =============================================
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-// Debug: Verificar que las variables se cargaron
 console.log('📝 VERIFICANDO VARIABLES DE ENTORNO:');
 console.log('   MONGO_URI:', process.env.MONGO_URI ? '✅ CARGADA' : '❌ NO CARGADA');
 console.log('   EMAIL_USER:', process.env.EMAIL_USER ? '✅ CARGADO' : '❌ NO CARGADO');
 console.log('   EMAIL_PASS:', process.env.EMAIL_PASS ? '✅ CARGADA' : '❌ NO CARGADA');
 console.log('   PORT:', process.env.PORT || '3001 (default)');
 
-// =============================================
-// 🌐 CONFIGURACIÓN DNS PARA NODE.JS v22+
-// =============================================
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 console.log('🌐 DNS configurado: 8.8.8.8, 8.8.4.4');
 
-// =============================================
-// 📁 IMPORTAR MODELOS DE DATOS
-// =============================================
 const Cliente = require('./models/cliente');
 const Reserva = require('./models/reserva');
 const Visita = require('./models/visita');
 
-// =============================================
-// 🚀 INICIALIZAR EXPRESS
-// =============================================
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// =============================================
-// 🌐 CONFIGURACIÓN DE CORS (CORREGIDA)
-// =============================================
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5500',
@@ -83,19 +59,12 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// =============================================
-// 📁 SERVIR ARCHIVOS ESTÁTICOS (FRONTEND)
-// =============================================
 app.use(express.static(path.join(__dirname, '..')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// =============================================
-// 🗄️ CONEXIÓN A MONGODB ATLAS (OPTIMIZADA)
-// =============================================
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -173,9 +142,6 @@ setInterval(async () => {
     }
 }, 30000);
 
-// =============================================
-// 📧 CONFIGURACIÓN DE EMAIL
-// =============================================
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 
@@ -202,10 +168,9 @@ transporter.verify((error, success) => {
 });
 
 // =============================================
-// 🌐 RUTAS DE LA API
+// RUTAS DE LA API
 // =============================================
 
-// 👥 RUTAS DE CLIENTES
 app.get('/api/clientes', async (req, res) => {
     try {
         await ensureConnection();
@@ -235,7 +200,6 @@ app.post('/api/clientes', async (req, res) => {
     }
 });
 
-// 📅 RUTAS DE RESERVAS
 app.get('/api/reservas', async (req, res) => {
     try {
         await ensureConnection();
@@ -265,7 +229,8 @@ app.post('/api/reservas', async (req, res) => {
     }
 });
 
-// 📊 RUTAS DE VISITAS Y ESTADÍSTICAS
+// =============================================
+// RUTAS DE VISITAS (SIN RESTRICCIÓN DE IP)
 // =============================================
 
 function getMesActual() {
@@ -273,14 +238,13 @@ function getMesActual() {
     return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
 }
 
-// ✅ Registrar una visita (SIN RESTRICCIÓN DE IP ÚNICA)
 app.post('/api/visita', async (req, res) => {
     try {
         await ensureConnection();
         const ip = req.ip || req.connection.remoteAddress || req.socket.remoteAddress;
         const mes = getMesActual();
 
-        // Guardar la visita sin verificar duplicados
+        // ✅ Guardar la visita sin verificar duplicados
         const nuevaVisita = new Visita({ ip, mes });
         await nuevaVisita.save();
 
@@ -291,7 +255,6 @@ app.post('/api/visita', async (req, res) => {
     }
 });
 
-// Obtener total de visitas del mes actual
 app.get('/api/visitas/mes', async (req, res) => {
     try {
         await ensureConnection();
@@ -304,7 +267,6 @@ app.get('/api/visitas/mes', async (req, res) => {
     }
 });
 
-// Obtener total de reservas (global, todos los tiempos)
 app.get('/api/reservas/total', async (req, res) => {
     try {
         await ensureConnection();
@@ -316,7 +278,10 @@ app.get('/api/reservas/total', async (req, res) => {
     }
 });
 
-// 📧 RUTAS DE EMAILS
+// =============================================
+// RUTAS DE EMAILS
+// =============================================
+
 app.post('/api/enviar-bienvenida', async (req, res) => {
     const { nombre, email, idioma } = req.body;
 
@@ -446,9 +411,6 @@ app.post('/api/enviar-reserva', async (req, res) => {
     }
 });
 
-// =============================================
-// 🏓 RUTA DE PING PARA MANTENER SERVIDOR ACTIVO
-// =============================================
 app.get('/api/ping', (req, res) => {
     res.json({ 
         status: 'alive', 
@@ -457,9 +419,6 @@ app.get('/api/ping', (req, res) => {
     });
 });
 
-// =============================================
-// 🚀 INICIAR SERVIDOR
-// =============================================
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     console.log(`📧 Email configurado para: ${EMAIL_USER}`);
@@ -473,9 +432,6 @@ app.listen(PORT, () => {
     console.log(`   GET  /api/reservas/total - Total de reservas global`);
 });
 
-// =============================================
-// 🔧 MANEJO DE ERRORES NO CAPTURADOS
-// =============================================
 process.on('uncaughtException', (error) => {
     console.error('❌ Error no capturado:', error);
 });
