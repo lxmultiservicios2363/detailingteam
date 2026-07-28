@@ -1,7 +1,7 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 11.6 (BACKEND URL CORREGIDA A RENDER)
+// VERSIÓN: 11.8 (CORREGIDO PARA PÁGINAS DE DETALLE)
 // FECHA: 27/07/2026
 // =============================================
 
@@ -12,20 +12,9 @@ const MAX_ORDENES_DIARIAS = 30;
 const TELEFONO_PROPIETARIO = "17139280466";
 const MAX_VEHICULOS = 3;
 
-// 🔥 BACKEND URL DINÁMICA (detecta entorno automáticamente)
-const BACKEND_URL = (() => {
-    const hostname = window.location.hostname;
-    // Si estamos en localhost o 127.0.0.1, usamos el backend local
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        console.log('🔧 Entorno local: usando backend en http://localhost:3001');
-        return 'http://localhost:3001';
-    }
-    // En producción, usa la URL de tu backend en Render
-    console.log('🌐 Entorno producción: usando backend en https://detailingteam.onrender.com');
-    return 'https://detailingteam.onrender.com';
-})();
-
-console.log('📡 BACKEND_URL configurada:', BACKEND_URL);
+// 🔥 BACKEND URL FIJA (SIEMPRE USA RENDER)
+const BACKEND_URL = 'https://detailingteam.onrender.com';
+console.log('📡 BACKEND_URL configurada (fija a Render):', BACKEND_URL);
 
 // =============================================
 // MATRIZ DE PRECIOS POR SERVICIO Y TIPO DE VEHÍCULO
@@ -101,6 +90,206 @@ const AGREGADOS = {
 };
 
 // =============================================
+// TRADUCCIONES DE DESCRIPCIONES DE SERVICIOS (para páginas de detalle)
+// =============================================
+const serviceDescriptions = {
+    'Express Detail': {
+        es: 'Ideal para mantenimiento rápido y efectivo. Este servicio incluye:',
+        en: 'Ideal for quick and effective maintenance. This service includes:'
+    },
+    'Silver Package': {
+        es: 'Limpieza profunda que va más allá del mantenimiento básico. Este servicio incluye:',
+        en: 'Deep cleaning that goes beyond basic maintenance. This service includes:'
+    },
+    'Gold Package': {
+        es: 'Limpieza premium con protección de cera. Incluye:',
+        en: 'Premium cleaning with wax protection. Includes:'
+    },
+    'Diamond Package': {
+        es: 'Premium Detail con protección cerámica por 90 días. Incluye:',
+        en: 'Premium Detail with 90-day ceramic protection. Includes:'
+    },
+    'Ceramic 1 Year': {
+        es: 'Protección cerámica de alta duración por 12 meses. Incluye:',
+        en: 'High durability ceramic protection for 12 months. Includes:'
+    },
+    'Ceramic 3 Years': {
+        es: 'Protección cerámica nivel medio con duración de 3 años. Incluye:',
+        en: 'Mid-level ceramic protection lasting 3 years. Includes:'
+    },
+    'Ceramic 5 Years': {
+        es: 'Protección cerámica premium con duración de 5 años. Incluye:',
+        en: 'Premium ceramic protection lasting 5 years. Includes:'
+    }
+};
+
+// =============================================
+// TRADUCCIONES DE ÍTEMS DE LISTA POR SERVICIO
+// =============================================
+const serviceListItems = {
+    'Express Detail': {
+        es: [
+            'Lavado a mano de toda la carrocería',
+            'Limpieza profesional de rines y llantas',
+            'Aspirado completo del interior',
+            'Limpieza de tablero, consola y paneles',
+            'Limpieza de cristales por dentro y por fuera',
+            'Secado con microfibra para evitar rayones'
+        ],
+        en: [
+            'Hand wash of the entire body',
+            'Professional cleaning of rims and tires',
+            'Complete interior vacuuming',
+            'Dashboard, console and panel cleaning',
+            'Window cleaning inside and out',
+            'Microfiber drying to prevent scratches'
+        ]
+    },
+    'Silver Package': {
+        es: [
+            'Todo lo incluido en Express Detail',
+            'Limpieza de paneles y puertas a fondo',
+            'Shampoo ligero de alfombras',
+            'Brillo de llantas',
+            'Eliminación de manchas superficiales',
+            'Limpieza de áreas difíciles (respiradores, molduras)'
+        ],
+        en: [
+            'Everything included in Express Detail',
+            'Thorough cleaning of panels and doors',
+            'Light carpet shampoo',
+            'Tire shine',
+            'Removal of light stains',
+            'Cleaning of difficult areas (vents, moldings)'
+        ]
+    },
+    'Gold Package': {
+        es: [
+            'Todo lo incluido en Silver Package',
+            'Shampoo profundo de alfombras y tapicería',
+            'Aplicación de cera o sellador de pintura',
+            'Protección de plásticos exteriores e interiores',
+            'Acabado de alto brillo',
+            'Eliminación de manchas difíciles'
+        ],
+        en: [
+            'Everything included in Silver Package',
+            'Deep carpet and upholstery shampoo',
+            'Wax or paint sealant application',
+            'Protection of exterior and interior plastics',
+            'High gloss finish',
+            'Removal of difficult stains'
+        ]
+    },
+    'Diamond Package': {
+        es: [
+            'Todo lo incluido en Gold Package',
+            'Limpieza profunda de pintura',
+            'Aplicación de sellador cerámico',
+            'Protección UV avanzada',
+            'Efecto hidrofóbico',
+            'Garantía de 90 días en el brillo'
+        ],
+        en: [
+            'Everything included in Gold Package',
+            'Deep paint cleaning',
+            'Ceramic sealant application',
+            'Advanced UV protection',
+            'Hydrophobic effect',
+            '90-day shine guarantee'
+        ]
+    },
+    'Ceramic 1 Year': {
+        es: [
+            'Lavado profundo de pintura',
+            'Descontaminación química',
+            'Clay bar para eliminar contaminantes',
+            'Aplicación de coating cerámico',
+            'Efecto hidrofóbico avanzado',
+            'Protección UV, química y ambiental'
+        ],
+        en: [
+            'Deep paint washing',
+            'Chemical decontamination',
+            'Clay bar to remove contaminants',
+            'Ceramic coating application',
+            'Advanced hydrophobic effect',
+            'UV, chemical and environmental protection'
+        ]
+    },
+    'Ceramic 3 Years': {
+        es: [
+            'Preparación avanzada de pintura',
+            'Descontaminación química y mecánica',
+            'Aplicación de capa cerámica base',
+            'Aplicación de capa cerámica de sacrificio',
+            'Efecto hidrofóbico mejorado',
+            'Protección contra rayos UV y contaminantes'
+        ],
+        en: [
+            'Advanced paint preparation',
+            'Chemical and mechanical decontamination',
+            'Base ceramic layer application',
+            'Sacrificial ceramic layer application',
+            'Enhanced hydrophobic effect',
+            'Protection against UV rays and contaminants'
+        ]
+    },
+    'Ceramic 5 Years': {
+        es: [
+            'Preparación profesional de pintura (pulido de una etapa)',
+            'Descontaminación química y mecánica completa',
+            'Aplicación de capa cerámica base premium',
+            'Aplicación de capa cerámica reforzada',
+            'Aplicación de capa de sacrificio hidrofóbica',
+            'Protección superior contra rayos UV, químicos y contaminantes'
+        ],
+        en: [
+            'Professional paint preparation (one-stage polishing)',
+            'Complete chemical and mechanical decontamination',
+            'Premium base ceramic layer application',
+            'Reinforced ceramic layer application',
+            'Hydrophobic sacrificial layer application',
+            'Superior protection against UV rays, chemicals and contaminants'
+        ]
+    }
+};
+
+// =============================================
+// TRADUCCIONES DE NOTAS DE SERVICIOS
+// =============================================
+const serviceNotes = {
+    'Express Detail': {
+        es: '✨ Tu auto quedará renovado en minutos, con un brillo espectacular y protección básica.',
+        en: '✨ Your car will be renewed in minutes, with spectacular shine and basic protection.'
+    },
+    'Silver Package': {
+        es: '✨ Resultado impecable para tu vehículo, ideal si buscas una limpieza completa pero no necesitas un detailing completo.',
+        en: '✨ Impeccable result for your vehicle, ideal if you are looking for a complete cleaning but do not need a full detailing.'
+    },
+    'Gold Package': {
+        es: '✨ Tu auto lucirá como recién salido del concesionario. Ideal para ocasiones especiales o si quieres mimar tu vehículo.',
+        en: '✨ Your car will look like it just left the dealership. Ideal for special occasions or if you want to pamper your vehicle.'
+    },
+    'Diamond Package': {
+        es: '✨ Tu auto lucirá como en un showroom. La protección cerámica repele agua, suciedad y rayos UV.',
+        en: '✨ Your car will look like in a showroom. Ceramic protection repels water, dirt and UV rays.'
+    },
+    'Ceramic 1 Year': {
+        es: '✨ Tu auto se mantendrá más limpio por más tiempo, el agua resbalará fácilmente y el brillo será impresionante.',
+        en: '✨ Your car will stay cleaner longer, water will slide off easily, and the shine will be impressive.'
+    },
+    'Ceramic 3 Years': {
+        es: '✨ Resistencia superior a químicos y contaminantes. Garantía de 3 años en condiciones normales de uso.',
+        en: '✨ Superior resistance to chemicals and contaminants. 3-year warranty under normal use conditions.'
+    },
+    'Ceramic 5 Years': {
+        es: '✨ La máxima protección disponible para tu vehículo. Inversión en belleza y cuidado a largo plazo.',
+        en: '✨ The maximum protection available for your vehicle. Investment in long-term beauty and care.'
+    }
+};
+
+// =============================================
 // VARIABLES GLOBALES
 // =============================================
 let clienteActualGlobal = null;
@@ -131,7 +320,7 @@ const tipoVehiculoTicket = {
 };
 
 // =============================================
-// TEXTOS EN INGLÉS
+// TEXTOS EN INGLÉS (con claves para páginas de detalle)
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
@@ -242,11 +431,20 @@ const textosIndexEn = {
     'copyright-text': '© 2025 Detailing Team. All rights reserved.',
     'copyright-security': 'By using this site, you accept our privacy and security practices.',
     'header-visits-label': 'visits this month',
-    'header-bookings-label': 'total bookings'
+    'header-bookings-label': 'total bookings',
+    // Claves para páginas de detalle
+    'service-description-title': 'Service Description',
+    'prices-title': 'Prices',
+    'price-basic-title': 'Basic finish',
+    'price-premium-title': 'Premium finish',
+    'price-note-basic': '(Base price - Sedan)',
+    'price-note-premium': '(Base price - Sedan)',
+    'additional-info-text': 'Large vehicles (SUV, Pickup, Van): Additional price',
+    'back-button': 'Back to Services'
 };
 
 // =============================================
-// TEXTOS EN ESPAÑOL
+// TEXTOS EN ESPAÑOL (con claves para páginas de detalle)
 // =============================================
 const textosIndexEs = {
     'page-title': 'Detailing Team TX - Excelencia en Brillo',
@@ -357,8 +555,198 @@ const textosIndexEs = {
     'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
     'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.',
     'header-visits-label': 'visitas este mes',
-    'header-bookings-label': 'reservas totales'
+    'header-bookings-label': 'reservas totales',
+    // Claves para páginas de detalle
+    'service-description-title': 'Descripción del Servicio',
+    'prices-title': 'Precios',
+    'price-basic-title': 'Sin acabado interior',
+    'price-premium-title': 'Con acabado completo',
+    'price-note-basic': '(Precio base - Sedán)',
+    'price-note-premium': '(Precio base - Sedán)',
+    'additional-info-text': 'Vehículos grandes (SUV, Pickup, Van): Consultar precio adicional',
+    'back-button': 'Volver a Servicios'
 };
+
+// =============================================
+// FUNCIÓN: getServiceNameFromPage
+// =============================================
+// Detecta el nombre del servicio según la URL de la página actual.
+// Retorna el nombre del servicio o null si no está en una página de detalle.
+// =============================================
+function getServiceNameFromPage() {
+    var url = window.location.pathname;
+    var serviceMap = {
+        'express-detail': 'Express Detail',
+        'silver-detail': 'Silver Package',
+        'gold-detail': 'Gold Package',
+        'diamond-detail': 'Diamond Package',
+        'ceramic1-detail': 'Ceramic 1 Year',
+        'ceramic3-detail': 'Ceramic 3 Years',
+        'ceramic5-detail': 'Ceramic 5 Years'
+    };
+    
+    for (var key in serviceMap) {
+        if (url.indexOf(key) !== -1) {
+            return serviceMap[key];
+        }
+    }
+    
+    // Si no se detecta por URL, intentar por el título de la página
+    var titleElem = document.querySelector('.service-detail-title');
+    if (titleElem) {
+        var titleText = titleElem.innerText;
+        if (titleText.indexOf('Express') !== -1) return 'Express Detail';
+        if (titleText.indexOf('Silver') !== -1) return 'Silver Package';
+        if (titleText.indexOf('Gold') !== -1) return 'Gold Package';
+        if (titleText.indexOf('Diamond') !== -1) return 'Diamond Package';
+        if (titleText.indexOf('Ceramic 1') !== -1) return 'Ceramic 1 Year';
+        if (titleText.indexOf('Ceramic 3') !== -1) return 'Ceramic 3 Years';
+        if (titleText.indexOf('Ceramic 5') !== -1) return 'Ceramic 5 Years';
+    }
+    
+    return null;
+}
+
+// =============================================
+// FUNCIÓN: actualizarPaginaDetalle
+// =============================================
+// Actualiza los textos de una página de detalle de servicio según el idioma.
+// Usa serviceDescriptions, serviceListItems, serviceNotes y las claves de textosIndex.
+// =============================================
+function actualizarPaginaDetalle() {
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
+    
+    // Detectar si estamos en una página de detalle
+    var serviceName = getServiceNameFromPage();
+    if (!serviceName) {
+        // No es una página de detalle, salir
+        return;
+    }
+    
+    console.log('🔄 Actualizando página de detalle para:', serviceName, 'Idioma:', idioma);
+    
+    // Actualizar título "Descripción del Servicio"
+    var descTitle = document.getElementById('service-description-title');
+    if (descTitle && textos['service-description-title']) {
+        descTitle.innerHTML = '<i class="fas fa-info-circle"></i> ' + textos['service-description-title'];
+    }
+    
+    // Actualizar título "Precios"
+    var pricesTitle = document.getElementById('prices-title');
+    if (pricesTitle && textos['prices-title']) {
+        pricesTitle.innerHTML = '<i class="fas fa-tag"></i> ' + textos['prices-title'];
+    }
+    
+    // Actualizar descripción principal
+    var descText = document.getElementById('service-description-text');
+    if (descText && serviceDescriptions[serviceName]) {
+        descText.innerText = serviceDescriptions[serviceName][idioma];
+    }
+    
+    // Actualizar lista de ítems (service-include-1 a 6)
+    if (serviceListItems[serviceName]) {
+        var items = serviceListItems[serviceName][idioma];
+        for (var i = 1; i <= items.length; i++) {
+            var item = document.getElementById('service-include-' + i);
+            if (item) {
+                // Conservar el icono si existe
+                var icon = item.querySelector('i');
+                if (icon) {
+                    item.innerHTML = '';
+                    item.appendChild(icon);
+                    item.appendChild(document.createTextNode(' ' + items[i-1]));
+                } else {
+                    item.innerText = items[i-1];
+                }
+            }
+        }
+    }
+    
+    // Actualizar nota del servicio
+    var noteElem = document.getElementById('service-note');
+    if (noteElem && serviceNotes[serviceName]) {
+        var noteText = serviceNotes[serviceName][idioma];
+        // Si tiene un <strong> dentro, mantenerlo
+        var strong = noteElem.querySelector('strong');
+        if (strong) {
+            // Reemplazar solo el texto después del strong
+            var prefix = noteElem.innerText.substring(0, noteElem.innerText.indexOf(strong.innerText) + strong.innerText.length);
+            noteElem.innerHTML = prefix + ' ' + noteText.substring(noteText.indexOf(' ') + 1);
+        } else {
+            noteElem.innerHTML = '✨ ' + noteText;
+        }
+    }
+    
+    // Actualizar títulos de precios (basic y premium)
+    var priceBasicTitle = document.getElementById('price-basic-title');
+    if (priceBasicTitle && textos['price-basic-title']) {
+        priceBasicTitle.innerText = textos['price-basic-title'];
+    }
+    var pricePremiumTitle = document.getElementById('price-premium-title');
+    if (pricePremiumTitle && textos['price-premium-title']) {
+        pricePremiumTitle.innerText = textos['price-premium-title'];
+    }
+    
+    // Actualizar notas de precios
+    var noteBasic = document.getElementById('price-note-basic');
+    if (noteBasic && textos['price-note-basic']) {
+        noteBasic.innerText = textos['price-note-basic'];
+    }
+    var notePremium = document.getElementById('price-note-premium');
+    if (notePremium && textos['price-note-premium']) {
+        notePremium.innerText = textos['price-note-premium'];
+    }
+    
+    // Actualizar información adicional
+    var additionalInfo = document.getElementById('additional-info-text');
+    if (additionalInfo && textos['additional-info-text']) {
+        var icon = additionalInfo.querySelector('i');
+        var strong = additionalInfo.querySelector('strong');
+        if (icon && strong) {
+            var newText = textos['additional-info-text'];
+            additionalInfo.innerHTML = '';
+            additionalInfo.appendChild(icon.cloneNode(true));
+            additionalInfo.appendChild(document.createTextNode(' '));
+            var newStrong = document.createElement('strong');
+            var strongText = newText.substring(0, newText.indexOf(':') + 1);
+            newStrong.innerText = strongText;
+            additionalInfo.appendChild(newStrong);
+            additionalInfo.appendChild(document.createTextNode(' ' + newText.substring(newText.indexOf(':') + 1).trim()));
+        } else {
+            additionalInfo.innerText = textos['additional-info-text'];
+        }
+    }
+    
+    // Actualizar texto del botón "Reservar"
+    var bookingBtnText = document.getElementById('booking-btn-text');
+    if (bookingBtnText) {
+        bookingBtnText.innerText = (idioma === 'es' ? 'Reservar' : 'Book') + ' ' + serviceName;
+    }
+    
+    // Actualizar nota de acción
+    var actionNote = document.getElementById('action-note');
+    if (actionNote) {
+        actionNote.innerText = (idioma === 'es' 
+            ? 'Al reservar, selecciona "' + serviceName + '" en el formulario'
+            : 'When booking, select "' + serviceName + '" in the form');
+    }
+    
+    // Actualizar botón "Volver"
+    var backBtn = document.getElementById('back-button');
+    if (backBtn && textos['back-button']) {
+        var icon = backBtn.querySelector('i');
+        if (icon) {
+            backBtn.innerHTML = '';
+            backBtn.appendChild(icon.cloneNode(true));
+            backBtn.appendChild(document.createTextNode(' ' + textos['back-button']));
+        } else {
+            backBtn.innerText = textos['back-button'];
+        }
+    }
+    
+    console.log('✅ Página de detalle actualizada al idioma:', idioma);
+}
 
 // =============================================
 // FUNCIÓN: actualizarIdioma
@@ -367,6 +755,7 @@ function actualizarIdioma() {
     var idioma = localStorage.getItem('idioma') || 'es';
     var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
+    // Actualizar elementos de la página principal (index.html)
     for (var id in textos) {
         var elemento = document.getElementById(id);
         if (elemento) {
@@ -384,7 +773,7 @@ function actualizarIdioma() {
         }
     }
     
-    // ACTUALIZAR LABELS DE CONTADORES
+    // ACTUALIZAR LABELS DE CONTADORES (solo si existen)
     var visitsLabel = document.getElementById('header-visits-label');
     if (visitsLabel && textos['header-visits-label']) {
         visitsLabel.innerText = textos['header-visits-label'];
@@ -403,9 +792,16 @@ function actualizarIdioma() {
     
     document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
     
-    regenerarFormularioRegistro();
-    regenerarFormularioReserva();
-    actualizarPrecio();
+    // Regenerar formularios SOLO si estamos en index.html (existen los elementos)
+    var bookingStep1 = document.getElementById('bookingStep1');
+    if (bookingStep1) {
+        regenerarFormularioRegistro();
+        regenerarFormularioReserva();
+        actualizarPrecio();
+    }
+    
+    // SIEMPRE actualizar la página de detalle si estamos en una
+    actualizarPaginaDetalle();
     
     console.log('🌐 Idioma actualizado a:', idioma);
 }
@@ -484,9 +880,10 @@ function generarOpcionesAnios(selected) {
 // FUNCIÓN: mostrarFormularioRegistroCompleto
 // =============================================
 function mostrarFormularioRegistroCompleto() {
-    var idioma = localStorage.getItem('idioma') || 'es';
     var formContainer = document.querySelector('#registro .form-container');
-    if (!formContainer) return;
+    if (!formContainer) return; // Si no existe, salir (página de detalle)
+    
+    var idioma = localStorage.getItem('idioma') || 'es';
     
     var vehiculosHtml = '';
     for (var i = 1; i <= MAX_VEHICULOS; i++) {
@@ -636,11 +1033,11 @@ function guardarRegistroCompleto(event) {
 // FUNCIÓN: regenerarFormularioRegistro
 // =============================================
 function regenerarFormularioRegistro() {
-    var idioma = localStorage.getItem('idioma') || 'es';
-    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
-    
     var formContainer = document.querySelector('#registro .form-container');
     if (!formContainer) return;
+    
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
     var existingForm = document.getElementById('registerFormCompleto');
     if (existingForm) {
@@ -714,47 +1111,50 @@ function regenerarFormularioRegistro() {
 // FUNCIÓN: regenerarFormularioReserva
 // =============================================
 function regenerarFormularioReserva() {
+    // Verificar que estamos en la página principal (existen los elementos)
+    var serviceSelect = document.getElementById('booking-select-service');
+    if (!serviceSelect) return;
+    
     var idioma = localStorage.getItem('idioma') || 'es';
     var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    var serviceSelect = document.getElementById('booking-select-service');
-    if (serviceSelect) {
-        var defaultOption = document.getElementById('booking-service-default');
-        if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
-        
-        var expressOption = document.getElementById('booking-service-express');
-        if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
-        
-        var silverOption = document.getElementById('booking-service-silver');
-        if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
-        
-        var goldOption = document.getElementById('booking-service-gold');
-        if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
-        
-        var diamondOption = document.getElementById('booking-service-diamond');
-        if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
-        
-        var ceramic1Option = document.getElementById('booking-service-ceramic1');
-        if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
-        
-        var ceramic3Option = document.getElementById('booking-service-ceramic3');
-        if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
-        
-        var ceramic5Option = document.getElementById('booking-service-ceramic5');
-        if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
-    }
+    // Actualizar opciones del select de servicios
+    var defaultOption = document.getElementById('booking-service-default');
+    if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
     
+    var expressOption = document.getElementById('booking-service-express');
+    if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
+    
+    var silverOption = document.getElementById('booking-service-silver');
+    if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
+    
+    var goldOption = document.getElementById('booking-service-gold');
+    if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
+    
+    var diamondOption = document.getElementById('booking-service-diamond');
+    if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
+    
+    var ceramic1Option = document.getElementById('booking-service-ceramic1');
+    if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
+    
+    var ceramic3Option = document.getElementById('booking-service-ceramic3');
+    if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
+    
+    var ceramic5Option = document.getElementById('booking-service-ceramic5');
+    if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
+    
+    // Actualizar opciones del select de vehículos
     var vehicleSelect = document.getElementById('booking-select-vehicle');
     if (vehicleSelect) {
         var currentValue = vehicleSelect.value;
         
         vehicleSelect.innerHTML = '';
         
-        var defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.id = 'booking-vehicle-default';
-        defaultOption.innerText = textos['booking-vehicle-default'];
-        vehicleSelect.appendChild(defaultOption);
+        var defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.id = 'booking-vehicle-default';
+        defaultOpt.innerText = textos['booking-vehicle-default'];
+        vehicleSelect.appendChild(defaultOpt);
         
         var allowedVehicles = [
             { value: 'sedan', id: 'booking-vehicle-sedan', text: textos['booking-vehicle-sedan'] },
@@ -778,6 +1178,7 @@ function regenerarFormularioReserva() {
         }
     }
     
+    // Actualizar etiquetas del formulario
     var bookingLabels = document.querySelectorAll('#bookingStep1 .form-group label .label-text');
     if (bookingLabels.length >= 6) {
         if (bookingLabels[0] && textos['booking-label-service']) bookingLabels[0].innerText = textos['booking-label-service'];
@@ -788,6 +1189,7 @@ function regenerarFormularioReserva() {
         if (bookingLabels[5] && textos['booking-label-price']) bookingLabels[5].innerText = textos['booking-label-price'];
     }
     
+    // Actualizar placeholders
     var dateInput = document.getElementById('booking-input-date');
     if (dateInput && textos['booking-label-date']) dateInput.placeholder = textos['booking-label-date'];
     
@@ -828,9 +1230,10 @@ function regenerarFormularioReserva() {
 // FUNCIÓN: regenerarAgregados
 // =============================================
 function regenerarAgregados() {
-    var idioma = localStorage.getItem('idioma') || 'es';
     var container = document.getElementById('extrasContainer');
     if (!container) return;
+    
+    var idioma = localStorage.getItem('idioma') || 'es';
     
     container.innerHTML = '';
     
@@ -1161,16 +1564,21 @@ window.onload = function() {
         cambiarIdioma(idiomaDetectado);
     }
     
-    regenerarAgregados();
+    // Solo ejecutar funciones de index.html si estamos en esa página
+    if (document.getElementById('extrasContainer')) {
+        regenerarAgregados();
+    }
     
-    // SIEMPRE mostrar el formulario de registro completo
-    mostrarFormularioRegistroCompleto();
+    if (document.querySelector('#registro .form-container')) {
+        mostrarFormularioRegistroCompleto();
+    }
     
-    // Si ya hay un cliente registrado, mostrar también el selector de vehículos
-    if (verificarClienteExistente()) {
+    // Si hay cliente registrado, mostrar selector de vehículos (solo en index.html)
+    if (verificarClienteExistente() && document.getElementById('precioCalculadoContainer')) {
         mostrarSelectorVehiculosEnReserva();
     }
     
+    // Configurar hora (solo en index.html)
     var horaInput = document.getElementById('booking-input-time');
     if (horaInput) {
         horaInput.min = "00:00";
@@ -1178,6 +1586,7 @@ window.onload = function() {
         horaInput.step = "1800";
     }
     
+    // Configurar eventos de precio (solo en index.html)
     var serviceSelect = document.getElementById('booking-select-service');
     var vehicleSelect = document.getElementById('booking-select-vehicle');
     if (serviceSelect) serviceSelect.onchange = actualizarPrecio;
