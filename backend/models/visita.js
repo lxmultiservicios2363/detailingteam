@@ -14,8 +14,6 @@ const mongoose = require('mongoose');
  * que todas las visitas se registren, sin importar si la misma IP
  * visita varias veces en el mismo mes.
  */
-const mongoose = require('mongoose');
-
 const visitaSchema = new mongoose.Schema({
     ip: { type: String, required: true },
     mes: { type: String, required: true }, // "YYYY-MM"
