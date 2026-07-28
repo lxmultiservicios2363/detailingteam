@@ -1,7 +1,7 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Versión: 7.2 (SIN RESTRICCIÓN DE IP ÚNICA POR MES)
+// Versión: 7.3 (CORREGIDO - ERROR 500 EN /api/visita)
 // Fecha: 27/07/2026
 // =============================================
 
@@ -123,11 +123,14 @@ async function ensureConnection() {
         try {
             await mongoose.connect(MONGO_URI, mongoOptions);
             console.log('✅ Reconexión exitosa');
+            return true;
         } catch (err) {
             console.error('❌ Error en reconexión:', err);
             setTimeout(ensureConnection, 5000);
+            return false;
         }
     }
+    return true;
 }
 
 setInterval(async () => {
@@ -238,20 +241,55 @@ function getMesActual() {
     return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
 }
 
+// ✅ ENDPOINT CORREGIDO CON LOGS Y MEJOR MANEJO DE ERRORES
 app.post('/api/visita', async (req, res) => {
     try {
-        await ensureConnection();
-        const ip = req.ip || req.connection.remoteAddress || req.socket.remoteAddress;
-        const mes = getMesActual();
+        console.log('📥 Solicitud POST /api/visita recibida');
+        
+        // Verificar conexión a MongoDB
+        const connected = await ensureConnection();
+        if (!connected) {
+            console.error('❌ No se pudo conectar a MongoDB');
+            return res.status(503).json({ error: 'Servicio no disponible' });
+        }
 
-        // ✅ Guardar la visita sin verificar duplicados
+        // Obtener IP real del cliente (considerando proxies)
+        let ip = req.ip || 
+                 req.headers['x-forwarded-for'] || 
+                 req.connection.remoteAddress || 
+                 req.socket.remoteAddress;
+        
+        // Si la IP es un array (x-forwarded-for puede tener múltiples IPs), tomar la primera
+        if (Array.isArray(ip)) ip = ip[0];
+        if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
+        
+        // Limpiar IP (eliminar prefijo IPv6 si es localhost)
+        if (ip === '::1' || ip === '::ffff:127.0.0.1') ip = '127.0.0.1';
+        
+        console.log('🔍 IP detectada:', ip);
+
+        if (!ip || ip === '') {
+            console.error('❌ IP inválida o vacía');
+            return res.status(400).json({ error: 'IP inválida' });
+        }
+
+        const mes = getMesActual();
+        console.log('📅 Mes actual:', mes);
+
+        // Guardar la visita
         const nuevaVisita = new Visita({ ip, mes });
         await nuevaVisita.save();
-
+        
+        console.log('✅ Visita registrada correctamente');
         res.status(201).json({ mensaje: 'Visita registrada' });
+        
     } catch (error) {
-        console.error('❌ Error al registrar visita:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('❌ Error en POST /api/visita:', error);
+        // Enviar error detallado solo en desarrollo, en producción enviar genérico
+        res.status(500).json({ 
+            error: 'Error interno del servidor',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 
