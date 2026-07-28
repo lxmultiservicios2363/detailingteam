@@ -5,8 +5,8 @@
 // conecta a MongoDB Atlas y maneja las rutas API
 // para clientes, reservas, visitas y envío de emails.
 // 
-// 📌 Versión: 7.1 (CON VISITAS Y RESERVAS TOTALES)
-// 📌 Fecha: 22/06/2026
+// 📌 Versión: 7.2 (SIN RESTRICCIÓN DE IP ÚNICA POR MES)
+// 📌 Fecha: 27/07/2026
 // 📌 Autor: Luis Enrique Reina Mesa
 // =============================================
 
@@ -44,7 +44,7 @@ console.log('🌐 DNS configurado: 8.8.8.8, 8.8.4.4');
 // =============================================
 const Cliente = require('./models/cliente');
 const Reserva = require('./models/reserva');
-const Visita = require('./models/visita'); // <--- NUEVO MODELO
+const Visita = require('./models/visita');
 
 // =============================================
 // 🚀 INICIALIZAR EXPRESS
@@ -56,24 +56,19 @@ const PORT = process.env.PORT || 3001;
 // 🌐 CONFIGURACIÓN DE CORS (CORREGIDA)
 // =============================================
 const allowedOrigins = [
-    // Desarrollo local
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
     'http://localhost:3001',
-    // Dominios de prueba
     'https://detailingteam.onrender.com',
-    // DOMINIO FINAL (el que estás usando)
     'https://detailingteamtx.com',
     'https://www.detailingteamtx.com',
-    // Para casos especiales
     'null',
     'file://'
 ];
 
 app.use(cors({
     origin: function(origin, callback) {
-        // Permitir si no hay origen (ej: Postman) o si está en la lista blanca
         if (!origin || allowedOrigins.includes(origin) || origin.startsWith('file://')) {
             callback(null, true);
         } else {
@@ -92,10 +87,8 @@ app.use(express.urlencoded({ extended: true }));
 // =============================================
 // 📁 SERVIR ARCHIVOS ESTÁTICOS (FRONTEND)
 // =============================================
-// Esto permite que el backend entregue tu página web
 app.use(express.static(path.join(__dirname, '..')));
 
-// Ruta principal - sirve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
@@ -110,7 +103,6 @@ if (!MONGO_URI) {
     process.exit(1);
 }
 
-// OPCIONES DE CONEXIÓN PARA EVITAR DESCONEXIONES
 const mongoOptions = {
     serverApi: {
         version: '1',
@@ -118,26 +110,21 @@ const mongoOptions = {
         deprecationErrors: true,
     },
     family: 4,
-    // 🔥 NUEVAS OPCIONES PARA EVITAR DESCONEXIONES
-    maxPoolSize: 10,                    // Conexiones simultáneas
-    minPoolSize: 2,                     // Mantiene conexiones activas
-    maxIdleTimeMS: 60000,               // Cierra conexiones inactivas después de 1 minuto
-    connectTimeoutMS: 30000,            // Tiempo máximo para conectar
-    socketTimeoutMS: 45000,             // Tiempo máximo para operaciones
-    serverSelectionTimeoutMS: 30000,    // Tiempo para seleccionar servidor
-    heartbeatFrequencyMS: 10000,        // Revisa el estado del servidor cada 10s
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 60000,
+    connectTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    serverSelectionTimeoutMS: 30000,
+    heartbeatFrequencyMS: 10000,
     retryWrites: true,
     retryReads: true
 };
 
-// CONEXIÓN INICIAL
 mongoose.connect(MONGO_URI, mongoOptions)
     .then(() => console.log('✅ Conectado a MongoDB Atlas'))
     .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-// =============================================
-// 🔄 MANEJO DE EVENTOS DE CONEXIÓN MONGODB
-// =============================================
 const db = mongoose.connection;
 
 db.on('connected', () => {
@@ -146,7 +133,6 @@ db.on('connected', () => {
 
 db.on('disconnected', () => {
     console.log('⚠️ MongoDB desconectado - Intentando reconectar...');
-    // Intentar reconectar automáticamente
     setTimeout(() => {
         mongoose.connect(MONGO_URI, mongoOptions)
             .then(() => console.log('✅ MongoDB reconectado exitosamente'))
@@ -162,9 +148,6 @@ db.on('reconnected', () => {
     console.log('✅ MongoDB reconectado exitosamente');
 });
 
-// =============================================
-// 🔧 FUNCIÓN PARA FORZAR RECONEXIÓN
-// =============================================
 async function ensureConnection() {
     if (mongoose.connection.readyState !== 1) {
         console.log('🔄 Reconectando a MongoDB...');
@@ -173,15 +156,11 @@ async function ensureConnection() {
             console.log('✅ Reconexión exitosa');
         } catch (err) {
             console.error('❌ Error en reconexión:', err);
-            // Reintentar después de 5 segundos
             setTimeout(ensureConnection, 5000);
         }
     }
 }
 
-// =============================================
-// 🔄 PING A MONGODB PARA MANTENER CONEXIÓN ACTIVA
-// =============================================
 setInterval(async () => {
     try {
         if (mongoose.connection.readyState === 1) {
@@ -192,7 +171,7 @@ setInterval(async () => {
         console.log('⚠️ Ping falló - Reconectando...');
         await ensureConnection();
     }
-}, 30000); // Cada 30 segundos
+}, 30000);
 
 // =============================================
 // 📧 CONFIGURACIÓN DE EMAIL
@@ -286,36 +265,29 @@ app.post('/api/reservas', async (req, res) => {
     }
 });
 
-// 📊 RUTAS DE VISITAS Y ESTADÍSTICAS (NUEVO)
+// 📊 RUTAS DE VISITAS Y ESTADÍSTICAS
 // =============================================
 
-// Función auxiliar para obtener el mes actual en formato YYYY-MM
 function getMesActual() {
     const now = new Date();
     return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
 }
 
-// Registrar una visita (solo si IP nueva en el mes)
+// ✅ Registrar una visita (SIN RESTRICCIÓN DE IP ÚNICA)
 app.post('/api/visita', async (req, res) => {
     try {
         await ensureConnection();
-        // Obtener IP real del cliente (considerando proxies)
         const ip = req.ip || req.connection.remoteAddress || req.socket.remoteAddress;
         const mes = getMesActual();
 
-        // Intentar guardar la visita (el índice único evita duplicados)
+        // Guardar la visita sin verificar duplicados
         const nuevaVisita = new Visita({ ip, mes });
         await nuevaVisita.save();
 
         res.status(201).json({ mensaje: 'Visita registrada' });
     } catch (error) {
-        // Si el error es por duplicado (código 11000), no hacemos nada
-        if (error.code === 11000) {
-            res.status(200).json({ mensaje: 'Visita ya registrada este mes' });
-        } else {
-            console.error('❌ Error al registrar visita:', error);
-            res.status(500).json({ error: 'Error interno del servidor' });
-        }
+        console.error('❌ Error al registrar visita:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
@@ -495,8 +467,8 @@ app.listen(PORT, () => {
     console.log(`   ✅ https://detailingteamtx.com`);
     console.log(`   ✅ https://www.detailingteamtx.com`);
     console.log(`🔄 Ping a MongoDB cada 30 segundos para mantener conexión activa`);
-    console.log(`📊 Endpoints de estadísticas agregados:`);
-    console.log(`   POST /api/visita - Registrar visita (IP única por mes)`);
+    console.log(`📊 Endpoints de estadísticas actualizados:`);
+    console.log(`   POST /api/visita - Registrar visita (SIN restricción de IP única)`);
     console.log(`   GET  /api/visitas/mes - Total de visitas del mes`);
     console.log(`   GET  /api/reservas/total - Total de reservas global`);
 });

@@ -23,6 +23,9 @@
 
     <!-- Estilos para alinear contadores en el header -->
     <style>
+        /* ============================================= */
+        /* CONTADORES EN EL HEADER - ESTILOS            */
+        /* ============================================= */
         .stats-header {
             display: flex;
             justify-content: center;
@@ -54,6 +57,7 @@
             color: var(--footer-text);
             opacity: 0.8;
         }
+        /* Ajustes para tablets y móviles */
         @media (max-width: 768px) {
             .stats-header {
                 gap: 1.5rem;
@@ -481,17 +485,31 @@
     <!-- ============================================= -->
     <!-- SCRIPTS                                       -->
     <!-- ============================================= -->
-    <!-- ✅ Se agregó ?v=2 para forzar recarga de caché -->
+
+    <!-- ============================================= -->
+    <!-- SCRIPT PRINCIPAL (con versión para evitar caché) -->
+    <!-- ============================================= -->
     <script src="script.js?v=2"></script>
 
     <!-- ============================================= -->
     <!-- SCRIPT DE CONTADORES (VISITAS Y RESERVAS)     -->
     <!-- ============================================= -->
-    <!-- ✅ Corregido: ahora usa la URL del backend en Render -->
+    <!--
+        Este script se encarga de:
+        1. Registrar una visita al cargar la página (POST /api/visita).
+        2. Obtener y mostrar el total de visitas del mes y reservas totales.
+        3. Actualizar los contadores automáticamente cada 15 segundos.
+        4. Permitir actualización manual desde otras funciones (window.actualizarContadores).
+    -->
     <script>
-        // Función para actualizar ambos contadores
+        /**
+         * actualizarContadores()
+         * Obtiene los totales de visitas y reservas desde el backend y actualiza
+         * los elementos HTML con los IDs #visitsCount y #bookingsCount.
+         * Si falla la conexión, muestra "—" para indicar error.
+         */
         function actualizarContadores() {
-            // Obtener visitas del mes (usando backend correcto)
+            // Obtener visitas del mes (usando backend en Render)
             fetch('https://detailingteam.onrender.com/api/visitas/mes')
                 .then(res => res.json())
                 .then(data => {
@@ -501,7 +519,7 @@
                     document.getElementById('visitsCount').innerText = '—';
                 });
 
-            // Obtener total de reservas (usando backend correcto)
+            // Obtener total de reservas (global, todos los tiempos)
             fetch('https://detailingteam.onrender.com/api/reservas/total')
                 .then(res => res.json())
                 .then(data => {
@@ -512,7 +530,12 @@
                 });
         }
 
-        // Registrar visita (solo si no existe en el mes)
+        /**
+         * registrarVisita()
+         * Envía una petición POST al backend para registrar una nueva visita.
+         * No espera respuesta, solo registra la visita en la base de datos.
+         * Si falla, solo muestra un mensaje en consola (no interrumpe la experiencia).
+         */
         function registrarVisita() {
             fetch('https://detailingteam.onrender.com/api/visita', {
                 method: 'POST',
@@ -520,14 +543,27 @@
             }).catch(err => console.log('Error registrando visita:', err));
         }
 
-        // Ejecutar al cargar la página
+        // =============================================
+        // EJECUCIÓN AL CARGAR LA PÁGINA
+        // =============================================
         document.addEventListener('DOMContentLoaded', function() {
-            registrarVisita();       // Solo se ejecuta una vez por IP y mes
-            actualizarContadores();  // Muestra los números actuales
+            // 1. Registrar la visita (si es la primera vez en el mes)
+            registrarVisita();
+
+            // 2. Mostrar los contadores actuales
+            actualizarContadores();
+
+            // 3. Configurar actualización automática cada 15 segundos
+            setInterval(actualizarContadores, 15000); // 15.000 ms = 15 segundos
+
+            console.log('🔄 Contadores configurados para actualización automática cada 15 segundos.');
         });
 
-        // También actualizar contadores después de una reserva exitosa
-        // (se llama desde procesarReserva en script.js)
+        // =============================================
+        // EXPONER FUNCIÓN PARA ACTUALIZACIÓN MANUAL
+        // =============================================
+        // Esta función se puede llamar desde otros scripts (ej: después de una reserva)
+        // para actualizar los contadores sin esperar los 15 segundos.
         window.actualizarContadores = actualizarContadores;
     </script>
 </body>

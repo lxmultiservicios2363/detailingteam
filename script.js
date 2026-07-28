@@ -1,8 +1,8 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 11.4 (FORMULARIO DE REGISTRO SIEMPRE VISIBLE)
-// FECHA: 20/06/2026
+// VERSIÓN: 11.6 (BACKEND URL CORREGIDA A RENDER)
+// FECHA: 27/07/2026
 // =============================================
 
 // =============================================
@@ -11,7 +11,21 @@
 const MAX_ORDENES_DIARIAS = 30;
 const TELEFONO_PROPIETARIO = "17139280466";
 const MAX_VEHICULOS = 3;
-const BACKEND_URL = 'https://detailingteamtx.com';
+
+// 🔥 BACKEND URL DINÁMICA (detecta entorno automáticamente)
+const BACKEND_URL = (() => {
+    const hostname = window.location.hostname;
+    // Si estamos en localhost o 127.0.0.1, usamos el backend local
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🔧 Entorno local: usando backend en http://localhost:3001');
+        return 'http://localhost:3001';
+    }
+    // En producción, usa la URL de tu backend en Render
+    console.log('🌐 Entorno producción: usando backend en https://detailingteam.onrender.com');
+    return 'https://detailingteam.onrender.com';
+})();
+
+console.log('📡 BACKEND_URL configurada:', BACKEND_URL);
 
 // =============================================
 // MATRIZ DE PRECIOS POR SERVICIO Y TIPO DE VEHÍCULO
@@ -1130,10 +1144,11 @@ function mostrarSelectorVehiculosEnReserva() {
 }
 
 // =============================================
-// INICIALIZACIÓN - CORREGIDA
+// INICIALIZACIÓN
 // =============================================
 window.onload = function() {
     console.log('🚀 Página cargada');
+    console.log('📡 BACKEND_URL:', BACKEND_URL);
     
     inicializarTema();
     
