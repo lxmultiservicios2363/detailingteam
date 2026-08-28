@@ -16,16 +16,11 @@
     <meta property="og:url" content="https://detailingteamtx.com">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- NUEVAS FUENTES: Montserrat + Lato -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-    <!-- Estilos para alinear contadores en el header -->
     <style>
-        /* ============================================= */
-        /* CONTADORES EN EL HEADER - ESTILOS            */
-        /* ============================================= */
         .stats-header {
             display: flex;
             justify-content: center;
@@ -57,7 +52,6 @@
             color: var(--footer-text);
             opacity: 0.8;
         }
-        /* Ajustes para tablets y móviles */
         @media (max-width: 768px) {
             .stats-header {
                 gap: 1.5rem;
@@ -112,16 +106,12 @@
                 </div>
             </div>
 
-            <!-- ============================================= -->
-            <!-- CONTADORES EN EL HEADER (SOLO VISITAS)       -->
-            <!-- ============================================= -->
             <div class="stats-header">
                 <div class="stat-box">
                     <i class="fas fa-eye"></i>
                     <span class="stat-number" id="visitsCount">0</span>
                     <span class="stat-label" id="header-visits-label">visitas este mes</span>
                 </div>
-                <!-- ✅ CONTADOR DE RESERVAS ELIMINADO -->
             </div>
         </div>
     </header>
@@ -139,9 +129,7 @@
     </nav>
 
     <main>
-        <!-- ============================================= -->
-        <!-- SECCIÓN SERVICIOS                             -->
-        <!-- ============================================= -->
+        <!-- Servicios -->
         <section id="servicios">
             <div class="container">
                 <h2 id="services-title">✨ Servicios Profesionales ✨</h2>
@@ -218,9 +206,7 @@
             </div>
         </section>
 
-        <!-- ============================================= -->
-        <!-- SECCIÓN GALERÍA                               -->
-        <!-- ============================================= -->
+        <!-- Galería -->
         <section id="galeria">
             <div class="container">
                 <h2 id="gallery-title">📸 Resultados que Hablan Solos 📸</h2>
@@ -244,22 +230,18 @@
             </div>
         </section>
 
-        <!-- ============================================= -->
-        <!-- SECCIÓN REGISTRO                               -->
-        <!-- ============================================= -->
+        <!-- Registro -->
         <section id="registro">
             <div class="container">
                 <h2 id="register-title">📝 Registro de Clientes 📝</h2>
                 <p class="section-description" id="register-description">Guarda los datos de tu vehículo para un servicio más rápido y personalizado. ¡Te esperamos!</p>
                 <div class="form-container">
-                    <!-- El formulario completo se genera dinámicamente con JavaScript -->
+                    <!-- Generado dinámicamente -->
                 </div>
             </div>
         </section>
 
-        <!-- ============================================= -->
-        <!-- SECCIÓN RESERVAS                               -->
-        <!-- ============================================= -->
+        <!-- Reservas -->
         <section id="reservas">
             <div class="container">
                 <h2 id="booking-title">📅 Reserva tu Turno 📅</h2>
@@ -316,24 +298,20 @@
                             </label>
                         </div>
                         <div class="form-group" id="extrasContainer">
-                            <!-- Extras se generan dinámicamente con JavaScript -->
+                            <!-- Extras generados dinámicamente -->
                         </div>
                         <div class="form-group" id="precioCalculadoContainer">
                             <span class="label-text" id="booking-label-price">Precio final:</span>
                             <div id="precioCalculado" class="service-price">$0</div>
                         </div>
-                        <!-- ✅ BOTÓN MODIFICADO: "Continuar con la Reserva" -->
                         <button type="submit" class="btn btn-block" id="booking-btn"><i class="fas fa-arrow-right"></i> Continuar con la Reserva</button>
                     </form>
                 </div>
-                <!-- ✅ ELIMINADO: #bookingStep2 (paso de pago) -->
                 <div id="reservaTemporal" class="hidden"></div>
             </div>
         </section>
 
-        <!-- ============================================= -->
-        <!-- SECCIÓN CONTACTO                               -->
-        <!-- ============================================= -->
+        <!-- Contacto -->
         <section id="contacto">
             <div class="container">
                 <h2 id="contact-title">📱 Contáctanos - Servicio Móvil 📱</h2>
@@ -400,9 +378,6 @@
         </section>
     </main>
 
-    <!-- ============================================= -->
-    <!-- FOOTER                                        -->
-    <!-- ============================================= -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -431,7 +406,6 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN DESARROLLADOR ACTUALIZADA -->
             <div class="developer-section">
                 <h4 id="developer-title"><i class="fas fa-code"></i> ¿Hablamos de tu proyecto?</h4>
                 <p class="qr-message" id="qr-message"><strong>Escanea el QR y chatea conmigo</strong></p>
@@ -447,9 +421,7 @@
         </div>
     </footer>
 
-    <!-- ============================================= -->
-    <!-- SCRIPTS                                       -->
-    <!-- ============================================= -->
-    <script src="script.js?v=2"></script>
+    <!-- ✅ UN SOLO SCRIPT (ELIMINADO EL INLINE) -->
+    <script src="script.js?v=3"></script>
 </body>
 </html>

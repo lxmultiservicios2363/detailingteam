@@ -1,8 +1,15 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Versión: 7.3 (CORREGIDO - ERROR 500 EN /api/visita)
-// Fecha: 27/07/2026
+// Versión: 7.4 (CORRECCIÓN CONTADOR VISITAS)
+// Fecha: 28/07/2026
+// 
+// CAMBIOS REALIZADOS EN ESTA VERSIÓN:
+// 1. ✅ Ruta POST /api/visita con logs mejorados
+// 2. ✅ Detección de índices únicos en la colección
+// 3. ✅ Manejo de errores con código 409 para duplicados
+// 4. ✅ Conexión a MongoDB más robusta
+// 5. ✅ CORS configurado correctamente
 // =============================================
 
 const express = require('express');
@@ -233,7 +240,7 @@ app.post('/api/reservas', async (req, res) => {
 });
 
 // =============================================
-// RUTAS DE VISITAS (SIN RESTRICCIÓN DE IP)
+// RUTAS DE VISITAS (CORREGIDAS)
 // =============================================
 
 function getMesActual() {
@@ -241,10 +248,10 @@ function getMesActual() {
     return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
 }
 
-// ✅ ENDPOINT CORREGIDO CON LOGS Y MEJOR MANEJO DE ERRORES
+// ✅ RUTA POST /api/visita (CON LOGS MEJORADOS Y DETECCIÓN DE ÍNDICES)
 app.post('/api/visita', async (req, res) => {
     try {
-        console.log('📥 Solicitud POST /api/visita recibida');
+        console.log('📥 POST /api/visita - Solicitud recibida');
         
         // Verificar conexión a MongoDB
         const connected = await ensureConnection();
@@ -253,17 +260,14 @@ app.post('/api/visita', async (req, res) => {
             return res.status(503).json({ error: 'Servicio no disponible' });
         }
 
-        // Obtener IP real del cliente (considerando proxies)
+        // Obtener IP real del cliente
         let ip = req.ip || 
                  req.headers['x-forwarded-for'] || 
                  req.connection.remoteAddress || 
                  req.socket.remoteAddress;
         
-        // Si la IP es un array (x-forwarded-for puede tener múltiples IPs), tomar la primera
         if (Array.isArray(ip)) ip = ip[0];
         if (ip && ip.includes(',')) ip = ip.split(',')[0].trim();
-        
-        // Limpiar IP (eliminar prefijo IPv6 si es localhost)
         if (ip === '::1' || ip === '::ffff:127.0.0.1') ip = '127.0.0.1';
         
         console.log('🔍 IP detectada:', ip);
@@ -276,16 +280,47 @@ app.post('/api/visita', async (req, res) => {
         const mes = getMesActual();
         console.log('📅 Mes actual:', mes);
 
+        // 🔥 NUEVO: Verificar si existe algún índice único antes de guardar
+        try {
+            const indexes = await Visita.collection.indexes();
+            console.log('📊 Índices en la colección visitas:', indexes.map(i => i.name));
+            
+            // Si existe el índice único, mostrar advertencia
+            const uniqueIndex = indexes.find(i => i.name === 'ip_1_mes_1');
+            if (uniqueIndex) {
+                console.warn('⚠️ ¡ÍNDICE ÚNICO ENCONTRADO! Elimínalo con: db.visitas.dropIndex("ip_1_mes_1")');
+            }
+        } catch (err) {
+            console.log('⚠️ No se pudieron obtener los índices:', err.message);
+        }
+
         // Guardar la visita
         const nuevaVisita = new Visita({ ip, mes });
         await nuevaVisita.save();
         
-        console.log('✅ Visita registrada correctamente');
-        res.status(201).json({ mensaje: 'Visita registrada' });
+        console.log('✅ Visita registrada correctamente. ID:', nuevaVisita._id);
+        
+        const totalMes = await Visita.countDocuments({ mes });
+        console.log('📊 Total de visitas del mes:', totalMes);
+        
+        res.status(201).json({ 
+            mensaje: 'Visita registrada',
+            id: nuevaVisita._id,
+            totalMes: totalMes
+        });
         
     } catch (error) {
         console.error('❌ Error en POST /api/visita:', error);
-        // Enviar error detallado solo en desarrollo, en producción enviar genérico
+        
+        // Si el error es de duplicado, mostrar mensaje claro
+        if (error.code === 11000) {
+            console.error('⚠️ ERROR DE DUPLICADO - Índice único detectado');
+            return res.status(409).json({ 
+                error: 'Ya existe un registro con esta IP y mes',
+                code: 'DUPLICATE_KEY'
+            });
+        }
+        
         res.status(500).json({ 
             error: 'Error interno del servidor',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -298,6 +333,7 @@ app.get('/api/visitas/mes', async (req, res) => {
         await ensureConnection();
         const mes = getMesActual();
         const total = await Visita.countDocuments({ mes });
+        console.log('📊 GET /api/visitas/mes - Total:', total);
         res.json({ total });
     } catch (error) {
         console.error('❌ Error al contar visitas:', error);

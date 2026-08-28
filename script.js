@@ -1,15 +1,17 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 11.9 (CORREGIDO)
-// FECHA: 27/07/2026
+// VERSIÓN: 12.2 (CORRECCIÓN DEFINITIVA CONTADOR)
+// FECHA: 28/07/2026
 // 
 // CAMBIOS REALIZADOS EN ESTA VERSIÓN:
-// 1. Traducción completa al inglés (todas las claves y mensajes de alerta)
-// 2. Corrección del contador de visitas (se ejecuta correctamente en cada carga)
-// 3. Eliminado el contador de reservas del frontend
-// 4. Flujo de reserva: sin pago, solo WhatsApp al dueño
-// 5. Código documentado y optimizado
+// 1. ✅ Contador de visitas: timestamp para evitar caché
+// 2. ✅ registrarVisita() se ejecuta en cada carga con DOMContentLoaded
+// 3. ✅ Actualización automática cada 15 segundos
+// 4. ✅ Logs detallados para depuración
+// 5. ✅ Manejo de errores mejorado
+// 6. ✅ Eliminado mode: 'cors' que causaba problemas
+// 7. ✅ Todas las funciones de registro, reservas y formularios
 // =============================================
 
 // =============================================
@@ -303,18 +305,6 @@ let clienteActualGlobal = null;
 let vehiculosRegistrados = [];
 
 // =============================================
-// OBJETO PARA MAPEAR TIPOS DE VEHÍCULO A TEXTO
-// =============================================
-const tipoVehiculoTexto = {
-    'sedan': '🚗 Sedán',
-    'coupe': '🏎️ Coupé',
-    'convertible': '🏎️ Convertible',
-    'suv': '🚙 SUV',
-    'pickup': '🛻 Pickup',
-    'van': '🚐 Van / Minivan'
-};
-
-// =============================================
 // TEXTO COMPLETO PARA TICKET
 // =============================================
 const tipoVehiculoTicket = {
@@ -401,9 +391,7 @@ const textosIndexEn = {
     'booking-textarea-notes': 'Any special instructions...',
     'booking-label-extras': 'Extras (optional)',
     'booking-label-price': 'Final price:',
-    // ✅ CAMBIO: Botón ahora dice "Continue with Booking"
     'booking-btn': 'Continue with Booking',
-    'payment-back-btn': 'Back',
     'contact-title': '📱 Contact Us - Mobile Service 📱',
     'contact-mobile-service': 'Home service in Houston, TX',
     'contact-location-text': 'We come to your home or location',
@@ -434,7 +422,6 @@ const textosIndexEn = {
     'copyright-text': '© 2025 Detailing Team. All rights reserved.',
     'copyright-security': 'By using this site, you accept our privacy and security practices.',
     'header-visits-label': 'visits this month',
-    // Claves para páginas de detalle
     'service-description-title': 'Service Description',
     'prices-title': 'Prices',
     'price-basic-title': 'Basic finish',
@@ -520,9 +507,7 @@ const textosIndexEs = {
     'booking-textarea-notes': 'Alguna indicación especial...',
     'booking-label-extras': 'Extras (opcional)',
     'booking-label-price': 'Precio final:',
-    // ✅ CAMBIO: Botón ahora dice "Continuar con la Reserva"
     'booking-btn': 'Continuar con la Reserva',
-    'payment-back-btn': 'Volver',
     'contact-title': '📱 Contáctanos - Servicio Móvil 📱',
     'contact-mobile-service': 'Servicio a domicilio en Houston, TX',
     'contact-location-text': 'Nos desplazamos a tu domicilio o ubicación',
@@ -553,7 +538,6 @@ const textosIndexEs = {
     'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
     'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.',
     'header-visits-label': 'visitas este mes',
-    // Claves para páginas de detalle
     'service-description-title': 'Descripción del Servicio',
     'prices-title': 'Precios',
     'price-basic-title': 'Sin acabado interior',
@@ -565,184 +549,19 @@ const textosIndexEs = {
 };
 
 // =============================================
-// FUNCIÓN: getServiceNameFromPage
+// FUNCIÓN: detectarIdiomaNavegador
 // =============================================
-// Detecta el nombre del servicio según la URL de la página actual.
-// Retorna el nombre del servicio o null si no está en una página de detalle.
-// =============================================
-function getServiceNameFromPage() {
-    var url = window.location.pathname;
-    var serviceMap = {
-        'express-detail': 'Express Detail',
-        'silver-detail': 'Silver Package',
-        'gold-detail': 'Gold Package',
-        'diamond-detail': 'Diamond Package',
-        'ceramic1-detail': 'Ceramic 1 Year',
-        'ceramic3-detail': 'Ceramic 3 Years',
-        'ceramic5-detail': 'Ceramic 5 Years'
-    };
-    
-    for (var key in serviceMap) {
-        if (url.indexOf(key) !== -1) {
-            return serviceMap[key];
-        }
-    }
-    
-    // Si no se detecta por URL, intentar por el título de la página
-    var titleElem = document.querySelector('.service-detail-title');
-    if (titleElem) {
-        var titleText = titleElem.innerText;
-        if (titleText.indexOf('Express') !== -1) return 'Express Detail';
-        if (titleText.indexOf('Silver') !== -1) return 'Silver Package';
-        if (titleText.indexOf('Gold') !== -1) return 'Gold Package';
-        if (titleText.indexOf('Diamond') !== -1) return 'Diamond Package';
-        if (titleText.indexOf('Ceramic 1') !== -1) return 'Ceramic 1 Year';
-        if (titleText.indexOf('Ceramic 3') !== -1) return 'Ceramic 3 Years';
-        if (titleText.indexOf('Ceramic 5') !== -1) return 'Ceramic 5 Years';
-    }
-    
-    return null;
+function detectarIdiomaNavegador() {
+    var lang = navigator.language || navigator.userLanguage;
+    return lang.startsWith('es') ? 'es' : 'en';
 }
 
 // =============================================
-// FUNCIÓN: actualizarPaginaDetalle
+// FUNCIÓN: cambiarIdioma
 // =============================================
-// Actualiza los textos de una página de detalle de servicio según el idioma.
-// Usa serviceDescriptions, serviceListItems, serviceNotes y las claves de textosIndex.
-// =============================================
-function actualizarPaginaDetalle() {
-    var idioma = localStorage.getItem('idioma') || 'es';
-    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
-    
-    // Detectar si estamos en una página de detalle
-    var serviceName = getServiceNameFromPage();
-    if (!serviceName) {
-        // No es una página de detalle, salir
-        return;
-    }
-    
-    console.log('🔄 Actualizando página de detalle para:', serviceName, 'Idioma:', idioma);
-    
-    // Actualizar título "Descripción del Servicio"
-    var descTitle = document.getElementById('service-description-title');
-    if (descTitle && textos['service-description-title']) {
-        descTitle.innerHTML = '<i class="fas fa-info-circle"></i> ' + textos['service-description-title'];
-    }
-    
-    // Actualizar título "Precios"
-    var pricesTitle = document.getElementById('prices-title');
-    if (pricesTitle && textos['prices-title']) {
-        pricesTitle.innerHTML = '<i class="fas fa-tag"></i> ' + textos['prices-title'];
-    }
-    
-    // Actualizar descripción principal
-    var descText = document.getElementById('service-description-text');
-    if (descText && serviceDescriptions[serviceName]) {
-        descText.innerText = serviceDescriptions[serviceName][idioma];
-    }
-    
-    // Actualizar lista de ítems (service-include-1 a 6)
-    if (serviceListItems[serviceName]) {
-        var items = serviceListItems[serviceName][idioma];
-        for (var i = 1; i <= items.length; i++) {
-            var item = document.getElementById('service-include-' + i);
-            if (item) {
-                // Conservar el icono si existe
-                var icon = item.querySelector('i');
-                if (icon) {
-                    item.innerHTML = '';
-                    item.appendChild(icon);
-                    item.appendChild(document.createTextNode(' ' + items[i-1]));
-                } else {
-                    item.innerText = items[i-1];
-                }
-            }
-        }
-    }
-    
-    // Actualizar nota del servicio
-    var noteElem = document.getElementById('service-note');
-    if (noteElem && serviceNotes[serviceName]) {
-        var noteText = serviceNotes[serviceName][idioma];
-        // Si tiene un <strong> dentro, mantenerlo
-        var strong = noteElem.querySelector('strong');
-        if (strong) {
-            // Reemplazar solo el texto después del strong
-            var prefix = noteElem.innerText.substring(0, noteElem.innerText.indexOf(strong.innerText) + strong.innerText.length);
-            noteElem.innerHTML = prefix + ' ' + noteText.substring(noteText.indexOf(' ') + 1);
-        } else {
-            noteElem.innerHTML = '✨ ' + noteText;
-        }
-    }
-    
-    // Actualizar títulos de precios (basic y premium)
-    var priceBasicTitle = document.getElementById('price-basic-title');
-    if (priceBasicTitle && textos['price-basic-title']) {
-        priceBasicTitle.innerText = textos['price-basic-title'];
-    }
-    var pricePremiumTitle = document.getElementById('price-premium-title');
-    if (pricePremiumTitle && textos['price-premium-title']) {
-        pricePremiumTitle.innerText = textos['price-premium-title'];
-    }
-    
-    // Actualizar notas de precios
-    var noteBasic = document.getElementById('price-note-basic');
-    if (noteBasic && textos['price-note-basic']) {
-        noteBasic.innerText = textos['price-note-basic'];
-    }
-    var notePremium = document.getElementById('price-note-premium');
-    if (notePremium && textos['price-note-premium']) {
-        notePremium.innerText = textos['price-note-premium'];
-    }
-    
-    // Actualizar información adicional
-    var additionalInfo = document.getElementById('additional-info-text');
-    if (additionalInfo && textos['additional-info-text']) {
-        var icon = additionalInfo.querySelector('i');
-        var strong = additionalInfo.querySelector('strong');
-        if (icon && strong) {
-            var newText = textos['additional-info-text'];
-            additionalInfo.innerHTML = '';
-            additionalInfo.appendChild(icon.cloneNode(true));
-            additionalInfo.appendChild(document.createTextNode(' '));
-            var newStrong = document.createElement('strong');
-            var strongText = newText.substring(0, newText.indexOf(':') + 1);
-            newStrong.innerText = strongText;
-            additionalInfo.appendChild(newStrong);
-            additionalInfo.appendChild(document.createTextNode(' ' + newText.substring(newText.indexOf(':') + 1).trim()));
-        } else {
-            additionalInfo.innerText = textos['additional-info-text'];
-        }
-    }
-    
-    // Actualizar texto del botón "Reservar"
-    var bookingBtnText = document.getElementById('booking-btn-text');
-    if (bookingBtnText) {
-        bookingBtnText.innerText = (idioma === 'es' ? 'Reservar' : 'Book') + ' ' + serviceName;
-    }
-    
-    // Actualizar nota de acción
-    var actionNote = document.getElementById('action-note');
-    if (actionNote) {
-        actionNote.innerText = (idioma === 'es' 
-            ? 'Al reservar, selecciona "' + serviceName + '" en el formulario'
-            : 'When booking, select "' + serviceName + '" in the form');
-    }
-    
-    // Actualizar botón "Volver"
-    var backBtn = document.getElementById('back-button');
-    if (backBtn && textos['back-button']) {
-        var icon = backBtn.querySelector('i');
-        if (icon) {
-            backBtn.innerHTML = '';
-            backBtn.appendChild(icon.cloneNode(true));
-            backBtn.appendChild(document.createTextNode(' ' + textos['back-button']));
-        } else {
-            backBtn.innerText = textos['back-button'];
-        }
-    }
-    
-    console.log('✅ Página de detalle actualizada al idioma:', idioma);
+function cambiarIdioma(idioma) {
+    localStorage.setItem('idioma', idioma);
+    actualizarIdioma();
 }
 
 // =============================================
@@ -752,14 +571,11 @@ function actualizarIdioma() {
     var idioma = localStorage.getItem('idioma') || 'es';
     var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
     
-    // Actualizar elementos de la página principal (index.html)
     for (var id in textos) {
         var elemento = document.getElementById(id);
         if (elemento) {
             if (id === 'schedule-text' || id.indexOf('desc') !== -1 || id.indexOf('description') !== -1) {
                 elemento.innerHTML = textos[id];
-            } else if (id.indexOf('placeholder') !== -1) {
-                elemento.placeholder = textos[id];
             } else if (elemento.tagName === 'INPUT' || elemento.tagName === 'TEXTAREA') {
                 elemento.placeholder = textos[id];
             } else if (elemento.tagName === 'IMG') {
@@ -770,7 +586,6 @@ function actualizarIdioma() {
         }
     }
     
-    // ACTUALIZAR LABELS DE CONTADORES (solo visitas)
     var visitsLabel = document.getElementById('header-visits-label');
     if (visitsLabel && textos['header-visits-label']) {
         visitsLabel.innerText = textos['header-visits-label'];
@@ -785,28 +600,14 @@ function actualizarIdioma() {
     
     document.documentElement.lang = idioma === 'en' ? 'en' : 'es';
     
-    // Regenerar formularios SOLO si estamos en index.html (existen los elementos)
-    var bookingStep1 = document.getElementById('bookingStep1');
-    if (bookingStep1) {
+    if (document.getElementById('bookingStep1')) {
         regenerarFormularioRegistro();
         regenerarFormularioReserva();
         actualizarPrecio();
     }
     
-    // SIEMPRE actualizar la página de detalle si estamos en una
     actualizarPaginaDetalle();
-    
     console.log('🌐 Idioma actualizado a:', idioma);
-}
-
-function cambiarIdioma(idioma) {
-    localStorage.setItem('idioma', idioma);
-    actualizarIdioma();
-}
-
-function detectarIdiomaNavegador() {
-    var lang = navigator.language || navigator.userLanguage;
-    return lang.startsWith('es') ? 'es' : 'en';
 }
 
 // =============================================
@@ -837,6 +638,141 @@ function inicializarTema() {
 }
 
 // =============================================
+// FUNCIÓN: getServiceNameFromPage
+// =============================================
+function getServiceNameFromPage() {
+    var url = window.location.pathname;
+    var serviceMap = {
+        'express-detail': 'Express Detail',
+        'silver-detail': 'Silver Package',
+        'gold-detail': 'Gold Package',
+        'diamond-detail': 'Diamond Package',
+        'ceramic1-detail': 'Ceramic 1 Year',
+        'ceramic3-detail': 'Ceramic 3 Years',
+        'ceramic5-detail': 'Ceramic 5 Years'
+    };
+    for (var key in serviceMap) {
+        if (url.indexOf(key) !== -1) return serviceMap[key];
+    }
+    return null;
+}
+
+// =============================================
+// FUNCIÓN: actualizarPaginaDetalle
+// =============================================
+function actualizarPaginaDetalle() {
+    var idioma = localStorage.getItem('idioma') || 'es';
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
+    var serviceName = getServiceNameFromPage();
+    if (!serviceName) return;
+    
+    var descTitle = document.getElementById('service-description-title');
+    if (descTitle && textos['service-description-title']) {
+        descTitle.innerHTML = '<i class="fas fa-info-circle"></i> ' + textos['service-description-title'];
+    }
+    
+    var pricesTitle = document.getElementById('prices-title');
+    if (pricesTitle && textos['prices-title']) {
+        pricesTitle.innerHTML = '<i class="fas fa-tag"></i> ' + textos['prices-title'];
+    }
+    
+    var descText = document.getElementById('service-description-text');
+    if (descText && serviceDescriptions[serviceName]) {
+        descText.innerText = serviceDescriptions[serviceName][idioma];
+    }
+    
+    if (serviceListItems[serviceName]) {
+        var items = serviceListItems[serviceName][idioma];
+        for (var i = 1; i <= items.length; i++) {
+            var item = document.getElementById('service-include-' + i);
+            if (item) {
+                var icon = item.querySelector('i');
+                if (icon) {
+                    item.innerHTML = '';
+                    item.appendChild(icon);
+                    item.appendChild(document.createTextNode(' ' + items[i-1]));
+                } else {
+                    item.innerText = items[i-1];
+                }
+            }
+        }
+    }
+    
+    var noteElem = document.getElementById('service-note');
+    if (noteElem && serviceNotes[serviceName]) {
+        var noteText = serviceNotes[serviceName][idioma];
+        var strong = noteElem.querySelector('strong');
+        if (strong) {
+            var prefix = noteElem.innerText.substring(0, noteElem.innerText.indexOf(strong.innerText) + strong.innerText.length);
+            noteElem.innerHTML = prefix + ' ' + noteText.substring(noteText.indexOf(' ') + 1);
+        } else {
+            noteElem.innerHTML = '✨ ' + noteText;
+        }
+    }
+    
+    var priceBasicTitle = document.getElementById('price-basic-title');
+    if (priceBasicTitle && textos['price-basic-title']) {
+        priceBasicTitle.innerText = textos['price-basic-title'];
+    }
+    var pricePremiumTitle = document.getElementById('price-premium-title');
+    if (pricePremiumTitle && textos['price-premium-title']) {
+        pricePremiumTitle.innerText = textos['price-premium-title'];
+    }
+    
+    var noteBasic = document.getElementById('price-note-basic');
+    if (noteBasic && textos['price-note-basic']) {
+        noteBasic.innerText = textos['price-note-basic'];
+    }
+    var notePremium = document.getElementById('price-note-premium');
+    if (notePremium && textos['price-note-premium']) {
+        notePremium.innerText = textos['price-note-premium'];
+    }
+    
+    var additionalInfo = document.getElementById('additional-info-text');
+    if (additionalInfo && textos['additional-info-text']) {
+        var icon = additionalInfo.querySelector('i');
+        var strong = additionalInfo.querySelector('strong');
+        if (icon && strong) {
+            var newText = textos['additional-info-text'];
+            additionalInfo.innerHTML = '';
+            additionalInfo.appendChild(icon.cloneNode(true));
+            additionalInfo.appendChild(document.createTextNode(' '));
+            var newStrong = document.createElement('strong');
+            var strongText = newText.substring(0, newText.indexOf(':') + 1);
+            newStrong.innerText = strongText;
+            additionalInfo.appendChild(newStrong);
+            additionalInfo.appendChild(document.createTextNode(' ' + newText.substring(newText.indexOf(':') + 1).trim()));
+        } else {
+            additionalInfo.innerText = textos['additional-info-text'];
+        }
+    }
+    
+    var bookingBtnText = document.getElementById('booking-btn-text');
+    if (bookingBtnText) {
+        bookingBtnText.innerText = (idioma === 'es' ? 'Reservar' : 'Book') + ' ' + serviceName;
+    }
+    
+    var actionNote = document.getElementById('action-note');
+    if (actionNote) {
+        actionNote.innerText = (idioma === 'es' 
+            ? 'Al reservar, selecciona "' + serviceName + '" en el formulario'
+            : 'When booking, select "' + serviceName + '" in the form');
+    }
+    
+    var backBtn = document.getElementById('back-button');
+    if (backBtn && textos['back-button']) {
+        var icon = backBtn.querySelector('i');
+        if (icon) {
+            backBtn.innerHTML = '';
+            backBtn.appendChild(icon.cloneNode(true));
+            backBtn.appendChild(document.createTextNode(' ' + textos['back-button']));
+        } else {
+            backBtn.innerText = textos['back-button'];
+        }
+    }
+}
+
+// =============================================
 // FUNCIÓN: verificarClienteExistente
 // =============================================
 function verificarClienteExistente() {
@@ -858,7 +794,7 @@ function verificarClienteExistente() {
 }
 
 // =============================================
-// FUNCIÓN: generarOpcionesAnios (1990 - 2050)
+// FUNCIÓN: generarOpcionesAnios
 // =============================================
 function generarOpcionesAnios(selected) {
     var html = '';
@@ -874,7 +810,7 @@ function generarOpcionesAnios(selected) {
 // =============================================
 function mostrarFormularioRegistroCompleto() {
     var formContainer = document.querySelector('#registro .form-container');
-    if (!formContainer) return; // Si no existe, salir (página de detalle)
+    if (!formContainer) return;
     
     var idioma = localStorage.getItem('idioma') || 'es';
     
@@ -991,10 +927,8 @@ function guardarRegistroCompleto(event) {
         body: JSON.stringify(clienteData)
     })
     .then(function(res) {
-        console.log('📊 Status:', res.status);
         if (!res.ok) {
             return res.text().then(function(text) {
-                console.error('Error response:', text);
                 throw new Error('HTTP ' + res.status + ': ' + text);
             });
         }
@@ -1102,108 +1036,6 @@ function regenerarFormularioRegistro() {
 }
 
 // =============================================
-// FUNCIÓN: regenerarFormularioReserva
-// =============================================
-function regenerarFormularioReserva() {
-    // Verificar que estamos en la página principal (existen los elementos)
-    var serviceSelect = document.getElementById('booking-select-service');
-    if (!serviceSelect) return;
-    
-    var idioma = localStorage.getItem('idioma') || 'es';
-    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
-    
-    // Actualizar opciones del select de servicios
-    var defaultOption = document.getElementById('booking-service-default');
-    if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
-    
-    var expressOption = document.getElementById('booking-service-express');
-    if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
-    
-    var silverOption = document.getElementById('booking-service-silver');
-    if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
-    
-    var goldOption = document.getElementById('booking-service-gold');
-    if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
-    
-    var diamondOption = document.getElementById('booking-service-diamond');
-    if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
-    
-    var ceramic1Option = document.getElementById('booking-service-ceramic1');
-    if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
-    
-    var ceramic3Option = document.getElementById('booking-service-ceramic3');
-    if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
-    
-    var ceramic5Option = document.getElementById('booking-service-ceramic5');
-    if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
-    
-    // Actualizar opciones del select de vehículos
-    var vehicleSelect = document.getElementById('booking-select-vehicle');
-    if (vehicleSelect) {
-        var currentValue = vehicleSelect.value;
-        
-        vehicleSelect.innerHTML = '';
-        
-        var defaultOpt = document.createElement('option');
-        defaultOpt.value = '';
-        defaultOpt.id = 'booking-vehicle-default';
-        defaultOpt.innerText = textos['booking-vehicle-default'];
-        vehicleSelect.appendChild(defaultOpt);
-        
-        var allowedVehicles = [
-            { value: 'sedan', id: 'booking-vehicle-sedan', text: textos['booking-vehicle-sedan'] },
-            { value: 'coupe', id: 'booking-vehicle-coupe', text: textos['booking-vehicle-coupe'] },
-            { value: 'convertible', id: 'booking-vehicle-convertible', text: textos['booking-vehicle-convertible'] },
-            { value: 'suv', id: 'booking-vehicle-suv', text: textos['booking-vehicle-suv'] },
-            { value: 'pickup', id: 'booking-vehicle-pickup', text: textos['booking-vehicle-pickup'] },
-            { value: 'van', id: 'booking-vehicle-van', text: textos['booking-vehicle-van'] }
-        ];
-        
-        for (var j = 0; j < allowedVehicles.length; j++) {
-            var option = document.createElement('option');
-            option.value = allowedVehicles[j].value;
-            option.id = allowedVehicles[j].id;
-            option.innerText = allowedVehicles[j].text;
-            vehicleSelect.appendChild(option);
-        }
-        
-        if (currentValue && (currentValue === 'sedan' || currentValue === 'coupe' || currentValue === 'convertible' || currentValue === 'suv' || currentValue === 'pickup' || currentValue === 'van')) {
-            vehicleSelect.value = currentValue;
-        }
-    }
-    
-    // Actualizar etiquetas del formulario
-    var bookingLabels = document.querySelectorAll('#bookingStep1 .form-group label .label-text');
-    if (bookingLabels.length >= 6) {
-        if (bookingLabels[0] && textos['booking-label-service']) bookingLabels[0].innerText = textos['booking-label-service'];
-        if (bookingLabels[1] && textos['booking-label-vehicle']) bookingLabels[1].innerText = textos['booking-label-vehicle'];
-        if (bookingLabels[2] && textos['booking-label-date']) bookingLabels[2].innerText = textos['booking-label-date'];
-        if (bookingLabels[3] && textos['booking-label-time']) bookingLabels[3].innerText = textos['booking-label-time'];
-        if (bookingLabels[4] && textos['booking-label-notes']) bookingLabels[4].innerText = textos['booking-label-notes'];
-        if (bookingLabels[5] && textos['booking-label-price']) bookingLabels[5].innerText = textos['booking-label-price'];
-    }
-    
-    // Actualizar placeholders
-    var dateInput = document.getElementById('booking-input-date');
-    if (dateInput && textos['booking-label-date']) dateInput.placeholder = textos['booking-label-date'];
-    
-    var timeInput = document.getElementById('booking-input-time');
-    if (timeInput && textos['booking-label-time']) timeInput.placeholder = textos['booking-label-time'];
-    
-    var notesTextarea = document.getElementById('booking-textarea-notes');
-    if (notesTextarea && textos['booking-label-notes']) notesTextarea.placeholder = textos['booking-label-notes'];
-    
-    var timeNote = document.getElementById('booking-time-note');
-    if (timeNote && textos['booking-time-note']) timeNote.innerText = textos['booking-time-note'];
-    
-    // ✅ CAMBIO: Texto del botón actualizado
-    var bookingBtn = document.getElementById('booking-btn');
-    if (bookingBtn && textos['booking-btn']) bookingBtn.innerText = textos['booking-btn'];
-    
-    regenerarAgregados();
-}
-
-// =============================================
 // FUNCIÓN: regenerarAgregados
 // =============================================
 function regenerarAgregados() {
@@ -1211,7 +1043,6 @@ function regenerarAgregados() {
     if (!container) return;
     
     var idioma = localStorage.getItem('idioma') || 'es';
-    
     container.innerHTML = '';
     
     var label = document.createElement('span');
@@ -1275,25 +1106,130 @@ function actualizarPrecio() {
     }
     
     var total = precioBase;
-    
     var extras = document.querySelectorAll('.extra-input:checked');
     for (var i = 0; i < extras.length; i++) {
         total += parseInt(extras[i].dataset.precio);
     }
     
-    var idioma = localStorage.getItem('idioma') || 'es';
     precioDiv.innerText = '$' + total;
 }
 
 // =============================================
-// FUNCIÓN: guardarRegistro (original - por compatibilidad)
+// FUNCIÓN: regenerarFormularioReserva
 // =============================================
-function guardarRegistro(event) {
-    event.preventDefault();
+function regenerarFormularioReserva() {
+    var serviceSelect = document.getElementById('booking-select-service');
+    if (!serviceSelect) return;
+    
     var idioma = localStorage.getItem('idioma') || 'es';
-    alert(idioma === 'es' 
-        ? 'Usa el formulario de registro completo en la sección "Registro"'
-        : 'Use the complete registration form in the "Register" section');
+    var textos = idioma === 'en' ? textosIndexEn : textosIndexEs;
+    
+    // Actualizar opciones de servicios
+    var defaultOption = document.getElementById('booking-service-default');
+    if (defaultOption && textos['booking-service-default']) defaultOption.innerText = textos['booking-service-default'];
+    
+    var expressOption = document.getElementById('booking-service-express');
+    if (expressOption && textos['booking-service-express']) expressOption.innerText = textos['booking-service-express'];
+    
+    var silverOption = document.getElementById('booking-service-silver');
+    if (silverOption && textos['booking-service-silver']) silverOption.innerText = textos['booking-service-silver'];
+    
+    var goldOption = document.getElementById('booking-service-gold');
+    if (goldOption && textos['booking-service-gold']) goldOption.innerText = textos['booking-service-gold'];
+    
+    var diamondOption = document.getElementById('booking-service-diamond');
+    if (diamondOption && textos['booking-service-diamond']) diamondOption.innerText = textos['booking-service-diamond'];
+    
+    var ceramic1Option = document.getElementById('booking-service-ceramic1');
+    if (ceramic1Option && textos['booking-service-ceramic1']) ceramic1Option.innerText = textos['booking-service-ceramic1'];
+    
+    var ceramic3Option = document.getElementById('booking-service-ceramic3');
+    if (ceramic3Option && textos['booking-service-ceramic3']) ceramic3Option.innerText = textos['booking-service-ceramic3'];
+    
+    var ceramic5Option = document.getElementById('booking-service-ceramic5');
+    if (ceramic5Option && textos['booking-service-ceramic5']) ceramic5Option.innerText = textos['booking-service-ceramic5'];
+    
+    // Actualizar opciones de vehículos
+    var vehicleSelect = document.getElementById('booking-select-vehicle');
+    if (vehicleSelect) {
+        var currentValue = vehicleSelect.value;
+        vehicleSelect.innerHTML = '';
+        
+        var defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.id = 'booking-vehicle-default';
+        defaultOpt.innerText = textos['booking-vehicle-default'];
+        vehicleSelect.appendChild(defaultOpt);
+        
+        var allowedVehicles = [
+            { value: 'sedan', id: 'booking-vehicle-sedan', text: textos['booking-vehicle-sedan'] },
+            { value: 'coupe', id: 'booking-vehicle-coupe', text: textos['booking-vehicle-coupe'] },
+            { value: 'convertible', id: 'booking-vehicle-convertible', text: textos['booking-vehicle-convertible'] },
+            { value: 'suv', id: 'booking-vehicle-suv', text: textos['booking-vehicle-suv'] },
+            { value: 'pickup', id: 'booking-vehicle-pickup', text: textos['booking-vehicle-pickup'] },
+            { value: 'van', id: 'booking-vehicle-van', text: textos['booking-vehicle-van'] }
+        ];
+        for (var j = 0; j < allowedVehicles.length; j++) {
+            var option = document.createElement('option');
+            option.value = allowedVehicles[j].value;
+            option.id = allowedVehicles[j].id;
+            option.innerText = allowedVehicles[j].text;
+            vehicleSelect.appendChild(option);
+        }
+        if (currentValue) vehicleSelect.value = currentValue;
+    }
+    
+    // Actualizar etiquetas
+    var bookingLabels = document.querySelectorAll('#bookingStep1 .form-group label .label-text');
+    if (bookingLabels.length >= 6) {
+        if (bookingLabels[0] && textos['booking-label-service']) bookingLabels[0].innerText = textos['booking-label-service'];
+        if (bookingLabels[1] && textos['booking-label-vehicle']) bookingLabels[1].innerText = textos['booking-label-vehicle'];
+        if (bookingLabels[2] && textos['booking-label-date']) bookingLabels[2].innerText = textos['booking-label-date'];
+        if (bookingLabels[3] && textos['booking-label-time']) bookingLabels[3].innerText = textos['booking-label-time'];
+        if (bookingLabels[4] && textos['booking-label-notes']) bookingLabels[4].innerText = textos['booking-label-notes'];
+        if (bookingLabels[5] && textos['booking-label-price']) bookingLabels[5].innerText = textos['booking-label-price'];
+    }
+    
+    var dateInput = document.getElementById('booking-input-date');
+    if (dateInput && textos['booking-label-date']) dateInput.placeholder = textos['booking-label-date'];
+    
+    var timeInput = document.getElementById('booking-input-time');
+    if (timeInput && textos['booking-label-time']) timeInput.placeholder = textos['booking-label-time'];
+    
+    var notesTextarea = document.getElementById('booking-textarea-notes');
+    if (notesTextarea && textos['booking-label-notes']) notesTextarea.placeholder = textos['booking-label-notes'];
+    
+    var timeNote = document.getElementById('booking-time-note');
+    if (timeNote && textos['booking-time-note']) timeNote.innerText = textos['booking-time-note'];
+    
+    var bookingBtn = document.getElementById('booking-btn');
+    if (bookingBtn && textos['booking-btn']) bookingBtn.innerText = textos['booking-btn'];
+    
+    regenerarAgregados();
+}
+
+// =============================================
+// FUNCIÓN: mostrarSelectorVehiculosEnReserva
+// =============================================
+function mostrarSelectorVehiculosEnReserva() {
+    var precioContainer = document.getElementById('precioCalculadoContainer');
+    if (!precioContainer) return;
+    
+    if (vehiculosRegistrados.length > 0 && !document.getElementById('vehiculo-selector')) {
+        var idioma = localStorage.getItem('idioma') || 'es';
+        var selectorHtml = `
+            <div class="form-group">
+                <label>${idioma === 'es' ? 'Selecciona el vehículo para este servicio' : 'Select the vehicle for this service'} *</label>
+                <select id="vehiculo-selector" class="form-control" required>
+                    <option value="">${idioma === 'es' ? 'Selecciona un vehículo' : 'Select a vehicle'}</option>
+        `;
+        for (var i = 0; i < vehiculosRegistrados.length; i++) {
+            var v = vehiculosRegistrados[i];
+            selectorHtml += '<option value="' + v.placa + '">' + v.marca + ' - ' + v.placa + (v.anio ? ' (' + v.anio + ')' : '') + '</option>';
+        }
+        selectorHtml += '</select></div>';
+        precioContainer.insertAdjacentHTML('beforebegin', selectorHtml);
+    }
 }
 
 // =============================================
@@ -1339,43 +1275,12 @@ function generarTicket(reserva, cliente) {
 }
 
 // =============================================
-// FUNCIÓN: mostrarSelectorVehiculosEnReserva
-// =============================================
-function mostrarSelectorVehiculosEnReserva() {
-    var precioContainer = document.getElementById('precioCalculadoContainer');
-    if (!precioContainer) return;
-    
-    if (vehiculosRegistrados.length > 0 && !document.getElementById('vehiculo-selector')) {
-        var idioma = localStorage.getItem('idioma') || 'es';
-        var selectorHtml = `
-            <div class="form-group">
-                <label>${idioma === 'es' ? 'Selecciona el vehículo para este servicio' : 'Select the vehicle for this service'} *</label>
-                <select id="vehiculo-selector" class="form-control" required>
-                    <option value="">${idioma === 'es' ? 'Selecciona un vehículo' : 'Select a vehicle'}</option>
-        `;
-        for (var i = 0; i < vehiculosRegistrados.length; i++) {
-            var v = vehiculosRegistrados[i];
-            selectorHtml += '<option value="' + v.placa + '">' + v.marca + ' - ' + v.placa + (v.anio ? ' (' + v.anio + ')' : '') + '</option>';
-        }
-        selectorHtml += '</select></div>';
-        precioContainer.insertAdjacentHTML('beforebegin', selectorHtml);
-    }
-}
-
-// =============================================
-// FUNCIÓN: procesarReserva (CORREGIDA)
-// =============================================
-// Cambios realizados:
-// 1. Eliminado el paso de pago (bookingStep2)
-// 2. El botón ahora dice "Continuar con la Reserva"
-// 3. No envía emails, solo envía ticket por WhatsApp al dueño
-// 4. Mensajes de alerta bilingües
+// FUNCIÓN: procesarReserva (CORREGIDA - NUEVO FLUJO)
 // =============================================
 function procesarReserva(event) {
     event.preventDefault();
     var idioma = localStorage.getItem('idioma') || 'es';
     
-    // Validar que el cliente esté registrado
     if (!verificarClienteExistente()) {
         alert(idioma === 'es' 
             ? '⚠️ Debes registrarte antes de hacer una reserva.'
@@ -1384,7 +1289,6 @@ function procesarReserva(event) {
         return false;
     }
     
-    // Validar que haya seleccionado un vehículo
     var vehiculoSelector = document.getElementById('vehiculo-selector');
     if (!vehiculoSelector || !vehiculoSelector.value) {
         alert(idioma === 'es'
@@ -1393,35 +1297,18 @@ function procesarReserva(event) {
         return false;
     }
     
-    // Obtener el vehículo seleccionado
-    var matriculaSeleccionada = vehiculoSelector.value;
-    var vehiculoSeleccionado = null;
-    for (var i = 0; i < vehiculosRegistrados.length; i++) {
-        if (vehiculosRegistrados[i].placa === matriculaSeleccionada) {
-            vehiculoSeleccionado = vehiculosRegistrados[i];
-            break;
-        }
-    }
+    var servicio = document.getElementById('booking-select-service').value;
+    var tipoVehiculo = document.getElementById('booking-select-vehicle').value;
+    var fecha = document.getElementById('booking-input-date').value;
+    var hora = document.getElementById('booking-input-time').value;
+    var notas = document.getElementById('booking-textarea-notes').value;
+    var matricula = vehiculoSelector.value;
     
-    // Validar hora
-    var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
-    if (!hora) {
-        alert(idioma === 'es' 
-            ? '❌ Por favor selecciona una hora.'
-            : '❌ Please select a time.');
+    if (!servicio || !tipoVehiculo || !fecha || !hora) {
+        alert(idioma === 'es' ? '❌ Completa todos los campos obligatorios.' : '❌ Complete all required fields.');
         return false;
     }
     
-    // Validar fecha
-    var fecha = document.getElementById('booking-input-date') ? document.getElementById('booking-input-date').value : null;
-    if (!fecha) {
-        alert(idioma === 'es' 
-            ? '❌ Por favor selecciona una fecha.'
-            : '❌ Please select a date.');
-        return false;
-    }
-    
-    // Validar cupos disponibles
     if (obtenerReservasPorFecha(fecha).length >= MAX_ORDENES_DIARIAS) {
         alert(idioma === 'es' 
             ? '❌ No hay cupos disponibles para esta fecha.'
@@ -1429,21 +1316,7 @@ function procesarReserva(event) {
         return false;
     }
     
-    // Obtener datos del formulario
-    var servicioSelect = document.getElementById('booking-select-service');
-    var tipoVehiculo = document.getElementById('booking-select-vehicle') ? document.getElementById('booking-select-vehicle').value : null;
-    var notas = document.getElementById('booking-textarea-notes') ? document.getElementById('booking-textarea-notes').value : '';
-    
-    // Validar que haya seleccionado servicio y tipo de vehículo
-    if (!servicioSelect.value || !tipoVehiculo) {
-        alert(idioma === 'es' 
-            ? '❌ Por favor selecciona un servicio y tipo de vehículo.'
-            : '❌ Please select a service and vehicle type.');
-        return false;
-    }
-    
-    // Calcular precios
-    var precioBase = PRECIOS_MATRIZ[servicioSelect.value] ? PRECIOS_MATRIZ[servicioSelect.value][tipoVehiculo] : 0;
+    var precioBase = PRECIOS_MATRIZ[servicio] ? PRECIOS_MATRIZ[servicio][tipoVehiculo] : 0;
     if (precioBase === undefined) precioBase = 0;
     
     var totalExtras = 0;
@@ -1459,9 +1332,16 @@ function procesarReserva(event) {
     
     var precioFinal = precioBase + totalExtras;
     
-    // Construir objeto de reserva
+    var vehiculoSeleccionado = null;
+    for (var i = 0; i < vehiculosRegistrados.length; i++) {
+        if (vehiculosRegistrados[i].placa === matricula) {
+            vehiculoSeleccionado = vehiculosRegistrados[i];
+            break;
+        }
+    }
+    
     var reserva = {
-        servicio: servicioSelect.value,
+        servicio: servicio,
         tipoVehiculo: tipoVehiculo,
         fecha: fecha,
         hora: hora,
@@ -1471,120 +1351,93 @@ function procesarReserva(event) {
         extras: extrasSeleccionados,
         totalExtras: totalExtras,
         clienteEmail: clienteActualGlobal.email,
-        matricula: matriculaSeleccionada,
+        matricula: matricula,
         vehiculoInfo: vehiculoSeleccionado,
         metodoPago: 'Efectivo'
     };
     
-    console.log('📤 Enviando reserva al backend:', reserva);
+    console.log('📤 Enviando reserva al backend...', reserva);
     
-    // 1. Guardar reserva en la base de datos
     fetch(BACKEND_URL + '/api/reservas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reserva)
     })
     .then(function(res) {
-        if (!res.ok) {
-            return res.text().then(function(text) {
-                throw new Error('HTTP ' + res.status + ': ' + text);
-            });
-        }
+        if (!res.ok) throw new Error('Error al guardar reserva');
         return res.json();
     })
     .then(function(data) {
-        console.log('✅ Reserva guardada en el servidor:', data);
-        
-        // 2. Guardar en localStorage (copia local)
-        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-        reservas.push(reserva);
-        localStorage.setItem('reservas', JSON.stringify(reservas));
-        
-        // 3. Generar ticket
+        console.log('✅ Reserva guardada en DB:', data);
         var ticket = generarTicket(reserva, clienteActualGlobal);
-        console.log('📝 Ticket generado:\n', ticket);
-        
-        // 4. Enviar ticket por WhatsApp al dueño
         enviarWhatsApp(ticket);
-        
-        // 5. Mostrar mensaje de confirmación al usuario
-        alert(idioma === 'es' 
-            ? '✅ Reserva confirmada. Se ha enviado un ticket al dueño del servicio por WhatsApp.\n\n📋 Detalles de la reserva:\n' + ticket
-            : '✅ Booking confirmed. A ticket has been sent to the service owner via WhatsApp.\n\n📋 Booking details:\n' + ticket);
-        
-        // 6. Reiniciar el formulario y actualizar contadores
+        alert(idioma === 'es'
+            ? '✅ ¡Reserva confirmada! Se ha enviado el ticket al propietario por WhatsApp. Te contactaremos para confirmar.'
+            : '✅ Booking confirmed! The ticket has been sent to the owner via WhatsApp. We will contact you to confirm.');
         var bookingForm = document.getElementById('bookingForm');
         if (bookingForm) bookingForm.reset();
         document.getElementById('precioCalculado').innerText = '$0';
-        
-        // Actualizar contadores de visitas (para que se refleje la nueva reserva)
-        if (typeof actualizarContadores === 'function') {
-            actualizarContadores();
-        }
-        
-        // Recargar la página para actualizar todo (opcional)
-        // location.reload();
+        actualizarContadores();
+        var reservasLocal = JSON.parse(localStorage.getItem('reservas')) || [];
+        reservasLocal.push(reserva);
+        localStorage.setItem('reservas', JSON.stringify(reservasLocal));
     })
     .catch(function(err) {
         console.error('❌ Error en reserva:', err);
         alert(idioma === 'es'
-            ? '⚠️ La reserva se guardó localmente, pero hubo un problema con el servidor. Por favor, contacta al dueño directamente.\n\nError: ' + err.message
-            : '⚠️ The booking was saved locally, but there was a server problem. Please contact the owner directly.\n\nError: ' + err.message);
-        
-        // Guardar localmente aunque falle el servidor
-        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-        reservas.push(reserva);
-        localStorage.setItem('reservas', JSON.stringify(reservas));
-        
-        // Generar ticket y enviar WhatsApp igualmente
-        var ticket = generarTicket(reserva, clienteActualGlobal);
-        enviarWhatsApp(ticket);
+            ? '⚠️ Hubo un problema al guardar la reserva. Por favor, intenta de nuevo. Error: ' + err.message
+            : '⚠️ There was a problem saving the booking. Please try again. Error: ' + err.message);
     });
     
     return false;
 }
 
 // =============================================
-// FUNCIÓN: registrarVisita (CORREGIDA)
-// =============================================
-// Se encarga de registrar una visita en el backend.
-// Agregados logs para depuración.
+// FUNCIÓN: registrarVisita (CORREGIDA - CON TIMESTAMP)
 // =============================================
 function registrarVisita() {
-    console.log('🔄 Intentando registrar visita...');
-    console.log('📡 URL:', BACKEND_URL + '/api/visita');
+    // Agregar timestamp para evitar caché del navegador
+    var timestamp = new Date().getTime();
+    var url = BACKEND_URL + '/api/visita?_t=' + timestamp;
     
-    fetch(BACKEND_URL + '/api/visita', {
+    console.log('🔄 Intentando registrar visita con timestamp:', timestamp);
+    console.log('📡 URL:', url);
+    
+    fetch(url, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        mode: 'cors'
+        // NO usar 'mode: cors' porque el servidor ya lo maneja
     })
     .then(function(response) {
         console.log('📊 Respuesta del servidor:', response.status);
+        if (!response.ok) throw new Error('Error HTTP ' + response.status);
         return response.json();
     })
     .then(function(data) {
         console.log('✅ Visita registrada:', data);
+        // Actualizar contador inmediatamente
+        actualizarContadores();
     })
     .catch(function(err) {
         console.error('❌ Error registrando visita:', err);
+        // Si falla, mostrar el contador actual igualmente
+        actualizarContadores();
     });
 }
 
 // =============================================
-// FUNCIÓN: actualizarContadores (CORREGIDA)
-// =============================================
-// Solo obtiene el total de visitas del mes.
-// (Eliminado el contador de reservas)
+// FUNCIÓN: actualizarContadores (CORREGIDA - CON TIMESTAMP)
 // =============================================
 function actualizarContadores() {
-    console.log('🔄 Actualizando contadores...');
+    var timestamp = new Date().getTime();
+    var url = BACKEND_URL + '/api/visitas/mes?_t=' + timestamp;
     
-    // Obtener visitas del mes
-    fetch(BACKEND_URL + '/api/visitas/mes')
+    console.log('🔄 Actualizando contadores...', url);
+    
+    fetch(url)
         .then(function(res) {
             if (!res.ok) throw new Error('Error en la respuesta');
             return res.json();
@@ -1626,40 +1479,28 @@ function mostrarQRExterno() {
 }
 
 // =============================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN (CORREGIDA - CON DOMContentLoaded)
 // =============================================
-window.onload = function() {
-    console.log('🚀 Página cargada - Versión 11.9');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Página cargada - Versión 12.2 (CORRECCIÓN DEFINITIVA)');
     console.log('📡 BACKEND_URL:', BACKEND_URL);
     
-    // Inicializar tema
     inicializarTema();
     
-    // Configurar idioma
     var idiomaGuardado = localStorage.getItem('idioma');
     var idiomaDetectado = detectarIdiomaNavegador();
+    cambiarIdioma(idiomaGuardado || idiomaDetectado);
     
-    if (idiomaGuardado) {
-        cambiarIdioma(idiomaGuardado);
-    } else {
-        cambiarIdioma(idiomaDetectado);
-    }
-    
-    // Solo ejecutar funciones de index.html si estamos en esa página
     if (document.getElementById('extrasContainer')) {
         regenerarAgregados();
     }
-    
     if (document.querySelector('#registro .form-container')) {
         mostrarFormularioRegistroCompleto();
     }
-    
-    // Si hay cliente registrado, mostrar selector de vehículos (solo en index.html)
     if (verificarClienteExistente() && document.getElementById('precioCalculadoContainer')) {
         mostrarSelectorVehiculosEnReserva();
     }
     
-    // Configurar hora (solo en index.html)
     var horaInput = document.getElementById('booking-input-time');
     if (horaInput) {
         horaInput.min = "00:00";
@@ -1667,7 +1508,6 @@ window.onload = function() {
         horaInput.step = "1800";
     }
     
-    // Configurar eventos de precio (solo en index.html)
     var serviceSelect = document.getElementById('booking-select-service');
     var vehicleSelect = document.getElementById('booking-select-vehicle');
     if (serviceSelect) serviceSelect.onchange = actualizarPrecio;
@@ -1675,30 +1515,31 @@ window.onload = function() {
     
     mostrarQRExterno();
     
-    // Configurar botones de idioma
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
     if (btnEnglish) btnEnglish.onclick = function() { cambiarIdioma('en'); };
     if (btnSpanish) btnSpanish.onclick = function() { cambiarIdioma('es'); };
     
-    // Configurar toggle de tema
     var themeToggle = document.getElementById('themeToggle');
     if (themeToggle) themeToggle.addEventListener('change', toggleTema);
     
-    // ✅ REGISTRAR VISITA AL CARGAR LA PÁGINA
-    registrarVisita();
+    // ✅ REGISTRAR VISITA AL CARGAR LA PÁGINA (con retraso para asegurar que todo esté listo)
+    setTimeout(function() {
+        registrarVisita();
+    }, 500);
     
     // ✅ ACTUALIZAR CONTADORES AL CARGAR
-    actualizarContadores();
+    setTimeout(function() {
+        actualizarContadores();
+    }, 1000);
     
-    // ✅ ACTUALIZAR CONTADORES CADA 30 SEGUNDOS
-    setInterval(actualizarContadores, 30000);
+    // ✅ ACTUALIZAR CONTADORES CADA 15 SEGUNDOS (más rápido)
+    setInterval(actualizarContadores, 15000);
     
-    // Escuchar cambios en localStorage (idioma, tema)
     window.addEventListener('storage', function(e) {
         if (e.key === 'idioma') actualizarIdioma();
         if (e.key === 'tema') inicializarTema();
     });
     
     console.log('✅ Configuración completada');
-};
+});
