@@ -1,7 +1,7 @@
 // =============================================
 // RUTAS DE RESEÑAS - DETAILING TEAM
 // =============================================
-// Versión: 1.0
+// Versión: 1.1 (CON LOGS MEJORADOS)
 // Fecha: 28/07/2026
 // =============================================
 
@@ -14,9 +14,11 @@ const Resena = require('../models/resena');
 // =============================================
 router.get('/', async (req, res) => {
     try {
+        console.log('📥 GET /api/resenas - Solicitando reseñas');
         const resenas = await Resena.find({ aprobada: true })
             .sort({ fecha: -1 })
             .limit(20);
+        console.log(`✅ ${resenas.length} reseñas encontradas`);
         res.json(resenas);
     } catch (error) {
         console.error('❌ Error al obtener reseñas:', error);
@@ -29,10 +31,14 @@ router.get('/', async (req, res) => {
 // =============================================
 router.post('/', async (req, res) => {
     try {
+        console.log('📥 POST /api/resenas - Solicitud recibida');
+        console.log('📦 Body:', req.body);
+        
         const { nombre, email, servicio, puntuacion, comentario } = req.body;
         
         // Validar campos requeridos
         if (!nombre || !email || !puntuacion || !comentario) {
+            console.error('❌ Campos faltantes:', { nombre, email, puntuacion, comentario });
             return res.status(400).json({ 
                 error: 'Faltan campos requeridos: nombre, email, puntuacion, comentario' 
             });
@@ -54,6 +60,7 @@ router.post('/', async (req, res) => {
         
         await nuevaResena.save();
         console.log('✅ Nueva reseña guardada de:', nombre);
+        console.log('📊 ID:', nuevaResena._id);
         
         res.status(201).json({ 
             mensaje: 'Reseña guardada correctamente. Pendiente de aprobación.',

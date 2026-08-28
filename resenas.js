@@ -1,13 +1,8 @@
 // =============================================
 // SISTEMA DE RESEÑAS - DETAILING TEAM
 // =============================================
-// Versión: 1.0
+// Versión: 1.1 (CON LOGS MEJORADOS)
 // Fecha: 28/07/2026
-// 
-// Funcionalidades:
-// - Enviar reseña (nombre, email, servicio, puntuación, comentario)
-// - Mostrar reseñas aprobadas
-// - Sistema de estrellas interactivo
 // =============================================
 
 // =============================================
@@ -21,6 +16,7 @@ console.log('📡 RESENAS_BACKEND_URL:', RESENAS_BACKEND_URL);
 // =============================================
 function enviarResena(event) {
     event.preventDefault();
+    console.log('📝 Intentando enviar reseña...');
     
     // Obtener datos del formulario
     const nombre = document.getElementById('review-name').value.trim();
@@ -31,6 +27,8 @@ function enviarResena(event) {
     // Obtener puntuación seleccionada
     const ratingInput = document.querySelector('input[name="rating"]:checked');
     const puntuacion = ratingInput ? parseInt(ratingInput.value) : 0;
+    
+    console.log('📋 Datos del formulario:', { nombre, email, servicio, puntuacion, comentario });
     
     // Validaciones
     if (!nombre || !email || !comentario) {
@@ -64,7 +62,8 @@ function enviarResena(event) {
         comentario: comentario
     };
     
-    console.log('📤 Enviando reseña:', data);
+    console.log('📤 Enviando reseña al backend:', data);
+    console.log('🌐 URL:', RESENAS_BACKEND_URL + '/api/resenas');
     
     // Enviar al backend
     fetch(RESENAS_BACKEND_URL + '/api/resenas', {
@@ -75,6 +74,7 @@ function enviarResena(event) {
         body: JSON.stringify(data)
     })
     .then(response => {
+        console.log('📊 Respuesta del servidor:', response.status);
         if (!response.ok) throw new Error('Error al enviar la reseña');
         return response.json();
     })
@@ -84,16 +84,16 @@ function enviarResena(event) {
         
         // Resetear formulario
         document.getElementById('reviewForm').reset();
+        document.querySelectorAll('.star-rating input').forEach(input => input.checked = false);
         
-        // Recargar reseñas
+        // Recargar reseñas después de 2 segundos
         setTimeout(cargarResenas, 2000);
     })
     .catch(error => {
         console.error('❌ Error:', error);
-        mostrarMensaje('❌ Hubo un problema al enviar tu reseña. Por favor, intenta de nuevo.', 'error');
+        mostrarMensaje('❌ Hubo un problema al enviar tu reseña. Por favor, intenta de nuevo. Error: ' + error.message, 'error');
     })
     .finally(() => {
-        // Rehabilitar botón
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-star"></i> Enviar Reseña';
     });
@@ -106,6 +106,7 @@ function cargarResenas() {
     const container = document.getElementById('reviewsContainer');
     if (!container) return;
     
+    console.log('🔄 Cargando reseñas...');
     container.innerHTML = '<p style="text-align: center; color: #999;">Cargando reseñas...</p>';
     
     fetch(RESENAS_BACKEND_URL + '/api/resenas')
@@ -125,7 +126,6 @@ function cargarResenas() {
                 return;
             }
             
-            // Generar HTML para cada reseña
             let html = '';
             resenas.forEach(resena => {
                 const fecha = new Date(resena.fecha);
@@ -135,7 +135,6 @@ function cargarResenas() {
                     day: 'numeric'
                 });
                 
-                // Generar estrellas
                 let estrellas = '';
                 for (let i = 0; i < 5; i++) {
                     estrellas += i < resena.puntuacion ? '★' : '☆';
@@ -177,7 +176,6 @@ function mostrarMensaje(texto, tipo) {
     container.textContent = texto;
     container.style.display = 'block';
     
-    // Ocultar después de 5 segundos
     clearTimeout(container._timeout);
     container._timeout = setTimeout(() => {
         container.style.display = 'none';
@@ -185,7 +183,7 @@ function mostrarMensaje(texto, tipo) {
 }
 
 // =============================================
-// FUNCIÓN: escapeHTML (para evitar XSS)
+// FUNCIÓN: escapeHTML
 // =============================================
 function escapeHTML(texto) {
     const div = document.createElement('div');
@@ -199,12 +197,10 @@ function escapeHTML(texto) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('⭐ Sistema de reseñas inicializado');
     
-    // Cargar reseñas al cargar la página
     if (document.getElementById('reviewsContainer')) {
         cargarResenas();
     }
     
-    // Configurar estrellas: al hacer clic en una estrella, se selecciona
     const stars = document.querySelectorAll('.star-rating .star');
     stars.forEach(star => {
         star.addEventListener('click', function() {

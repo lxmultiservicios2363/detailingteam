@@ -1,7 +1,7 @@
 // =============================================
 // MODELO DE RESEÑAS - DETAILING TEAM
 // =============================================
-// Versión: 1.0
+// Versión: 1.1 (CON ÍNDICES)
 // Fecha: 28/07/2026
 // =============================================
 
@@ -16,5 +16,8 @@ const resenaSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now },
     aprobada: { type: Boolean, default: false } // Para moderación
 });
+
+// ✅ Índices para optimizar consultas
+resenaSchema.index({ aprobada: 1, fecha: -1 });
 
 module.exports = mongoose.model('Resena', resenaSchema);
