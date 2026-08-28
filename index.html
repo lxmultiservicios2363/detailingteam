@@ -190,6 +190,159 @@
         body.dark-mode .review-service {
             color: #aaa;
         }
+
+        /* ============================================= */
+        /* BOTÓN DE RESEÑA EN GOOGLE                     */
+        /* ============================================= */
+        .google-review-section {
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+
+        .google-review-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            gap: 1rem;
+        }
+
+        .google-review-divider::before,
+        .google-review-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color, #ddd);
+        }
+
+        .google-review-divider span {
+            padding: 0 1rem;
+            color: var(--text-primary, #666);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            background: var(--card-bg, #fff);
+            padding: 0 1.5rem;
+        }
+
+        .google-review-box {
+            background: var(--card-bg, #fff);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 2px solid #e8eaed;
+            max-width: 600px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .google-review-box:hover {
+            border-color: var(--accent-gold, #c9a959);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+
+        .google-review-box h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary-blue, #0a2b5c);
+            margin-bottom: 0.5rem;
+        }
+
+        .google-review-box p {
+            color: var(--text-primary, #444);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .btn-google-review {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #4285f4;
+            color: white;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-google-review i {
+            font-size: 1.3rem;
+        }
+
+        .btn-google-review:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.4);
+            color: white;
+        }
+
+        .google-review-note {
+            font-size: 0.85rem !important;
+            color: #888 !important;
+            margin-top: 1rem !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Modo oscuro */
+        body.dark-mode .google-review-box {
+            background: #2a2a3a;
+            border-color: #3a3a4a;
+        }
+
+        body.dark-mode .google-review-box h4 {
+            color: var(--accent-gold, #c9a959);
+        }
+
+        body.dark-mode .google-review-box p {
+            color: #ccc;
+        }
+
+        body.dark-mode .google-review-divider span {
+            background: #2a2a3a;
+            color: #aaa;
+        }
+
+        body.dark-mode .google-review-divider::before,
+        body.dark-mode .google-review-divider::after {
+            background: #444;
+        }
+
+        body.dark-mode .btn-google-review {
+            background: #4a8bf5;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+        }
+
+        body.dark-mode .btn-google-review:hover {
+            background: #5a9bf5;
+            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .google-review-box {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
+            
+            .btn-google-review {
+                padding: 0.7rem 1.8rem;
+                font-size: 0.9rem;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .google-review-box h4 {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -494,7 +647,7 @@
         </section>
 
         <!-- ============================================= -->
-        <!-- SECCIÓN RESEÑAS - NUEVO SISTEMA              -->
+        <!-- SECCIÓN RESEÑAS - COMPLETAMENTE TRADUCIDA    -->
         <!-- ============================================= -->
         <section id="reseñas">
             <div class="container">
@@ -507,23 +660,23 @@
                     <form id="reviewForm" onsubmit="enviarResena(event)">
                         <div class="form-group">
                             <label id="review-label-name">Nombre *</label>
-                            <input type="text" class="form-control" id="review-name" required>
+                            <input type="text" class="form-control" id="review-name" placeholder="Tu nombre completo" required>
                         </div>
                         <div class="form-group">
                             <label id="review-label-email">Email *</label>
-                            <input type="email" class="form-control" id="review-email" required>
+                            <input type="email" class="form-control" id="review-email" placeholder="tucorreo@ejemplo.com" required>
                         </div>
                         <div class="form-group">
                             <label id="review-label-service">Servicio contratado</label>
                             <select class="form-control" id="review-service">
-                                <option value="">Selecciona un servicio</option>
-                                <option value="Express Detail">Express Detail</option>
-                                <option value="Silver Package">Silver Package</option>
-                                <option value="Gold Package">Gold Package</option>
-                                <option value="Diamond Package">Diamond Package</option>
-                                <option value="Ceramic 1 Year">Ceramic 1 Year</option>
-                                <option value="Ceramic 3 Years">Ceramic 3 Years</option>
-                                <option value="Ceramic 5 Years">Ceramic 5 Years</option>
+                                <option value="" id="review-service-default">Selecciona un servicio</option>
+                                <option value="Express Detail" id="review-service-express">Express Detail</option>
+                                <option value="Silver Package" id="review-service-silver">Silver Package</option>
+                                <option value="Gold Package" id="review-service-gold">Gold Package</option>
+                                <option value="Diamond Package" id="review-service-diamond">Diamond Package</option>
+                                <option value="Ceramic 1 Year" id="review-service-ceramic1">Ceramic 1 Year</option>
+                                <option value="Ceramic 3 Years" id="review-service-ceramic3">Ceramic 3 Years</option>
+                                <option value="Ceramic 5 Years" id="review-service-ceramic5">Ceramic 5 Years</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -547,12 +700,33 @@
                             <textarea class="form-control" id="review-comment" rows="4" placeholder="Cuéntanos tu experiencia..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-block" id="review-submit-btn">
-                            <i class="fas fa-star"></i> Enviar Reseña
+                            <i class="fas fa-star"></i> <span id="review-submit-text">Enviar Reseña</span>
                         </button>
                     </form>
                     <div id="reviewResponseMessage" class="hidden"></div>
                 </div>
-                
+
+                <!-- ============================================= -->
+                <!-- BOTÓN PARA DEJAR RESEÑA EN GOOGLE             -->
+                <!-- ============================================= -->
+                <div class="google-review-section">
+                    <div class="google-review-divider">
+                        <span id="google-review-divider-text">O</span>
+                    </div>
+                    <div class="google-review-box">
+                        <h4 id="google-review-title">🌟 ¿Ya usaste nuestros servicios?</h4>
+                        <p id="google-review-desc">¡Ayúdanos a crecer dejando tu reseña en Google! Tu opinión es muy importante para nosotros.</p>
+                        <a href="https://search.google.com/local/writereview?placeid=TU_PLACE_ID_AQUI" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="btn-google-review" 
+                           id="google-review-btn">
+                            <i class="fab fa-google"></i> <span id="google-review-btn-text">Dejar reseña en Google</span>
+                        </a>
+                        <p class="google-review-note" id="google-review-note">⭐ Tu calificación nos ayuda a llegar a más clientes. ¡Gracias!</p>
+                    </div>
+                </div>
+
                 <!-- Listado de reseñas -->
                 <div class="reviews-list" id="reviewsList">
                     <h3 id="reviews-list-title">📋 Lo que dicen nuestros clientes</h3>

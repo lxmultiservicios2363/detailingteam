@@ -1,17 +1,14 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 12.2 (CORRECCIÓN DEFINITIVA CONTADOR)
+// VERSIÓN: 12.3 (TRADUCCIONES DE RESEÑAS COMPLETAS)
 // FECHA: 28/07/2026
 // 
 // CAMBIOS REALIZADOS EN ESTA VERSIÓN:
-// 1. ✅ Contador de visitas: timestamp para evitar caché
-// 2. ✅ registrarVisita() se ejecuta en cada carga con DOMContentLoaded
-// 3. ✅ Actualización automática cada 15 segundos
-// 4. ✅ Logs detallados para depuración
-// 5. ✅ Manejo de errores mejorado
-// 6. ✅ Eliminado mode: 'cors' que causaba problemas
-// 7. ✅ Todas las funciones de registro, reservas y formularios
+// 1. ✅ Añadidas todas las claves de traducción para reseñas
+// 2. ✅ Traducciones completas en español e inglés
+// 3. ✅ Placeholders de reseñas traducibles
+// 4. ✅ Mensajes de éxito/error de reseñas traducidos
 // =============================================
 
 // =============================================
@@ -317,7 +314,7 @@ const tipoVehiculoTicket = {
 };
 
 // =============================================
-// TEXTOS EN INGLÉS (con claves para páginas de detalle)
+// TEXTOS EN INGLÉS - CON TODAS LAS CLAVES DE RESEÑAS
 // =============================================
 const textosIndexEn = {
     'page-title': 'Detailing Team TX - Excellence in Shine',
@@ -429,11 +426,42 @@ const textosIndexEn = {
     'price-note-basic': '(Base price - Sedan)',
     'price-note-premium': '(Base price - Sedan)',
     'additional-info-text': 'Large vehicles (SUV, Pickup, Van): Additional price',
-    'back-button': 'Back to Services'
+    'back-button': 'Back to Services',
+    // =============================================
+    // 🔥 NUEVAS CLAVES PARA RESEÑAS (INGLÉS)
+    // =============================================
+    'reviews-title': '⭐ Customer Reviews ⭐',
+    'reviews-description': 'Share your experience and help us improve. Your opinion matters!',
+    'review-form-title': '📝 Leave your review',
+    'review-label-name': 'Full Name *',
+    'review-label-email': 'Email *',
+    'review-label-service': 'Service hired',
+    'review-label-rating': 'Rating *',
+    'review-label-comment': 'Comment *',
+    'review-rating-note': 'Select from 1 to 5 stars',
+    'review-submit-text': 'Submit Review',
+    'reviews-list-title': '📋 What our customers say',
+    'reviews-loading': 'Loading reviews...',
+    'google-review-divider-text': 'OR',
+    'google-review-title': '🌟 Have you used our services?',
+    'google-review-desc': 'Help us grow by leaving your review on Google! Your opinion is very important to us.',
+    'google-review-btn-text': 'Leave a review on Google',
+    'google-review-note': '⭐ Your rating helps us reach more customers. Thank you!',
+    'review-service-default': 'Select a service',
+    'review-service-express': 'Express Detail',
+    'review-service-silver': 'Silver Package',
+    'review-service-gold': 'Gold Package',
+    'review-service-diamond': 'Diamond Package',
+    'review-service-ceramic1': 'Ceramic 1 Year',
+    'review-service-ceramic3': 'Ceramic 3 Years',
+    'review-service-ceramic5': 'Ceramic 5 Years',
+    'review-name': 'Your full name',
+    'review-email': 'youremail@example.com',
+    'review-comment': 'Tell us about your experience...'
 };
 
 // =============================================
-// TEXTOS EN ESPAÑOL (con claves para páginas de detalle)
+// TEXTOS EN ESPAÑOL - CON TODAS LAS CLAVES DE RESEÑAS
 // =============================================
 const textosIndexEs = {
     'page-title': 'Detailing Team TX - Excelencia en Brillo',
@@ -545,7 +573,38 @@ const textosIndexEs = {
     'price-note-basic': '(Precio base - Sedán)',
     'price-note-premium': '(Precio base - Sedán)',
     'additional-info-text': 'Vehículos grandes (SUV, Pickup, Van): Consultar precio adicional',
-    'back-button': 'Volver a Servicios'
+    'back-button': 'Volver a Servicios',
+    // =============================================
+    // 🔥 NUEVAS CLAVES PARA RESEÑAS (ESPAÑOL)
+    // =============================================
+    'reviews-title': '⭐ Reseñas de Nuestros Clientes ⭐',
+    'reviews-description': 'Comparte tu experiencia y ayúdanos a mejorar. ¡Tu opinión es importante!',
+    'review-form-title': '📝 Deja tu reseña',
+    'review-label-name': 'Nombre *',
+    'review-label-email': 'Email *',
+    'review-label-service': 'Servicio contratado',
+    'review-label-rating': 'Puntuación *',
+    'review-label-comment': 'Comentario *',
+    'review-rating-note': 'Selecciona de 1 a 5 estrellas',
+    'review-submit-text': 'Enviar Reseña',
+    'reviews-list-title': '📋 Lo que dicen nuestros clientes',
+    'reviews-loading': 'Cargando reseñas...',
+    'google-review-divider-text': 'O',
+    'google-review-title': '🌟 ¿Ya usaste nuestros servicios?',
+    'google-review-desc': '¡Ayúdanos a crecer dejando tu reseña en Google! Tu opinión es muy importante para nosotros.',
+    'google-review-btn-text': 'Dejar reseña en Google',
+    'google-review-note': '⭐ Tu calificación nos ayuda a llegar a más clientes. ¡Gracias!',
+    'review-service-default': 'Selecciona un servicio',
+    'review-service-express': 'Express Detail',
+    'review-service-silver': 'Silver Package',
+    'review-service-gold': 'Gold Package',
+    'review-service-diamond': 'Diamond Package',
+    'review-service-ceramic1': 'Ceramic 1 Year',
+    'review-service-ceramic3': 'Ceramic 3 Years',
+    'review-service-ceramic5': 'Ceramic 5 Years',
+    'review-name': 'Tu nombre completo',
+    'review-email': 'tucorreo@ejemplo.com',
+    'review-comment': 'Cuéntanos tu experiencia...'
 };
 
 // =============================================
@@ -583,6 +642,38 @@ function actualizarIdioma() {
             } else {
                 elemento.innerText = textos[id];
             }
+        }
+    }
+    
+    // Actualizar las opciones del select de reseñas (si existe)
+    var reviewServiceSelect = document.getElementById('review-service');
+    if (reviewServiceSelect) {
+        var options = reviewServiceSelect.querySelectorAll('option');
+        if (options.length > 0) {
+            // La primera opción es la que tiene id "review-service-default"
+            var defaultOpt = document.getElementById('review-service-default');
+            if (defaultOpt) defaultOpt.innerText = textos['review-service-default'];
+            
+            var expressOpt = document.getElementById('review-service-express');
+            if (expressOpt) expressOpt.innerText = textos['review-service-express'];
+            
+            var silverOpt = document.getElementById('review-service-silver');
+            if (silverOpt) silverOpt.innerText = textos['review-service-silver'];
+            
+            var goldOpt = document.getElementById('review-service-gold');
+            if (goldOpt) goldOpt.innerText = textos['review-service-gold'];
+            
+            var diamondOpt = document.getElementById('review-service-diamond');
+            if (diamondOpt) diamondOpt.innerText = textos['review-service-diamond'];
+            
+            var ceramic1Opt = document.getElementById('review-service-ceramic1');
+            if (ceramic1Opt) ceramic1Opt.innerText = textos['review-service-ceramic1'];
+            
+            var ceramic3Opt = document.getElementById('review-service-ceramic3');
+            if (ceramic3Opt) ceramic3Opt.innerText = textos['review-service-ceramic3'];
+            
+            var ceramic5Opt = document.getElementById('review-service-ceramic5');
+            if (ceramic5Opt) ceramic5Opt.innerText = textos['review-service-ceramic5'];
         }
     }
     
@@ -1482,7 +1573,7 @@ function mostrarQRExterno() {
 // INICIALIZACIÓN (CORREGIDA - CON DOMContentLoaded)
 // =============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Página cargada - Versión 12.2 (CORRECCIÓN DEFINITIVA)');
+    console.log('🚀 Página cargada - Versión 12.3 (TRADUCCIONES COMPLETAS)');
     console.log('📡 BACKEND_URL:', BACKEND_URL);
     
     inicializarTema();
