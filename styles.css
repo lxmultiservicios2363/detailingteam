@@ -1533,3 +1533,186 @@ body.dark-mode .price-option.featured {
         font-size: 1rem;
     }
 }
+/* ============================================= */
+/* ESTILOS PARA RESEÑAS                          */
+/* ============================================= */
+
+/* Contenedor de estrellas */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    font-size: 2.5rem;
+}
+
+/* Ocultar los radio buttons */
+.star-rating input {
+    display: none;
+}
+
+/* Estilos de las estrellas (labels) */
+.star-rating .star {
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.2s ease;
+    font-size: 2.5rem;
+    user-select: none;
+}
+
+/* Efecto hover: cambiar color */
+.star-rating .star:hover,
+.star-rating .star:hover ~ .star {
+    color: #f5b342;
+}
+
+/* Estrellas seleccionadas */
+.star-rating input:checked ~ .star {
+    color: #f5b342;
+}
+
+/* Mostrar estrellas en las reseñas ya guardadas */
+.review-stars {
+    color: #f5b342;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+/* Tarjeta de reseña individual */
+.review-card {
+    background: var(--card-bg, #fff);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--accent-gold, #c9a959);
+    transition: transform 0.2s;
+}
+
+.review-card:hover {
+    transform: translateY(-3px);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.review-author {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-color, #333);
+}
+
+.review-date {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.review-service {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.review-service strong {
+    color: var(--accent-gold, #c9a959);
+}
+
+.review-comment {
+    color: var(--text-color, #444);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+}
+
+/* Mensaje de confirmación */
+.review-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    margin: 1rem 0;
+}
+
+.review-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    margin: 1rem 0;
+}
+
+/* Sección de Google Review */
+.google-review-section {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--card-bg, #fff);
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.google-review-section h4 {
+    color: var(--primary-blue, #0a2b5c);
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0.5rem;
+}
+
+.google-review-section p {
+    color: var(--text-primary, #333);
+    font-family: 'Lato', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .star-rating {
+        font-size: 2rem;
+    }
+    .star-rating .star {
+        font-size: 2rem;
+    }
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+}
+
+/* Modo oscuro */
+body.dark-mode .review-card {
+    background: #2d2d2d;
+    border-color: #c9a959;
+}
+body.dark-mode .review-author {
+    color: #eee;
+}
+body.dark-mode .review-comment {
+    color: #ccc;
+}
+body.dark-mode .review-service {
+    color: #aaa;
+}
+body.dark-mode .google-review-section {
+    background: #2a2a2a;
+}
+body.dark-mode .google-review-section h4 {
+    color: var(--accent-gold);
+}
+body.dark-mode .google-review-section p {
+    color: #ccc;
+}
+body.dark-mode .review-success {
+    background: #1e3a2e;
+    color: #a5d6a7;
+    border-color: #2e7d32;
+}
+body.dark-mode .review-error {
+    background: #4a2c2c;
+    color: #ef9a9a;
+    border-color: #c62828;
+}

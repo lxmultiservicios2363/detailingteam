@@ -74,6 +74,122 @@
                 font-size: 0.7rem;
             }
         }
+
+        /* ============================================= */
+        /* ESTILOS PARA RESEÑAS - ESTRELLAS             */
+        /* ============================================= */
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            font-size: 2.5rem;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating .star {
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.2s ease;
+            font-size: 2.5rem;
+            user-select: none;
+        }
+        .star-rating .star:hover,
+        .star-rating .star:hover ~ .star {
+            color: #f5b342;
+        }
+        .star-rating input:checked ~ .star {
+            color: #f5b342;
+        }
+        .review-stars {
+            color: #f5b342;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+        .review-card {
+            background: var(--card-bg, #fff);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent-gold, #c9a959);
+            transition: transform 0.2s;
+        }
+        .review-card:hover {
+            transform: translateY(-3px);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        .review-author {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-color, #333);
+        }
+        .review-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        .review-service {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .review-service strong {
+            color: var(--accent-gold, #c9a959);
+        }
+        .review-comment {
+            color: var(--text-color, #444);
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        .review-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+            margin: 1rem 0;
+        }
+        .review-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+            margin: 1rem 0;
+        }
+        @media (max-width: 768px) {
+            .star-rating {
+                font-size: 2rem;
+            }
+            .star-rating .star {
+                font-size: 2rem;
+            }
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+        }
+        body.dark-mode .review-card {
+            background: #2d2d2d;
+            border-color: #c9a959;
+        }
+        body.dark-mode .review-author {
+            color: #eee;
+        }
+        body.dark-mode .review-comment {
+            color: #ccc;
+        }
+        body.dark-mode .review-service {
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
@@ -376,6 +492,77 @@
                 </div>
             </div>
         </section>
+
+        <!-- ============================================= -->
+        <!-- SECCIÓN RESEÑAS - NUEVO SISTEMA              -->
+        <!-- ============================================= -->
+        <section id="reseñas">
+            <div class="container">
+                <h2 id="reviews-title">⭐ Reseñas de Nuestros Clientes ⭐</h2>
+                <p class="section-description" id="reviews-description">Comparte tu experiencia y ayúdanos a mejorar. ¡Tu opinión es importante!</p>
+                
+                <!-- Formulario para dejar reseña -->
+                <div class="review-form-container">
+                    <h3 id="review-form-title">📝 Deja tu reseña</h3>
+                    <form id="reviewForm" onsubmit="enviarResena(event)">
+                        <div class="form-group">
+                            <label id="review-label-name">Nombre *</label>
+                            <input type="text" class="form-control" id="review-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label id="review-label-email">Email *</label>
+                            <input type="email" class="form-control" id="review-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label id="review-label-service">Servicio contratado</label>
+                            <select class="form-control" id="review-service">
+                                <option value="">Selecciona un servicio</option>
+                                <option value="Express Detail">Express Detail</option>
+                                <option value="Silver Package">Silver Package</option>
+                                <option value="Gold Package">Gold Package</option>
+                                <option value="Diamond Package">Diamond Package</option>
+                                <option value="Ceramic 1 Year">Ceramic 1 Year</option>
+                                <option value="Ceramic 3 Years">Ceramic 3 Years</option>
+                                <option value="Ceramic 5 Years">Ceramic 5 Years</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label id="review-label-rating">Puntuación *</label>
+                            <div class="star-rating" id="starRating">
+                                <input type="radio" name="rating" id="star5" value="5">
+                                <label for="star5" class="star">★</label>
+                                <input type="radio" name="rating" id="star4" value="4">
+                                <label for="star4" class="star">★</label>
+                                <input type="radio" name="rating" id="star3" value="3">
+                                <label for="star3" class="star">★</label>
+                                <input type="radio" name="rating" id="star2" value="2">
+                                <label for="star2" class="star">★</label>
+                                <input type="radio" name="rating" id="star1" value="1">
+                                <label for="star1" class="star">★</label>
+                            </div>
+                            <small id="review-rating-note">Selecciona de 1 a 5 estrellas</small>
+                        </div>
+                        <div class="form-group">
+                            <label id="review-label-comment">Comentario *</label>
+                            <textarea class="form-control" id="review-comment" rows="4" placeholder="Cuéntanos tu experiencia..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-block" id="review-submit-btn">
+                            <i class="fas fa-star"></i> Enviar Reseña
+                        </button>
+                    </form>
+                    <div id="reviewResponseMessage" class="hidden"></div>
+                </div>
+                
+                <!-- Listado de reseñas -->
+                <div class="reviews-list" id="reviewsList">
+                    <h3 id="reviews-list-title">📋 Lo que dicen nuestros clientes</h3>
+                    <div id="reviewsContainer">
+                        <!-- Las reseñas se cargan dinámicamente -->
+                        <p id="reviews-loading">Cargando reseñas...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -421,7 +608,8 @@
         </div>
     </footer>
 
-    <!-- ✅ UN SOLO SCRIPT (ELIMINADO EL INLINE) -->
+    <!-- Scripts -->
     <script src="script.js?v=3"></script>
+    <script src="resenas.js"></script>
 </body>
 </html>

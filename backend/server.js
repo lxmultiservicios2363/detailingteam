@@ -1,15 +1,16 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Versión: 7.5 (CORRECCIÓN DEFINITIVA CONTADOR)
+// Versión: 7.6 (SISTEMA DE RESEÑAS INTEGRADO)
 // Fecha: 28/07/2026
 // 
 // CAMBIOS REALIZADOS EN ESTA VERSIÓN:
-// 1. ✅ Eliminación automática del índice único al iniciar
-// 2. ✅ Logs detallados en POST /api/visita
-// 3. ✅ Manejo de errores con código 409 para duplicados
-// 4. ✅ Conexión a MongoDB más robusta
-// 5. ✅ CORS configurado correctamente
+// 1. ✅ Sistema de reseñas con estrellas (modelo + rutas)
+// 2. ✅ Eliminación automática del índice único al iniciar
+// 3. ✅ Logs detallados en POST /api/visita
+// 4. ✅ Manejo de errores con código 409 para duplicados
+// 5. ✅ Conexión a MongoDB más robusta
+// 6. ✅ CORS configurado correctamente
 // =============================================
 
 const express = require('express');
@@ -34,6 +35,9 @@ console.log('🌐 DNS configurado: 8.8.8.8, 8.8.4.4');
 const Cliente = require('./models/cliente');
 const Reserva = require('./models/reserva');
 const Visita = require('./models/visita');
+
+// ✅ IMPORTAR MODELO DE RESEÑAS
+const Resena = require('./models/resena');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -275,14 +279,12 @@ app.post('/api/visita', async (req, res) => {
     try {
         console.log('📥 POST /api/visita - Solicitud recibida');
         
-        // Verificar conexión a MongoDB
         const connected = await ensureConnection();
         if (!connected) {
             console.error('❌ No se pudo conectar a MongoDB');
             return res.status(503).json({ error: 'Servicio no disponible' });
         }
 
-        // Obtener IP real del cliente
         let ip = req.ip || 
                  req.headers['x-forwarded-for'] || 
                  req.connection.remoteAddress || 
@@ -302,7 +304,6 @@ app.post('/api/visita', async (req, res) => {
         const mes = getMesActual();
         console.log('📅 Mes actual:', mes);
 
-        // Guardar la visita
         const nuevaVisita = new Visita({ ip, mes });
         await nuevaVisita.save();
         
@@ -320,7 +321,6 @@ app.post('/api/visita', async (req, res) => {
     } catch (error) {
         console.error('❌ Error en POST /api/visita:', error);
         
-        // Si el error es de duplicado, mostrar mensaje claro
         if (error.code === 11000) {
             console.error('⚠️ ERROR DE DUPLICADO - Índice único detectado');
             return res.status(409).json({ 
@@ -359,6 +359,14 @@ app.get('/api/reservas/total', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+// =============================================
+// RUTAS DE RESEÑAS (NUEVO SISTEMA)
+// =============================================
+
+// ✅ Importar el router de reseñas
+const resenasRouter = require('./routes/resenas');
+app.use('/api/resenas', resenasRouter);
 
 // =============================================
 // RUTAS DE EMAILS
@@ -512,6 +520,9 @@ app.listen(PORT, () => {
     console.log(`   POST /api/visita - Registrar visita (SIN restricción de IP única)`);
     console.log(`   GET  /api/visitas/mes - Total de visitas del mes`);
     console.log(`   GET  /api/reservas/total - Total de reservas global`);
+    console.log(`⭐ Sistema de reseñas activo:`);
+    console.log(`   GET  /api/resenas - Obtener reseñas aprobadas`);
+    console.log(`   POST /api/resenas - Crear nueva reseña`);
 });
 
 process.on('uncaughtException', (error) => {
