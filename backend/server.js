@@ -1,12 +1,12 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Versión: 7.4 (CORRECCIÓN CONTADOR VISITAS)
+// Versión: 7.5 (CORRECCIÓN DEFINITIVA CONTADOR)
 // Fecha: 28/07/2026
 // 
 // CAMBIOS REALIZADOS EN ESTA VERSIÓN:
-// 1. ✅ Ruta POST /api/visita con logs mejorados
-// 2. ✅ Detección de índices únicos en la colección
+// 1. ✅ Eliminación automática del índice único al iniciar
+// 2. ✅ Logs detallados en POST /api/visita
 // 3. ✅ Manejo de errores con código 409 para duplicados
 // 4. ✅ Conexión a MongoDB más robusta
 // 5. ✅ CORS configurado correctamente
@@ -152,6 +152,28 @@ setInterval(async () => {
     }
 }, 30000);
 
+// =============================================
+// ELIMINAR ÍNDICE ÚNICO AL INICIAR (SI EXISTE)
+// =============================================
+mongoose.connection.once('open', async () => {
+    try {
+        const indexes = await Visita.collection.indexes();
+        const uniqueIndex = indexes.find(i => i.name === 'ip_1_mes_1');
+        if (uniqueIndex) {
+            await Visita.collection.dropIndex('ip_1_mes_1');
+            console.log('✅ Índice único ip_1_mes_1 eliminado correctamente');
+        } else {
+            console.log('ℹ️ El índice ip_1_mes_1 no existe, no es necesario eliminarlo');
+        }
+    } catch (err) {
+        if (err.code === 27) {
+            console.log('ℹ️ El índice ip_1_mes_1 no existe');
+        } else {
+            console.error('❌ Error al intentar eliminar el índice:', err);
+        }
+    }
+});
+
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 
@@ -279,20 +301,6 @@ app.post('/api/visita', async (req, res) => {
 
         const mes = getMesActual();
         console.log('📅 Mes actual:', mes);
-
-        // 🔥 NUEVO: Verificar si existe algún índice único antes de guardar
-        try {
-            const indexes = await Visita.collection.indexes();
-            console.log('📊 Índices en la colección visitas:', indexes.map(i => i.name));
-            
-            // Si existe el índice único, mostrar advertencia
-            const uniqueIndex = indexes.find(i => i.name === 'ip_1_mes_1');
-            if (uniqueIndex) {
-                console.warn('⚠️ ¡ÍNDICE ÚNICO ENCONTRADO! Elimínalo con: db.visitas.dropIndex("ip_1_mes_1")');
-            }
-        } catch (err) {
-            console.log('⚠️ No se pudieron obtener los índices:', err.message);
-        }
 
         // Guardar la visita
         const nuevaVisita = new Visita({ ip, mes });
