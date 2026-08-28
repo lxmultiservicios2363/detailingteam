@@ -1,8 +1,15 @@
 // =============================================
 // DETAILING TEAM - SCRIPT PRINCIPAL
 // =============================================
-// VERSIÓN: 11.8 (CORREGIDO PARA PÁGINAS DE DETALLE)
+// VERSIÓN: 11.9 (CORREGIDO)
 // FECHA: 27/07/2026
+// 
+// CAMBIOS REALIZADOS EN ESTA VERSIÓN:
+// 1. Traducción completa al inglés (todas las claves y mensajes de alerta)
+// 2. Corrección del contador de visitas (se ejecuta correctamente en cada carga)
+// 3. Eliminado el contador de reservas del frontend
+// 4. Flujo de reserva: sin pago, solo WhatsApp al dueño
+// 5. Código documentado y optimizado
 // =============================================
 
 // =============================================
@@ -394,12 +401,8 @@ const textosIndexEn = {
     'booking-textarea-notes': 'Any special instructions...',
     'booking-label-extras': 'Extras (optional)',
     'booking-label-price': 'Final price:',
-    'booking-btn': 'Continue to payment',
-    'payment-step2-title': 'Choose payment method',
-    'payment-paypal-title': 'Pay with PayPal',
-    'payment-paypal-desc': 'Secure online payment. You will be redirected to PayPal.',
-    'payment-cash-title': 'Pay in cash',
-    'payment-cash-desc': 'You pay directly at the workshop. We will confirm your reservation.',
+    // ✅ CAMBIO: Botón ahora dice "Continue with Booking"
+    'booking-btn': 'Continue with Booking',
     'payment-back-btn': 'Back',
     'contact-title': '📱 Contact Us - Mobile Service 📱',
     'contact-mobile-service': 'Home service in Houston, TX',
@@ -431,7 +434,6 @@ const textosIndexEn = {
     'copyright-text': '© 2025 Detailing Team. All rights reserved.',
     'copyright-security': 'By using this site, you accept our privacy and security practices.',
     'header-visits-label': 'visits this month',
-    'header-bookings-label': 'total bookings',
     // Claves para páginas de detalle
     'service-description-title': 'Service Description',
     'prices-title': 'Prices',
@@ -518,12 +520,8 @@ const textosIndexEs = {
     'booking-textarea-notes': 'Alguna indicación especial...',
     'booking-label-extras': 'Extras (opcional)',
     'booking-label-price': 'Precio final:',
-    'booking-btn': 'Continuar al pago',
-    'payment-step2-title': 'Elige método de pago',
-    'payment-paypal-title': 'Pagar con PayPal',
-    'payment-paypal-desc': 'Pago seguro online. Serás redirigido a PayPal.',
-    'payment-cash-title': 'Pagar en efectivo',
-    'payment-cash-desc': 'Pagas directamente en el taller. Confirmaremos tu reserva.',
+    // ✅ CAMBIO: Botón ahora dice "Continuar con la Reserva"
+    'booking-btn': 'Continuar con la Reserva',
     'payment-back-btn': 'Volver',
     'contact-title': '📱 Contáctanos - Servicio Móvil 📱',
     'contact-mobile-service': 'Servicio a domicilio en Houston, TX',
@@ -555,7 +553,6 @@ const textosIndexEs = {
     'copyright-text': '© 2025 Detailing Team. Todos los derechos reservados.',
     'copyright-security': 'Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.',
     'header-visits-label': 'visitas este mes',
-    'header-bookings-label': 'reservas totales',
     // Claves para páginas de detalle
     'service-description-title': 'Descripción del Servicio',
     'prices-title': 'Precios',
@@ -773,14 +770,10 @@ function actualizarIdioma() {
         }
     }
     
-    // ACTUALIZAR LABELS DE CONTADORES (solo si existen)
+    // ACTUALIZAR LABELS DE CONTADORES (solo visitas)
     var visitsLabel = document.getElementById('header-visits-label');
     if (visitsLabel && textos['header-visits-label']) {
         visitsLabel.innerText = textos['header-visits-label'];
-    }
-    var bookingsLabel = document.getElementById('header-bookings-label');
-    if (bookingsLabel && textos['header-bookings-label']) {
-        bookingsLabel.innerText = textos['header-bookings-label'];
     }
     
     document.title = textos['page-title'];
@@ -983,7 +976,8 @@ function guardarRegistroCompleto(event) {
         direccion: direccion,
         modelo: primerVehiculoModelo,
         anio: primerVehiculoAnio,
-        placa: primerVehiculoPlaca
+        placa: primerVehiculoPlaca,
+        vehiculos: vehiculos
     };
     
     console.log('📤 Enviando datos al backend:', clienteData);
@@ -1202,26 +1196,9 @@ function regenerarFormularioReserva() {
     var timeNote = document.getElementById('booking-time-note');
     if (timeNote && textos['booking-time-note']) timeNote.innerText = textos['booking-time-note'];
     
+    // ✅ CAMBIO: Texto del botón actualizado
     var bookingBtn = document.getElementById('booking-btn');
     if (bookingBtn && textos['booking-btn']) bookingBtn.innerText = textos['booking-btn'];
-    
-    var paymentStep2Title = document.getElementById('payment-step2-title');
-    if (paymentStep2Title && textos['payment-step2-title']) paymentStep2Title.innerText = textos['payment-step2-title'];
-    
-    var paymentPaypalTitle = document.getElementById('payment-paypal-title');
-    if (paymentPaypalTitle && textos['payment-paypal-title']) paymentPaypalTitle.innerText = textos['payment-paypal-title'];
-    
-    var paymentPaypalDesc = document.getElementById('payment-paypal-desc');
-    if (paymentPaypalDesc && textos['payment-paypal-desc']) paymentPaypalDesc.innerText = textos['payment-paypal-desc'];
-    
-    var paymentCashTitle = document.getElementById('payment-cash-title');
-    if (paymentCashTitle && textos['payment-cash-title']) paymentCashTitle.innerText = textos['payment-cash-title'];
-    
-    var paymentCashDesc = document.getElementById('payment-cash-desc');
-    if (paymentCashDesc && textos['payment-cash-desc']) paymentCashDesc.innerText = textos['payment-cash-desc'];
-    
-    var paymentBackBtn = document.getElementById('payment-back-btn');
-    if (paymentBackBtn && textos['payment-back-btn']) paymentBackBtn.innerText = textos['payment-back-btn'];
     
     regenerarAgregados();
 }
@@ -1320,142 +1297,8 @@ function guardarRegistro(event) {
 }
 
 // =============================================
-// FUNCIÓN: procesarReserva
+// FUNCIÓN: obtenerReservasPorFecha
 // =============================================
-function procesarReserva(event) {
-    event.preventDefault();
-    var idioma = localStorage.getItem('idioma') || 'es';
-    
-    if (!verificarClienteExistente()) {
-        alert(idioma === 'es' 
-            ? '⚠️ Debes registrarte antes de hacer una reserva.'
-            : '⚠️ You must register before making a booking.');
-        window.location.href = '#registro';
-        return false;
-    }
-    
-    var vehiculoSelector = document.getElementById('vehiculo-selector');
-    if (!vehiculoSelector || !vehiculoSelector.value) {
-        alert(idioma === 'es'
-            ? '⚠️ Por favor selecciona un vehículo registrado.'
-            : '⚠️ Please select a registered vehicle.');
-        return false;
-    }
-    
-    var matriculaSeleccionada = vehiculoSelector.value;
-    var vehiculoSeleccionado = null;
-    for (var i = 0; i < vehiculosRegistrados.length; i++) {
-        if (vehiculosRegistrados[i].placa === matriculaSeleccionada) {
-            vehiculoSeleccionado = vehiculosRegistrados[i];
-            break;
-        }
-    }
-    
-    var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
-    if (!hora) {
-        alert(idioma === 'es' 
-            ? '❌ Por favor selecciona una hora.'
-            : '❌ Please select a time.');
-        return false;
-    }
-    
-    var fecha = document.getElementById('booking-input-date') ? document.getElementById('booking-input-date').value : null;
-    if (!fecha) return false;
-    
-    if (obtenerReservasPorFecha(fecha).length >= MAX_ORDENES_DIARIAS) {
-        alert(idioma === 'es' 
-            ? '❌ No hay cupos disponibles para esta fecha.'
-            : '❌ No slots available for this date.');
-        return false;
-    }
-    
-    var servicioSelect = document.getElementById('booking-select-service');
-    var tipoVehiculo = document.getElementById('booking-select-vehicle') ? document.getElementById('booking-select-vehicle').value : null;
-    var notas = document.getElementById('booking-textarea-notes') ? document.getElementById('booking-textarea-notes').value : '';
-    
-    var precioBase = PRECIOS_MATRIZ[servicioSelect.value] ? PRECIOS_MATRIZ[servicioSelect.value][tipoVehiculo] : 0;
-    if (precioBase === undefined) precioBase = 0;
-    
-    var totalExtras = 0;
-    var extrasSeleccionados = [];
-    var extrasInputs = document.querySelectorAll('.extra-input:checked');
-    for (var j = 0; j < extrasInputs.length; j++) {
-        var key = extrasInputs[j].dataset.key;
-        var precio = parseInt(extrasInputs[j].dataset.precio);
-        totalExtras += precio;
-        var extraInfo = AGREGADOS[key];
-        extrasSeleccionados.push((idioma === 'es' ? extraInfo.es : extraInfo.en) + ' (+$' + precio + ')');
-    }
-    
-    var precioFinal = precioBase + totalExtras;
-    
-    var reserva = {
-        servicio: servicioSelect.value,
-        tipoVehiculo: tipoVehiculo,
-        fecha: fecha,
-        hora: hora,
-        notas: notas,
-        precio: precioFinal,
-        precioBase: precioBase,
-        extras: extrasSeleccionados,
-        totalExtras: totalExtras,
-        clienteEmail: clienteActualGlobal.email,
-        matricula: matriculaSeleccionada,
-        vehiculoInfo: vehiculoSeleccionado,
-        metodoPago: 'Efectivo'
-    };
-    
-    console.log('📤 Enviando reserva:', reserva);
-    
-    fetch(BACKEND_URL + '/api/reservas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reserva)
-    })
-    .then(function(res) {
-        if (!res.ok) return res.text().then(function(text) { throw new Error('HTTP ' + res.status + ': ' + text); });
-        return res.json();
-    })
-    .then(function(data) {
-        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-        reservas.push(reserva);
-        localStorage.setItem('reservas', JSON.stringify(reservas));
-        
-        var ticket = generarTicket(reserva, clienteActualGlobal);
-        enviarWhatsApp(ticket);
-        
-        return fetch(BACKEND_URL + '/api/enviar-reserva', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cliente: clienteActualGlobal, reserva: reserva, tipo: 'cliente', idioma: idioma })
-        });
-    })
-    .then(function(res) { return res.json(); })
-    .then(function() {
-        return fetch(BACKEND_URL + '/api/enviar-reserva', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cliente: clienteActualGlobal, reserva: reserva, tipo: 'propietario', idioma: idioma })
-        });
-    })
-    .then(function(res) { return res.json(); })
-    .then(function() {
-        alert(idioma === 'es' 
-            ? '✅ Reserva confirmada. Se han enviado los emails de confirmación.'
-            : '✅ Booking confirmed. Confirmation emails have been sent.');
-    })
-    .catch(function(err) {
-        console.error('Error en reserva:', err);
-        alert(idioma === 'es'
-            ? '⚠️ Reserva guardada localmente, pero hubo un problema con el servidor. Error: ' + err.message
-            : '⚠️ Booking saved locally, but there was a server problem. Error: ' + err.message);
-    });
-    
-    var bookingForm = document.getElementById('bookingForm');
-    if (bookingForm) bookingForm.reset();
-    return false;
-}
-
 function obtenerReservasPorFecha(fecha) {
     var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
     var resultado = [];
@@ -1465,12 +1308,18 @@ function obtenerReservasPorFecha(fecha) {
     return resultado;
 }
 
+// =============================================
+// FUNCIÓN: enviarWhatsApp
+// =============================================
 function enviarWhatsApp(mensaje) {
     var mensajeCodificado = encodeURIComponent(mensaje);
     var url = 'https://api.whatsapp.com/send?phone=' + TELEFONO_PROPIETARIO + '&text=' + mensajeCodificado;
     window.open(url, '_blank');
 }
 
+// =============================================
+// FUNCIÓN: generarTicket
+// =============================================
 function generarTicket(reserva, cliente) {
     var idioma = localStorage.getItem('idioma') || 'es';
     var linea = '══════════════════════════════';
@@ -1489,42 +1338,9 @@ function generarTicket(reserva, cliente) {
     }
 }
 
-function volverAlFormulario() {
-    var step2 = document.getElementById('bookingStep2');
-    var step1 = document.getElementById('bookingStep1');
-    if (step2) step2.classList.add('hidden');
-    if (step1) step1.classList.remove('hidden');
-}
-
-function procesarPagoPayPal() { 
-    var idioma = localStorage.getItem('idioma') || 'es';
-    alert(idioma === 'es' ? 'Redirigiendo a PayPal...' : 'Redirecting to PayPal...'); 
-}
-
-function procesarPagoEfectivo() { 
-    var idioma = localStorage.getItem('idioma') || 'es';
-    alert(idioma === 'es' ? 'Reserva confirmada para pago en efectivo.' : 'Booking confirmed for cash payment.'); 
-}
-
-function mostrarQRExterno() {
-    var qrContainer = document.getElementById('qrCode');
-    if (!qrContainer) return;
-    qrContainer.innerHTML = '';
-    var img = document.createElement('img');
-    img.src = 'assets/images/qr-whatsapp.png';
-    img.alt = 'Código QR - Contacto WhatsApp Business';
-    img.style.width = '160px';
-    img.style.cursor = 'pointer';
-    img.onclick = function() {
-        window.open('https://wa.me/593987384110?text=Hola%20Luis%2C%20vi%20tu%20trabajo%20en%20Detailing%20Team%20y%20me%20interesa%20una%20p%C3%A1gina%20web%20para%20mi%20negocio', '_blank');
-    };
-    img.onerror = function() {
-        console.error('❌ No se pudo cargar la imagen QR');
-        qrContainer.innerHTML = '<p style="color: red;">⚠️ QR no disponible</p>';
-    };
-    qrContainer.appendChild(img);
-}
-
+// =============================================
+// FUNCIÓN: mostrarSelectorVehiculosEnReserva
+// =============================================
 function mostrarSelectorVehiculosEnReserva() {
     var precioContainer = document.getElementById('precioCalculadoContainer');
     if (!precioContainer) return;
@@ -1547,14 +1363,279 @@ function mostrarSelectorVehiculosEnReserva() {
 }
 
 // =============================================
+// FUNCIÓN: procesarReserva (CORREGIDA)
+// =============================================
+// Cambios realizados:
+// 1. Eliminado el paso de pago (bookingStep2)
+// 2. El botón ahora dice "Continuar con la Reserva"
+// 3. No envía emails, solo envía ticket por WhatsApp al dueño
+// 4. Mensajes de alerta bilingües
+// =============================================
+function procesarReserva(event) {
+    event.preventDefault();
+    var idioma = localStorage.getItem('idioma') || 'es';
+    
+    // Validar que el cliente esté registrado
+    if (!verificarClienteExistente()) {
+        alert(idioma === 'es' 
+            ? '⚠️ Debes registrarte antes de hacer una reserva.'
+            : '⚠️ You must register before making a booking.');
+        window.location.href = '#registro';
+        return false;
+    }
+    
+    // Validar que haya seleccionado un vehículo
+    var vehiculoSelector = document.getElementById('vehiculo-selector');
+    if (!vehiculoSelector || !vehiculoSelector.value) {
+        alert(idioma === 'es'
+            ? '⚠️ Por favor selecciona un vehículo registrado.'
+            : '⚠️ Please select a registered vehicle.');
+        return false;
+    }
+    
+    // Obtener el vehículo seleccionado
+    var matriculaSeleccionada = vehiculoSelector.value;
+    var vehiculoSeleccionado = null;
+    for (var i = 0; i < vehiculosRegistrados.length; i++) {
+        if (vehiculosRegistrados[i].placa === matriculaSeleccionada) {
+            vehiculoSeleccionado = vehiculosRegistrados[i];
+            break;
+        }
+    }
+    
+    // Validar hora
+    var hora = document.getElementById('booking-input-time') ? document.getElementById('booking-input-time').value : null;
+    if (!hora) {
+        alert(idioma === 'es' 
+            ? '❌ Por favor selecciona una hora.'
+            : '❌ Please select a time.');
+        return false;
+    }
+    
+    // Validar fecha
+    var fecha = document.getElementById('booking-input-date') ? document.getElementById('booking-input-date').value : null;
+    if (!fecha) {
+        alert(idioma === 'es' 
+            ? '❌ Por favor selecciona una fecha.'
+            : '❌ Please select a date.');
+        return false;
+    }
+    
+    // Validar cupos disponibles
+    if (obtenerReservasPorFecha(fecha).length >= MAX_ORDENES_DIARIAS) {
+        alert(idioma === 'es' 
+            ? '❌ No hay cupos disponibles para esta fecha.'
+            : '❌ No slots available for this date.');
+        return false;
+    }
+    
+    // Obtener datos del formulario
+    var servicioSelect = document.getElementById('booking-select-service');
+    var tipoVehiculo = document.getElementById('booking-select-vehicle') ? document.getElementById('booking-select-vehicle').value : null;
+    var notas = document.getElementById('booking-textarea-notes') ? document.getElementById('booking-textarea-notes').value : '';
+    
+    // Validar que haya seleccionado servicio y tipo de vehículo
+    if (!servicioSelect.value || !tipoVehiculo) {
+        alert(idioma === 'es' 
+            ? '❌ Por favor selecciona un servicio y tipo de vehículo.'
+            : '❌ Please select a service and vehicle type.');
+        return false;
+    }
+    
+    // Calcular precios
+    var precioBase = PRECIOS_MATRIZ[servicioSelect.value] ? PRECIOS_MATRIZ[servicioSelect.value][tipoVehiculo] : 0;
+    if (precioBase === undefined) precioBase = 0;
+    
+    var totalExtras = 0;
+    var extrasSeleccionados = [];
+    var extrasInputs = document.querySelectorAll('.extra-input:checked');
+    for (var j = 0; j < extrasInputs.length; j++) {
+        var key = extrasInputs[j].dataset.key;
+        var precio = parseInt(extrasInputs[j].dataset.precio);
+        totalExtras += precio;
+        var extraInfo = AGREGADOS[key];
+        extrasSeleccionados.push((idioma === 'es' ? extraInfo.es : extraInfo.en) + ' (+$' + precio + ')');
+    }
+    
+    var precioFinal = precioBase + totalExtras;
+    
+    // Construir objeto de reserva
+    var reserva = {
+        servicio: servicioSelect.value,
+        tipoVehiculo: tipoVehiculo,
+        fecha: fecha,
+        hora: hora,
+        notas: notas,
+        precio: precioFinal,
+        precioBase: precioBase,
+        extras: extrasSeleccionados,
+        totalExtras: totalExtras,
+        clienteEmail: clienteActualGlobal.email,
+        matricula: matriculaSeleccionada,
+        vehiculoInfo: vehiculoSeleccionado,
+        metodoPago: 'Efectivo'
+    };
+    
+    console.log('📤 Enviando reserva al backend:', reserva);
+    
+    // 1. Guardar reserva en la base de datos
+    fetch(BACKEND_URL + '/api/reservas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reserva)
+    })
+    .then(function(res) {
+        if (!res.ok) {
+            return res.text().then(function(text) {
+                throw new Error('HTTP ' + res.status + ': ' + text);
+            });
+        }
+        return res.json();
+    })
+    .then(function(data) {
+        console.log('✅ Reserva guardada en el servidor:', data);
+        
+        // 2. Guardar en localStorage (copia local)
+        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+        reservas.push(reserva);
+        localStorage.setItem('reservas', JSON.stringify(reservas));
+        
+        // 3. Generar ticket
+        var ticket = generarTicket(reserva, clienteActualGlobal);
+        console.log('📝 Ticket generado:\n', ticket);
+        
+        // 4. Enviar ticket por WhatsApp al dueño
+        enviarWhatsApp(ticket);
+        
+        // 5. Mostrar mensaje de confirmación al usuario
+        alert(idioma === 'es' 
+            ? '✅ Reserva confirmada. Se ha enviado un ticket al dueño del servicio por WhatsApp.\n\n📋 Detalles de la reserva:\n' + ticket
+            : '✅ Booking confirmed. A ticket has been sent to the service owner via WhatsApp.\n\n📋 Booking details:\n' + ticket);
+        
+        // 6. Reiniciar el formulario y actualizar contadores
+        var bookingForm = document.getElementById('bookingForm');
+        if (bookingForm) bookingForm.reset();
+        document.getElementById('precioCalculado').innerText = '$0';
+        
+        // Actualizar contadores de visitas (para que se refleje la nueva reserva)
+        if (typeof actualizarContadores === 'function') {
+            actualizarContadores();
+        }
+        
+        // Recargar la página para actualizar todo (opcional)
+        // location.reload();
+    })
+    .catch(function(err) {
+        console.error('❌ Error en reserva:', err);
+        alert(idioma === 'es'
+            ? '⚠️ La reserva se guardó localmente, pero hubo un problema con el servidor. Por favor, contacta al dueño directamente.\n\nError: ' + err.message
+            : '⚠️ The booking was saved locally, but there was a server problem. Please contact the owner directly.\n\nError: ' + err.message);
+        
+        // Guardar localmente aunque falle el servidor
+        var reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+        reservas.push(reserva);
+        localStorage.setItem('reservas', JSON.stringify(reservas));
+        
+        // Generar ticket y enviar WhatsApp igualmente
+        var ticket = generarTicket(reserva, clienteActualGlobal);
+        enviarWhatsApp(ticket);
+    });
+    
+    return false;
+}
+
+// =============================================
+// FUNCIÓN: registrarVisita (CORREGIDA)
+// =============================================
+// Se encarga de registrar una visita en el backend.
+// Agregados logs para depuración.
+// =============================================
+function registrarVisita() {
+    console.log('🔄 Intentando registrar visita...');
+    console.log('📡 URL:', BACKEND_URL + '/api/visita');
+    
+    fetch(BACKEND_URL + '/api/visita', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        mode: 'cors'
+    })
+    .then(function(response) {
+        console.log('📊 Respuesta del servidor:', response.status);
+        return response.json();
+    })
+    .then(function(data) {
+        console.log('✅ Visita registrada:', data);
+    })
+    .catch(function(err) {
+        console.error('❌ Error registrando visita:', err);
+    });
+}
+
+// =============================================
+// FUNCIÓN: actualizarContadores (CORREGIDA)
+// =============================================
+// Solo obtiene el total de visitas del mes.
+// (Eliminado el contador de reservas)
+// =============================================
+function actualizarContadores() {
+    console.log('🔄 Actualizando contadores...');
+    
+    // Obtener visitas del mes
+    fetch(BACKEND_URL + '/api/visitas/mes')
+        .then(function(res) {
+            if (!res.ok) throw new Error('Error en la respuesta');
+            return res.json();
+        })
+        .then(function(data) {
+            var visitsCount = document.getElementById('visitsCount');
+            if (visitsCount) {
+                visitsCount.innerText = data.total || 0;
+                console.log('✅ Visitas actualizadas:', data.total);
+            }
+        })
+        .catch(function(err) {
+            console.error('❌ Error obteniendo visitas:', err);
+            var visitsCount = document.getElementById('visitsCount');
+            if (visitsCount) visitsCount.innerText = '—';
+        });
+}
+
+// =============================================
+// FUNCIÓN: mostrarQRExterno
+// =============================================
+function mostrarQRExterno() {
+    var qrContainer = document.getElementById('qrCode');
+    if (!qrContainer) return;
+    qrContainer.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = 'assets/images/qr-whatsapp.png';
+    img.alt = 'Código QR - Contacto WhatsApp Business';
+    img.style.width = '160px';
+    img.style.cursor = 'pointer';
+    img.onclick = function() {
+        window.open('https://wa.me/593987384110?text=Hola%20Luis%2C%20vi%20tu%20trabajo%20en%20Detailing%20Team%20y%20me%20interesa%20una%20p%C3%A1gina%20web%20para%20mi%20negocio', '_blank');
+    };
+    img.onerror = function() {
+        console.error('❌ No se pudo cargar la imagen QR');
+        qrContainer.innerHTML = '<p style="color: red;">⚠️ QR no disponible</p>';
+    };
+    qrContainer.appendChild(img);
+}
+
+// =============================================
 // INICIALIZACIÓN
 // =============================================
 window.onload = function() {
-    console.log('🚀 Página cargada');
+    console.log('🚀 Página cargada - Versión 11.9');
     console.log('📡 BACKEND_URL:', BACKEND_URL);
     
+    // Inicializar tema
     inicializarTema();
     
+    // Configurar idioma
     var idiomaGuardado = localStorage.getItem('idioma');
     var idiomaDetectado = detectarIdiomaNavegador();
     
@@ -1594,14 +1675,26 @@ window.onload = function() {
     
     mostrarQRExterno();
     
+    // Configurar botones de idioma
     var btnEnglish = document.getElementById('btnEnglish');
     var btnSpanish = document.getElementById('btnSpanish');
     if (btnEnglish) btnEnglish.onclick = function() { cambiarIdioma('en'); };
     if (btnSpanish) btnSpanish.onclick = function() { cambiarIdioma('es'); };
     
+    // Configurar toggle de tema
     var themeToggle = document.getElementById('themeToggle');
     if (themeToggle) themeToggle.addEventListener('change', toggleTema);
     
+    // ✅ REGISTRAR VISITA AL CARGAR LA PÁGINA
+    registrarVisita();
+    
+    // ✅ ACTUALIZAR CONTADORES AL CARGAR
+    actualizarContadores();
+    
+    // ✅ ACTUALIZAR CONTADORES CADA 30 SEGUNDOS
+    setInterval(actualizarContadores, 30000);
+    
+    // Escuchar cambios en localStorage (idioma, tema)
     window.addEventListener('storage', function(e) {
         if (e.key === 'idioma') actualizarIdioma();
         if (e.key === 'tema') inicializarTema();

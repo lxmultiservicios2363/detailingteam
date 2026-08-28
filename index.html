@@ -113,7 +113,7 @@
             </div>
 
             <!-- ============================================= -->
-            <!-- CONTADORES EN EL HEADER                       -->
+            <!-- CONTADORES EN EL HEADER (SOLO VISITAS)       -->
             <!-- ============================================= -->
             <div class="stats-header">
                 <div class="stat-box">
@@ -121,11 +121,7 @@
                     <span class="stat-number" id="visitsCount">0</span>
                     <span class="stat-label" id="header-visits-label">visitas este mes</span>
                 </div>
-                <div class="stat-box">
-                    <i class="fas fa-calendar-check"></i>
-                    <span class="stat-number" id="bookingsCount">0</span>
-                    <span class="stat-label" id="header-bookings-label">reservas totales</span>
-                </div>
+                <!-- ✅ CONTADOR DE RESERVAS ELIMINADO -->
             </div>
         </div>
     </header>
@@ -326,37 +322,11 @@
                             <span class="label-text" id="booking-label-price">Precio final:</span>
                             <div id="precioCalculado" class="service-price">$0</div>
                         </div>
-                        <button type="submit" class="btn btn-block" id="booking-btn"><i class="fas fa-arrow-right"></i> Continuar al pago</button>
+                        <!-- ✅ BOTÓN MODIFICADO: "Continuar con la Reserva" -->
+                        <button type="submit" class="btn btn-block" id="booking-btn"><i class="fas fa-arrow-right"></i> Continuar con la Reserva</button>
                     </form>
                 </div>
-                <div id="bookingStep2" class="form-container hidden">
-                    <h3 class="payment-title" id="payment-step2-title"><i class="fas fa-credit-card"></i> Elige método de pago</h3>
-                    <div class="payment-options">
-                        <div class="payment-option-card" onclick="procesarPagoPayPal()">
-                            <div class="payment-option-icon">
-                                <i class="fab fa-paypal"></i>
-                            </div>
-                            <div class="payment-option-info">
-                                <h4 id="payment-paypal-title">Pagar con PayPal</h4>
-                                <p id="payment-paypal-desc">Pago seguro online. Serás redirigido a PayPal.</p>
-                            </div>
-                        </div>
-                        <div class="payment-option-card" onclick="procesarPagoEfectivo()">
-                            <div class="payment-option-icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="payment-option-info">
-                                <h4 id="payment-cash-title">Pagar en efectivo</h4>
-                                <p id="payment-cash-desc">Pagas directamente en el taller. Confirmaremos tu reserva.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <button type="button" class="btn" id="payment-back-btn" onclick="volverAlFormulario()">
-                            <i class="fas fa-arrow-left"></i> Volver
-                        </button>
-                    </div>
-                </div>
+                <!-- ✅ ELIMINADO: #bookingStep2 (paso de pago) -->
                 <div id="reservaTemporal" class="hidden"></div>
             </div>
         </section>
@@ -470,11 +440,6 @@
                 </div>
             </div>
 
-            <!-- ============================================= -->
-            <!-- CONTADORES ELIMINADOS DEL FOOTER              -->
-            <!-- (Ahora están en el header)                    -->
-            <!-- ============================================= -->
-
             <div class="copyright">
                 <p id="copyright-text">© 2025 Detailing Team. Todos los derechos reservados.</p>
                 <p id="copyright-security"><i class="fas fa-check-circle"></i> Al usar este sitio, aceptas nuestras prácticas de privacidad y seguridad.</p>
@@ -485,86 +450,6 @@
     <!-- ============================================= -->
     <!-- SCRIPTS                                       -->
     <!-- ============================================= -->
-
-    <!-- ============================================= -->
-    <!-- SCRIPT PRINCIPAL (con versión para evitar caché) -->
-    <!-- ============================================= -->
     <script src="script.js?v=2"></script>
-
-    <!-- ============================================= -->
-    <!-- SCRIPT DE CONTADORES (VISITAS Y RESERVAS)     -->
-    <!-- ============================================= -->
-    <!--
-        Este script se encarga de:
-        1. Registrar una visita al cargar la página (POST /api/visita).
-        2. Obtener y mostrar el total de visitas del mes y reservas totales.
-        3. Actualizar los contadores automáticamente cada 15 segundos.
-        4. Permitir actualización manual desde otras funciones (window.actualizarContadores).
-    -->
-    <script>
-        /**
-         * actualizarContadores()
-         * Obtiene los totales de visitas y reservas desde el backend y actualiza
-         * los elementos HTML con los IDs #visitsCount y #bookingsCount.
-         * Si falla la conexión, muestra "—" para indicar error.
-         */
-        function actualizarContadores() {
-            // Obtener visitas del mes (usando backend en Render)
-            fetch('https://detailingteam.onrender.com/api/visitas/mes')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('visitsCount').innerText = data.total || 0;
-                })
-                .catch(() => {
-                    document.getElementById('visitsCount').innerText = '—';
-                });
-
-            // Obtener total de reservas (global, todos los tiempos)
-            fetch('https://detailingteam.onrender.com/api/reservas/total')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('bookingsCount').innerText = data.total || 0;
-                })
-                .catch(() => {
-                    document.getElementById('bookingsCount').innerText = '—';
-                });
-        }
-
-        /**
-         * registrarVisita()
-         * Envía una petición POST al backend para registrar una nueva visita.
-         * No espera respuesta, solo registra la visita en la base de datos.
-         * Si falla, solo muestra un mensaje en consola (no interrumpe la experiencia).
-         */
-        function registrarVisita() {
-            fetch('https://detailingteam.onrender.com/api/visita', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            }).catch(err => console.log('Error registrando visita:', err));
-        }
-
-        // =============================================
-        // EJECUCIÓN AL CARGAR LA PÁGINA
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Registrar la visita (si es la primera vez en el mes)
-            registrarVisita();
-
-            // 2. Mostrar los contadores actuales
-            actualizarContadores();
-
-            // 3. Configurar actualización automática cada 15 segundos
-            setInterval(actualizarContadores, 15000); // 15.000 ms = 15 segundos
-
-            console.log('🔄 Contadores configurados para actualización automática cada 15 segundos.');
-        });
-
-        // =============================================
-        // EXPONER FUNCIÓN PARA ACTUALIZACIÓN MANUAL
-        // =============================================
-        // Esta función se puede llamar desde otros scripts (ej: después de una reserva)
-        // para actualizar los contadores sin esperar los 15 segundos.
-        window.actualizarContadores = actualizarContadores;
-    </script>
 </body>
 </html>

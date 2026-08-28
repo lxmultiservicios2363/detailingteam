@@ -1,5 +1,5 @@
 Listado de rutas de carpetas para el volumen Datos
-El número de serie del volumen es 00000001 C482:2CB3
+El número de serie del volumen es 000000CA C482:2CB3
 D:.
 ¦   .gitignore
 ¦   admin.html
@@ -85,6 +85,10 @@ D:.
 ¦   ¦   +---0a
 ¦   ¦   ¦       1c4a1c8f6171fead0ab300789d99c2241a91f8
 ¦   ¦   ¦       
+¦   ¦   +---0c
+¦   ¦   ¦       6528820d93193a48c8b31b285acd7c9da0b438
+¦   ¦   ¦       c7a7aaf16e0cb62685cb245fb00c1db2fab066
+¦   ¦   ¦       
 ¦   ¦   +---0d
 ¦   ¦   ¦       b5882c5708299d0de225ea09e6ddcf05744ce7
 ¦   ¦   ¦       
@@ -92,7 +96,10 @@ D:.
 ¦   ¦   ¦       a87c3ef7a8e2d3925a373ffb6929c2121171f8
 ¦   ¦   ¦       
 ¦   ¦   +---0f
+¦   ¦   ¦       0990d674eb6d6b1a2441900c8a9473865d581b
+¦   ¦   ¦       29449ad7f71028b94566cf6d2b46d02894ee42
 ¦   ¦   ¦       403ca91f36f7c2c8c5eb1101907e3ecfd82417
+¦   ¦   ¦       ae69e98b609df1bf4ae311b018e01266436dea
 ¦   ¦   ¦       
 ¦   ¦   +---10
 ¦   ¦   ¦       5e107994570ca24576ac7e3ad0e92c93a98789
@@ -103,13 +110,22 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---15
 ¦   ¦   ¦       39d628d658b5c5d33230a7e56d14e34b71f7ea
+¦   ¦   ¦       3b280030f3045d510a595ba12029cdf0e28f1d
 ¦   ¦   ¦       c3bcdda7b6e76972cc9766cd4e3ed10adc673f
 ¦   ¦   ¦       
 ¦   ¦   +---1b
 ¦   ¦   ¦       279e3eb0cb5a82eac83b0221526fa3c9718c66
 ¦   ¦   ¦       
 ¦   ¦   +---1d
+¦   ¦   ¦       08d23a130e586da6336f330bbccf0f965d5b2c
 ¦   ¦   ¦       a438af7c2aa7d266fd3547311bf26feb94b224
+¦   ¦   ¦       f86ece59484ee4dd266b4e543769280d303a00
+¦   ¦   ¦       
+¦   ¦   +---1e
+¦   ¦   ¦       fe66debba2f4487866421d1557c636534a4069
+¦   ¦   ¦       
+¦   ¦   +---1f
+¦   ¦   ¦       0bafc5aa791a402872df7f7d3c6fca9e8b335a
 ¦   ¦   ¦       
 ¦   ¦   +---20
 ¦   ¦   ¦       f3ae4d68b28c13cfa2844331e591f0254f53a5
@@ -131,6 +147,7 @@ D:.
 ¦   ¦   ¦       5e4d390acab2713915914fe0e5b0df5d8ab435
 ¦   ¦   ¦       
 ¦   ¦   +---27
+¦   ¦   ¦       23970598da0851d74f69284da6038d2f80c4c7
 ¦   ¦   ¦       5db825ef839325d2791c47a2c597f8a847ad37
 ¦   ¦   ¦       7cb0a6b29a0d1ce45f8c26b098f5c1769c633c
 ¦   ¦   ¦       aeae32c23ab931e0cb4c74069acdb0df3db7fa
@@ -139,10 +156,17 @@ D:.
 ¦   ¦   ¦       82b7735a200d68d1643f1d5f08feb7ac0df161
 ¦   ¦   ¦       950c0a74205e556ad9bfa38525f77be2bf43da
 ¦   ¦   ¦       
+¦   ¦   +---2a
+¦   ¦   ¦       c88fa820ccae6ad30a09533231e41cac8cc788
+¦   ¦   ¦       
+¦   ¦   +---2b
+¦   ¦   ¦       a615f9b0519c67f06b219abd5ef71d83fb7bf7
+¦   ¦   ¦       
 ¦   ¦   +---2c
 ¦   ¦   ¦       283324b3c2a9ae0e3233e1a237aabf3c5c814e
 ¦   ¦   ¦       
 ¦   ¦   +---2d
+¦   ¦   ¦       03915455d37d6919a15609271fc84a28c9a155
 ¦   ¦   ¦       1a317ca0675ed831e52a95471d5043c8c26923
 ¦   ¦   ¦       
 ¦   ¦   +---2e
@@ -153,6 +177,10 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---30
 ¦   ¦   ¦       18a5411fd3e5046c72199fa3b74dd37e6b8853
+¦   ¦   ¦       
+¦   ¦   +---32
+¦   ¦   ¦       7a892304a0c3c0f5ad163d1a87609d16d4066d
+¦   ¦   ¦       d21116d571ef8ace79ac673086acb6ce5bc57f
 ¦   ¦   ¦       
 ¦   ¦   +---33
 ¦   ¦   ¦       06bf6950abb16b98a247c353280237f796ca8c
@@ -165,12 +193,16 @@ D:.
 ¦   ¦   +---3b
 ¦   ¦   ¦       a95ee1bdda77440e253107247022bc77c86ccc
 ¦   ¦   ¦       
+¦   ¦   +---3f
+¦   ¦   ¦       1ec7f6b1810376ddeac3bd1fee29de466aaad4
+¦   ¦   ¦       
 ¦   ¦   +---40
 ¦   ¦   ¦       c39ce3f847859486d4495594e02635e311992c
 ¦   ¦   ¦       c73e5a606cb83b15258929a6d3e9d214f02110
 ¦   ¦   ¦       
 ¦   ¦   +---41
 ¦   ¦   ¦       2c59b4a799389b841b103b1c2f710f9219412f
+¦   ¦   ¦       c0f0c39b62e21594499cae03c694247e93336c
 ¦   ¦   ¦       
 ¦   ¦   +---45
 ¦   ¦   ¦       7e7f86e08e4551fd2f98cf810a8f75ff5ce3a0
@@ -186,6 +218,7 @@ D:.
 ¦   ¦   ¦       eb145cf47d3be7e2caf2eed27c616ecac4c2ab
 ¦   ¦   ¦       
 ¦   ¦   +---4f
+¦   ¦   ¦       0f161e5ce99ddeeeea63a33c3bcbc61f9e780a
 ¦   ¦   ¦       68e8815f1d73c3bc3b7a9a53bcfc75b45a63b1
 ¦   ¦   ¦       e1645e89d9c66353b0ee6ba61757340a8ae7bf
 ¦   ¦   ¦       
@@ -199,6 +232,9 @@ D:.
 ¦   ¦   +---52
 ¦   ¦   ¦       6ec0e7bb8e3360f8e7780cad2f1e8e66e8b7e4
 ¦   ¦   ¦       
+¦   ¦   +---54
+¦   ¦   ¦       4991e705a54edb1eece949c8bfc9d75b2c0e37
+¦   ¦   ¦       
 ¦   ¦   +---56
 ¦   ¦   ¦       4b2bef7a21c96df084b8a88ee8f63fcf4b23fc
 ¦   ¦   ¦       
@@ -210,6 +246,9 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---5b
 ¦   ¦   ¦       26fb37183e5737592c751e561d90a355c4781c
+¦   ¦   ¦       
+¦   ¦   +---60
+¦   ¦   ¦       c8449a62ccb126a294c4e84f51f1ee1acf0a5d
 ¦   ¦   ¦       
 ¦   ¦   +---61
 ¦   ¦   ¦       6c0627caf4b5f730c5820ff452af3de907467f
@@ -268,6 +307,7 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---7a
 ¦   ¦   ¦       a5ba7ac48e9f16771e6760738bb416f8551b81
+¦   ¦   ¦       fece3e3cf04751abaf3a2fb14275f764ec4642
 ¦   ¦   ¦       
 ¦   ¦   +---7b
 ¦   ¦   ¦       66dc72fb48b674556ae14ce6d58a0255b3e33f
@@ -292,7 +332,12 @@ D:.
 ¦   ¦   +---8e
 ¦   ¦   ¦       40c3f9affe3c7ac95e907f67e12c7f0fe0ed75
 ¦   ¦   ¦       
+¦   ¦   +---90
+¦   ¦   ¦       500cccb76004c17227a9365222626f44d80012
+¦   ¦   ¦       
 ¦   ¦   +---91
+¦   ¦   ¦       0d1b86d6b110e2a4ae20d15d2499d1dc3b05e3
+¦   ¦   ¦       6efe680363996f052db1c4fb1db80a462cc1c9
 ¦   ¦   ¦       7375eca69a7f1be9ec7655e4a3a6b23ba36914
 ¦   ¦   ¦       b27d648ac2af793732dab077120db410771f94
 ¦   ¦   ¦       
@@ -307,10 +352,12 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---96
 ¦   ¦   ¦       1c17f7d2d92e873938f20f5db3db0383844b21
+¦   ¦   ¦       38e4ec7a95955a13e1b3d0e616ac99beabd6c8
 ¦   ¦   ¦       49224610e1ac877ac078096e3cfe333ed69db4
 ¦   ¦   ¦       8208491959cd7c99225a233b9029f0fb497344
 ¦   ¦   ¦       
 ¦   ¦   +---97
+¦   ¦   ¦       1dd87022ec164a15d371eb01b830b4d400ddfe
 ¦   ¦   ¦       7533a0d3ab4b5a74fbbbde6140a3a491479b6e
 ¦   ¦   ¦       
 ¦   ¦   +---99
@@ -323,13 +370,19 @@ D:.
 ¦   ¦   ¦       242be8c22f80cac5b697d84ff730b763cd3b57
 ¦   ¦   ¦       e8e164c24bd7a2125340c3ce0520efe8ff074a
 ¦   ¦   ¦       
+¦   ¦   +---9f
+¦   ¦   ¦       7dc4fa99847252072006a16d9877df8dffbd22
+¦   ¦   ¦       
 ¦   ¦   +---a4
+¦   ¦   ¦       201aebbc62d3fb24eb1b5625525b3b8feafaee
+¦   ¦   ¦       6c0e6cba549c531eff0b470ec4e66910ff304d
 ¦   ¦   ¦       97fff6946d87787c4aaf0f03235c37e4618510
 ¦   ¦   ¦       
 ¦   ¦   +---a6
 ¦   ¦   ¦       e499c32c55fe838682134b47034008e70dfa90
 ¦   ¦   ¦       
 ¦   ¦   +---a7
+¦   ¦   ¦       e29121e194e8b5e4557af0d73946a6334a374a
 ¦   ¦   ¦       ec204515147ae095460f87b0effd87f253e207
 ¦   ¦   ¦       
 ¦   ¦   +---aa
@@ -339,9 +392,15 @@ D:.
 ¦   ¦   +---af
 ¦   ¦   ¦       2557387def458a0bf4d5df0dfb4e7bdec29e5e
 ¦   ¦   ¦       
+¦   ¦   +---b2
+¦   ¦   ¦       abffc624a17ee8f8af7cf1bef18c1d6bad6507
+¦   ¦   ¦       
 ¦   ¦   +---b7
 ¦   ¦   ¦       3a6a0ecfb54bb41ac4dbec8f92f70afaff7486
 ¦   ¦   ¦       63f32978d5b0f9a96a14f5a0a07c963c2d70f9
+¦   ¦   ¦       
+¦   ¦   +---b8
+¦   ¦   ¦       7ddaba2f63c350ba1894cb901245fdeaa20b73
 ¦   ¦   ¦       
 ¦   ¦   +---be
 ¦   ¦   ¦       2389a1ec138a4810a4f3b9f014128086768bc7
@@ -391,8 +450,15 @@ D:.
 ¦   ¦   +---db
 ¦   ¦   ¦       400373e1d116c99292630b1a908815fb421aa9
 ¦   ¦   ¦       
+¦   ¦   +---e0
+¦   ¦   ¦       6a7d9db00c0799d2f796e641ccc328f36b6115
+¦   ¦   ¦       e59a2edf097d67a56185ebc240bb4e7b6a938c
+¦   ¦   ¦       
 ¦   ¦   +---e1
 ¦   ¦   ¦       3b49ed048d06d9a377be6ab1a178949d9991c5
+¦   ¦   ¦       
+¦   ¦   +---e2
+¦   ¦   ¦       b1600d713c3566450ad0bebedb21e4edb79789
 ¦   ¦   ¦       
 ¦   ¦   +---e5
 ¦   ¦   ¦       bcd97bcc3be098991a29d36c1409354563f7ec
@@ -407,7 +473,13 @@ D:.
 ¦   ¦   ¦       74d136d7cf8636f8e31c1b08c73a274471001e
 ¦   ¦   ¦       
 ¦   ¦   +---e9
+¦   ¦   ¦       3bad4e472c3fa33a5e644feb9fec6295ee652a
 ¦   ¦   ¦       5a46013c28efaebdfb1ecac60b8c25f8950b02
+¦   ¦   ¦       d0281f2a1da31e9dfb21642c6805b6442609b5
+¦   ¦   ¦       
+¦   ¦   +---ee
+¦   ¦   ¦       7b1e8cab2204207d097a5a818657fc654da4b3
+¦   ¦   ¦       a95293e1cecb3b576a375ac8aa67a344a78100
 ¦   ¦   ¦       
 ¦   ¦   +---ef
 ¦   ¦   ¦       7238d4f6e6ec9bd98919b6455cd933d26b07de
@@ -436,6 +508,9 @@ D:.
 ¦   ¦   ¦       
 ¦   ¦   +---f9
 ¦   ¦   ¦       0bfaa7f81ad169afa88be6784af79bf60db031
+¦   ¦   ¦       
+¦   ¦   +---fe
+¦   ¦   ¦       604d903c1bed64a312383bc45bdf0ef331ec78
 ¦   ¦   ¦       
 ¦   ¦   +---ff
 ¦   ¦   ¦       cb715b0465165a87c3c7d88c130bb1c354d90a
@@ -487,6 +562,7 @@ D:.
 ¦   +---models
 ¦   ¦       cliente.js
 ¦   ¦       reserva.js
+¦   ¦       visita.js
 ¦   ¦       
 ¦   +---node_modules
 ¦       ¦   .package-lock.json
