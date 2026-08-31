@@ -1,16 +1,17 @@
 // =============================================
 // SERVIDOR PRINCIPAL - DETAILING TEAM
 // =============================================
-// Versión: 7.6 (SISTEMA DE RESEÑAS INTEGRADO)
-// Fecha: 28/07/2026
+// Versión: 7.7 (SISTEMA DE RESEÑAS CON EMAIL)
+// Fecha: 30/08/2026
 // 
 // CAMBIOS REALIZADOS EN ESTA VERSIÓN:
 // 1. ✅ Sistema de reseñas con estrellas (modelo + rutas)
-// 2. ✅ Eliminación automática del índice único al iniciar
-// 3. ✅ Logs detallados en POST /api/visita
-// 4. ✅ Manejo de errores con código 409 para duplicados
-// 5. ✅ Conexión a MongoDB más robusta
-// 6. ✅ CORS configurado correctamente
+// 2. ✅ Envío de email al propietario cuando llega una reseña
+// 3. ✅ Eliminación automática del índice único al iniciar
+// 4. ✅ Logs detallados en POST /api/visita
+// 5. ✅ Manejo de errores con código 409 para duplicados
+// 6. ✅ Conexión a MongoDB más robusta
+// 7. ✅ CORS configurado correctamente
 // =============================================
 
 const express = require('express');
@@ -187,6 +188,9 @@ if (!EMAIL_USER || !EMAIL_PASS) {
     console.log('📧 Email configurado para:', EMAIL_USER);
 }
 
+// =============================================
+// TRANSPORTER PARA EMAILS (RESERVAS Y RESEÑAS)
+// =============================================
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -202,6 +206,13 @@ transporter.verify((error, success) => {
         console.log('📧 Servidor de email listo');
     }
 });
+
+// =============================================
+// IMPORTAR SERVICIO DE EMAIL PARA RESEÑAS
+// =============================================
+const emailService = require('./services/emailService');
+// Inicializar el servicio con el transporter (usa las mismas credenciales)
+emailService.initEmailService(EMAIL_USER, EMAIL_PASS);
 
 // =============================================
 // RUTAS DE LA API
